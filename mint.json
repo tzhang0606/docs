@@ -25,12 +25,6 @@
     "name": "Dashboard",
     "url": "https://teli.ai/dashboard?page=ai"
   },
-  "tabs": [
-    {
-      "name": "Teli Agents",
-      "url": "https://docs.teli.ai/teli-agents/variables"
-    }
-  ],
   "anchors": [
     {
       "name": "Community",
