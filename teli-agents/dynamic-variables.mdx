@@ -1,0 +1,89 @@
+---
+title: "Dynamic Variables"
+description: "Use Dynamic Variables in Teli AI to personalize and automate campaigns"
+icon: "code"
+---
+
+<CardGroup cols={1}>
+  <Card
+    title="What Are Dynamic Variables?"
+    icon="sliders"
+    description="Dynamic Variables allow you to insert real-time data into your messages, providing a way to personalize and automate campaigns. This helps to engage with your audience in a more meaningful way by using their specific data."
+  >
+    **Personalized Messaging:** Add placeholders like `{customer_name}` to automatically populate messages with user-specific data.
+
+    **Real-time Updates:** Information like `{first_name}` or `{location}` are replaced when the campaign is triggered, ensuring up-to-date communication.
+
+    **Data-Driven Automation:** Simplify your processes by allowing dynamic content to adapt automatically based on user data.
+
+  </Card>
+
+  <Card
+    title="How to Use Dynamic Variables"
+    icon="solid edit"
+    description="To implement dynamic variables, include placeholders within your campaign's messages. When the campaign is triggered, these placeholders are replaced with the user’s actual data."
+  >
+    **Step 1:** In the message body, use placeholders like `{first_name}`, `{company_name}`, or `{phone_number}`.
+
+    **Step 2:** Ensure the placeholders align with available user data, such as CRM fields.
+
+    **Step 3:** During execution, Teli AI replaces these placeholders with the real values from your database.
+
+  </Card>
+
+  <Card
+    title="Best Practices"
+    icon="check-circle"
+    description="Follow these best practices to ensure seamless integration of dynamic variables into your campaigns."
+  >
+    **Fallback Values:** Use fallback values (e.g., `{first_name | 'there'}`) to ensure your message remains meaningful even when data is missing.
+
+    **Clear Placeholders:** Make sure placeholders are descriptive and simple to avoid confusion (e.g., `{customer_name}` instead of `{user_info}`).
+
+    **Test Thoroughly:** Run test campaigns with sample data to ensure the variables are correctly replaced before launching live campaigns.
+
+  </Card>
+
+  <Card
+    title="Examples of Dynamic Variables"
+    icon="file-alt"
+    description="Here are a few common dynamic variables used to personalize communication."
+  >
+    **{first_name}:** The recipient's first name.
+
+    **{last_name}:** The recipient's last name.
+
+    **{email}:** The recipient's email address, ideal for email-based campaigns.
+
+    **{phone_number}:** The recipient's phone number, useful for SMS campaigns.
+
+    **{company_name}:** Personalized data like the recipient's associated company or organization name.
+
+  </Card>
+
+  <Card
+    title="Error Handling with Dynamic Variables"
+    icon="exclamation-circle"
+    description="Handling missing or incorrect dynamic data is crucial to ensure smooth campaign execution."
+  >
+    **Use Fallbacks:** Add fallback values (e.g., `{first_name | 'there'}`) to gracefully handle missing data.
+
+    **Monitor Issues:** Continuously track errors like empty fields or invalid data during campaign execution to ensure quality messaging.
+
+    **Data Validation:** Before launching campaigns, validate that the dynamic variables match with the expected data format in your database.
+
+  </Card>
+
+  <Card
+    title="Integration with CRM"
+    icon="plug"
+    description="Integrate your CRM to fetch real-time customer data and personalize campaigns effectively."
+  >
+    **Real-Time Data Fetch:** Pull customer details directly from your CRM, including `{first_name}`, `{last_name}`, and more.
+
+    **CRM-Driven Automation:** Set up workflows that trigger actions based on real-time CRM data to personalize communication.
+
+    **Consistency Across Channels:** Ensure all campaigns, whether email or SMS, are synced with CRM data for personalized outreach at scale.
+
+  </Card>
+</CardGroup>

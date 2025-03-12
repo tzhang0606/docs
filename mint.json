@@ -37,15 +37,14 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "AI Agent Behavior",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
+        "teli-agents/agent-types",
+        "teli-agents/dynamic-variables",
         "essentials/images",
         "essentials/settings",
         "essentials/navigation",
