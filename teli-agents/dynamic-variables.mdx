@@ -19,25 +19,24 @@ icon: "code"
   </Card>
 
   <Card
-    title="How to Use Dynamic Variables"
-    icon="solid edit"
-    description="To implement dynamic variables, include placeholders within your campaign's messages. When the campaign is triggered, these placeholders are replaced with the user’s actual data."
-  >
-    **Step 1:** In the message body, use placeholders like `{first_name}`, `{company_name}`, or `{phone_number}`.
+  title="How to Use Dynamic Variables"
+  icon="pencil"
+  description="To implement dynamic variables, include placeholders within your campaign's messages. When the campaign is triggered, these placeholders are replaced with the user’s actual data."
+>
+  **Step 1:** In the message body, use placeholders like `{first_name}`, `{company_name}`, or `{phone_number}`.
 
-    **Step 2:** Ensure the placeholders align with available user data, such as CRM fields.
+**Step 2:** Ensure the placeholders align with available user data, such as CRM fields.
 
-    **Step 3:** During execution, Teli AI replaces these placeholders with the real values from your database.
+**Step 3:** During execution, Teli AI replaces these placeholders with the real values from your database.
 
-  </Card>
+</Card>
 
   <Card
     title="Best Practices"
-    icon="check-circle"
+    icon="user"
     description="Follow these best practices to ensure seamless integration of dynamic variables into your campaigns."
   >
-    **Fallback Values:** Use fallback values (e.g., `{first_name | 'there'}`) to ensure your message remains meaningful even when data is missing.
-
+    
     **Clear Placeholders:** Make sure placeholders are descriptive and simple to avoid confusion (e.g., `{customer_name}` instead of `{user_info}`).
 
     **Test Thoroughly:** Run test campaigns with sample data to ensure the variables are correctly replaced before launching live campaigns.
@@ -45,29 +44,67 @@ icon: "code"
   </Card>
 
   <Card
-    title="Examples of Dynamic Variables"
-    icon="file-alt"
-    description="Here are a few common dynamic variables used to personalize communication."
-  >
-    **{first_name}:** The recipient's first name.
+  title="Examples of Dynamic Variables"
+  icon="flag"
+  description="Here are various dynamic variables used to personalize communication."
+>
+  **Personal Information**
+  `{{first_name}}` – The lead’s first name.
+  `{{middle_name}}` – The lead’s middle name.
+  `{{last_name}}` – The lead’s last name.
+  `{{name}}` – The lead’s full name.
+  `{{birthday}}` – The lead’s date of birth, formatted as MM/DD/YY.
+  `{{email}}` – The lead’s email address.
+  `{{phone_number}}` – The lead’s phone number, formatted as +1[Phone Number].
 
-    **{last_name}:** The recipient's last name.
+**Address Details**  
+ `{{address_line_1}}` – The first line of the lead’s residential address.  
+ `{{address_line_2}}` – The second line of the lead’s residential address (if applicable).  
+ `{{city}}` – The city where the lead resides.  
+ `{{state}}` – The state where the lead resides.  
+ `{{zip_code}}` – The zip code of the lead’s residential address.  
+ `{{country}}` – The country where the lead resides.
 
-    **{email}:** The recipient's email address, ideal for email-based campaigns.
+**Employment & Company Information**  
+ `{{company_name}}` – The name of the lead’s employer or business.  
+ `{{company_position}}` – The lead’s job title at the company.  
+ `{{company_industry}}` – The industry in which the lead’s company operates.  
+ `{{years_worked}}` – The number of years the lead has worked at their current job.  
+ `{{company_address_line_1}}` – The first line of the company’s address.  
+ `{{company_address_line_2}}` – The second line of the company’s address (if applicable).  
+ `{{company_city}}` – The city where the company is located.  
+ `{{company_state}}` – The state where the company is located.  
+ `{{company_zip_code}}` – The zip code of the company’s address.  
+ `{{company_country}}` – The country where the company is based.
 
-    **{phone_number}:** The recipient's phone number, useful for SMS campaigns.
+**Financial Information**  
+ `{{FICO_score}}` – The lead’s FICO credit score.  
+ `{{loan_balance}}` – The total outstanding balance on the lead’s loan(s).  
+ `{{loan_monthly_payment}}` – The monthly payment amount for the lead’s loan(s).  
+ `{{loan_type}}` – The type of loan the lead has (e.g., mortgage, personal loan, auto loan).  
+ `{{lender_name}}` – The name of the lender providing the loan.  
+ `{{cc_balance}}` – The total credit card debt the lead has.  
+ `{{savings}}` – The total savings the lead has.  
+ `{{tax}}` – The amount of taxes the lead owes or has paid.  
+ `{{mortgage_date}}` – The date when the lead’s mortgage was opened.  
+ `{{months_since_mtg_open}}` – The number of months since the lead’s mortgage account was opened.
 
-    **{company_name}:** Personalized data like the recipient's associated company or organization name.
+**Lead Tracking & Source Information**
+`{{lead_source}}` – The source from which the lead was acquired (e.g., referral, advertisement, organic search).
+`{{contact_id}}` – A unique identifier assigned to the lead.
+`{{sso}}` – The lead’s social security number.
 
-  </Card>
+**Additional Notes**
+`{{notes}}` – Any extra notes or comments related to the lead.
+
+</Card>
 
   <Card
     title="Error Handling with Dynamic Variables"
-    icon="exclamation-circle"
+    icon="exclamation"
     description="Handling missing or incorrect dynamic data is crucial to ensure smooth campaign execution."
   >
-    **Use Fallbacks:** Add fallback values (e.g., `{first_name | 'there'}`) to gracefully handle missing data.
-
+    
     **Monitor Issues:** Continuously track errors like empty fields or invalid data during campaign execution to ensure quality messaging.
 
     **Data Validation:** Before launching campaigns, validate that the dynamic variables match with the expected data format in your database.
