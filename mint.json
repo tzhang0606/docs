@@ -46,6 +46,7 @@
         "teli-agents/agent-types",
         "teli-agents/dynamic-variables",
         "teli-agents/integrations",
+        "teli-agents/perks",
         "essentials/images",
         "essentials/settings",
         "essentials/navigation",
