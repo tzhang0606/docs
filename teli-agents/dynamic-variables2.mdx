@@ -1,94 +1,107 @@
 ---
 title: "Dynamic Variables"
-description: "Learn how to use dynamic variables to customize your documentation based on user inputs."
+description: "Learn how to use dynamic variables to customize your documentation based on user input."
 icon: "code"
 ---
 
 ## Overview
 
-Dynamic variables in Mintlify allow you to create dynamic, personalized documentation by inserting user-specific or context-aware values into your content.
+Dynamic variables in Mintlify allow you to create personalized documentation by inserting user-specific or context-aware values into your content.
+
+---
 
 ## Available Dynamic Variables
 
-Below is a list of available dynamic variables and how they can be used in your documentation.
+### **User Variables**
 
-<ResponseField name="userName" type="string">
-  The name of the logged-in user.
-  Example: `{{user.name}}`
+<ResponseField name="{{ user_name }}" type="text">
+  The name of the logged-in user. **Example:** `{{ user_name }}`
 </ResponseField>
+
+<ResponseField name="{{ user_email }}" type="text">
+  The email address of the logged-in user. **Example:** `{{ user_email }}`
+</ResponseField>
+
+<ResponseField name="{{ user_role }}" type="text">
+  The role of the user in the system. **Example:** `{{ user_role }}`
+</ResponseField>
+
+---
+
+### **Date & Time Variables**
 
 <Expandable title="Date & Time Variables">
-  <ResponseField name="currentDate" type="string">
-    Inserts the current date.
-    Example: `{{date.today}}`
+  <ResponseField name="{{ current_date }}" type="text">
+    Inserts the current date. **Example:** `{{ current_date }}`
   </ResponseField>
-  <ResponseField name="currentTime" type="string">
-    Inserts the current time.
-    Example: `{{time.now}}`
+  <ResponseField name="{{ current_time }}" type="text">
+    Inserts the current time. **Example:** `{{ current_time }}`
   </ResponseField>
 </Expandable>
 
-<ResponseField name="userEmail" type="string">
-  Inserts the email address of the logged-in user.
-  Example: `{{user.email}}`
-</ResponseField>
+---
+
+### **Project Variables**
 
 <Expandable title="Project Variables">
-  <ResponseField name="project.name" type="string">
-    The name of the current project.
-    Example: `{{project.name}}`
+  <ResponseField name="{{ project_name }}" type="text">
+    The name of the current project. **Example:** `{{ project_name }}`
   </ResponseField>
-  <ResponseField name="project.version" type="string">
-    The version of the current project.
-    Example: `{{project.version}}`
+  <ResponseField name="{{ project_version }}" type="text">
+    The version of the current project. **Example:** `{{ project_version }}`
   </ResponseField>
 </Expandable>
 
-<ResponseField name="user.role" type="string">
-  The role of the user in the system.
-  Example: `{{user.role}}`
-</ResponseField>
+---
+
+### **Custom Variables**
 
 <Expandable title="Custom Variables">
-  <ResponseField name="custom.variable1" type="string">
-    A custom-defined variable.
-    Example: `{{custom.variable1}}`
+  <ResponseField name="{{ custom_variable1 }}" type="text">
+    A custom-defined variable. **Example:** `{{ custom_variable1 }}`
   </ResponseField>
-  <ResponseField name="custom.flag" type="boolean">
-    A custom boolean flag.
-    Example: `{{custom.flag}}`
+  <ResponseField name="{{ custom_flag }}" type="boolean">
+    A custom boolean flag. **Example:** `{{ custom_flag }}`
   </ResponseField>
 </Expandable>
+
+---
+
+### **Session Variables**
 
 <Expandable title="Session Variables">
-  <ResponseField name="session.id" type="string">
-    The unique identifier for the current session.
-    Example: `{{session.id}}`
+  <ResponseField name="{{ session_id }}" type="text">
+    The unique identifier for the current session. **Example:** `
+    {{ session_id }}`
   </ResponseField>
-  <ResponseField name="session.active" type="boolean">
-    Whether the session is currently active.
-    Example: `{{session.active}}`
+  <ResponseField name="{{ session_active }}" type="boolean">
+    Indicates if the session is currently active. **Example:** `
+    {{ session_active }}`
   </ResponseField>
 </Expandable>
+
+---
+
+### **Authentication Variables**
 
 <Expandable title="Authentication Variables">
-  <ResponseField name="auth.token" type="string">
-    The authentication token for the user.
-    Example: `{{auth.token}}`
+  <ResponseField name="{{ auth_token }}" type="text">
+    The authentication token for the user. **Example:** `{{ auth_token }}`
   </ResponseField>
-  <ResponseField name="auth.status" type="string">
-    The authentication status of the user.
-    Example: `{{auth.status}}`
+  <ResponseField name="{{ auth_status }}" type="text">
+    The authentication status of the user. **Example:** `{{ auth_status }}`
   </ResponseField>
 </Expandable>
 
+---
+
+### **System Variables**
+
 <Expandable title="System Variables">
-  <ResponseField name="system.timezone" type="string">
-    The current system timezone.
-    Example: `{{system.timezone}}`
+  <ResponseField name="{{ system_timezone }}" type="text">
+    The current system timezone. **Example:** `{{ system_timezone }}`
   </ResponseField>
-  <ResponseField name="system.locale" type="string">
-    The locale setting of the system.
-    Example: `{{system.locale}}`
+  <ResponseField name="{{ system_locale }}" type="text">
+    The locale setting of the system. **Example:** `{{ system_locale }}`
   </ResponseField>
 </Expandable>
