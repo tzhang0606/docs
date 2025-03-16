@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Teli AI",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -34,28 +34,32 @@
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Introduction",
       "pages": [
-        "introduction",
-        "quickstart"
+        "introduction"
       ]
     },
     {
-      "group": "AI Agent Behavior",
+      "group": "AI Agents Setup",
       "pages": [
-        "teli-agents/agent-types",
-        "teli-agents/dynamic-variables2",
-        "teli-agents/integrations",
-        "teli-agents/perks",
         "teli-agents/agents",
+        "teli-agents/dynamic-variables2"
+      ]
+    },
+    {
+      "group": "Running Campaigns",
+      "pages": [
         "teli-agents/contacts",
-        "teli-agents/reporting",
         "teli-agents/teli-voice",
         "teli-agents/teli-sms",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "teli-agents/reporting"
+      ]
+    },
+    {
+      "group": "Integrations & More",
+      "pages": [
+        "teli-agents/integrations",
+        "teli-agents/perks"
       ]
     }
   ],
