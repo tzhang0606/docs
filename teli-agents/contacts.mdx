@@ -8,59 +8,36 @@ icon: "address-book"
 
 Learn more about managing contacts in the following video:
 
-<video
-  controls
-  className="w-full aspect-video"
-  src="https://res.cloudinary.com/dpazvavqx/video/upload/v1741983496/ogvb0vrgrdgig3hse4kc.mp4"
-/>
+<video controls className="w-full aspect-video" src="https://res.cloudinary.com/dpazvavqx/video/upload/v1741983496/ogvb0vrgrdgig3hse4kc.mp4" />
 
 ## Managing Contacts in Teli AI
 
 Teli AI provides a simple yet powerful way to manage your contacts and personalize communication. By organizing and segmenting your contacts, you can ensure more targeted and efficient interactions.
 
-## Why Manage Contacts?
+## Contact Groups
 
-Managing your contacts effectively can provide the following benefits:
+When running a campaign, you will almost always engage with contact groups. Contact groups are a collection of contacts that you will want Teli's AI Agents to call. Teli will accept CSV files and automatically create mapping suggestions to parse your data. You can map fields such as first name, last name, birthday, and more fields (see section of dynamic variables for the full list).
 
-- **Personalized Communication**: Send tailored messages based on contact preferences and behaviors.
-- **Segmentation**: Group your contacts based on demographics or interaction history for targeted campaigns.
-- **Improved Engagement**: Increase engagement by delivering relevant content to the right audience at the right time.
+## Using Contact Group
 
-## Popular Contact Management Features
+### **1\. Outbound Campaigns**
 
-### 1. **Add New Contact**
+When you upload contacts to Teli, it is synchronized across all devices with permission to access. When you inititate an outbound campaign (call or SMS), you must select a contact group. In the next section, we will provide additional details on campaign behavior.
 
-Adding a new contact to your Teli AI account is easy! You can manually add a new contact or import contacts from a CSV file.
+### **2\. Inbound Campaigns**
 
-- **Manually Add**: Provide basic information such as name, email, and phone number.
-- **CSV Import**: Import a list of contacts to quickly build your contact database.
+Contact group can be linked to inbound campaigns for referencing. When a customer from your contact list calls your inbound number, the associated agent will now have knowledge about that customer. This makes the conversation more natural and personalized.
 
-### 2. **Contact Segmentation**
+## Contact Features
 
-Create dynamic segments based on user behavior or custom attributes. This helps you send targeted messages to specific groups.
+### **1\. Auto-Compliance**
 
-- **Behavioral Segmentation**: Segment based on past interactions, purchases, or activities.
-- **Custom Segments**: Create segments based on custom fields like location or interests.
+During a call or message thread, Teli AI's safety system will automatically detect if a contact does not want to be contacted. The system will flag the contact across all contact groups and display it with a red label followed by "DO NOT CALL". This ensures that your campaigns are always compliant with official regulations.
 
-### 3. **Contact Updates**
+### **2\. Data Security**
 
-Keep your contact list up to date by regularly updating contact information. You can easily update a contact's details like phone number, email, or address.
+You can store sensitive variables such as users' medical information and social security numbers within contact records. Teli uses robust cryptographic methods to hash and protect these data, both during transit and at rest. Teli's providers conducts frequent penetration testing to ensure compliance at an enterprise level.
 
-- **Edit Contact**: Update individual contact details.
-- **Bulk Updates**: Use the import feature to update multiple contacts at once.
+### **3\. Integration Friendly**
 
-### 4. **Contact Lists**
-
-Organize your contacts into lists for easy management. These lists can then be used in campaigns or for analysis.
-
-- **Create Lists**: Organize contacts based on shared criteria or campaigns.
-- **Sync Lists**: Sync lists with external tools like CRMs to keep everything in one place.
-
-## Getting Started
-
-To get started with managing contacts, follow these steps:
-
-1. **Add a New Contact**: Begin by adding your first contact manually or by importing a CSV file.
-2. **Create Segments**: Segment your contacts based on behavior or custom attributes.
-3. **Update Contact Information**: Keep your contact list updated to ensure effective communication.
-4. **Use Contacts in Campaigns**: Start using your segmented contact lists in campaigns.
+Contacts are always linked to call history records. As an administrator, you may want to send certain contacts to your employees to follow up. You can do this directly from call history or by connecting thrid party integrations with robust workflows (more on this in the integrations section).

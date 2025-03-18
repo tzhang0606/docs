@@ -4,104 +4,148 @@ description: "Learn how to use dynamic variables to customize your documentation
 icon: "code"
 ---
 
-## Overview
+## How it works
 
-Dynamic variables in Mintlify allow you to create personalized documentation by inserting user-specific or context-aware values into your content.
+Dynamic variables provides a way for you to reference individual contact information directly in your agents' scripts. Please note that all dynamic variables must be spelled exactly without spaces and always wrapped in double brackets. Additionally, you can only reference existing contact information. For example, if you upload contact groups without mapping to a specific field, using dynamic variables for that field will reference empty text. Here is the complete list of dynamic variables supported by Teli AI today:
 
----
+### **Basic Information**
 
-## Available Dynamic Variables
-
-### **User Variables**
-
-<ResponseField name="{{ user_name }}" type="text">
-  The name of the logged-in user. **Example:** `{{ user_name }}`
-</ResponseField>
-
-<ResponseField name="{{ user_email }}" type="text">
-  The email address of the logged-in user. **Example:** `{{ user_email }}`
-</ResponseField>
-
-<ResponseField name="{{ user_role }}" type="text">
-  The role of the user in the system. **Example:** `{{ user_role }}`
-</ResponseField>
-
----
-
-### **Date & Time Variables**
-
-<Expandable title="Date & Time Variables">
-  <ResponseField name="{{ current_date }}" type="text">
-    Inserts the current date. **Example:** `{{ current_date }}`
+<Expandable title="Basic Information" defaultOpen="true">
+  <ResponseField name="{{first_name}}" type="text" default="John">
+    References the contact's first name.
   </ResponseField>
-  <ResponseField name="{{ current_time }}" type="text">
-    Inserts the current time. **Example:** `{{ current_time }}`
+  <ResponseField name="{{middle}}" type="text" default="Joe">
+    References the contact's middle name.
+  </ResponseField>
+  <ResponseField name="{{last_name}}" type="text" default="Smith">
+    References the contact's last name.
+  </ResponseField>
+  <ResponseField name="{{name}}" type="text" default="John Joe Smith">
+    References the contact's full name.
+  </ResponseField>
+  <ResponseField name="{{birthday}}" type="date" default="01/01/1990">
+    References the contact's birthday.
+  </ResponseField>
+  <ResponseField name="{{email}}" type="email" default="john@teli.ai">
+    References the contact's email.
+  </ResponseField>
+  <ResponseField name="{{phone_number}}" type="+1[US Phone Number]" default="+11234567890" required="true">
+    References the contact's phone number. This is a required field for each contact record, not a required dynamic variable that you have to use in the agent script.
   </ResponseField>
 </Expandable>
 
 ---
 
-### **Project Variables**
+### **Location Information**
 
-<Expandable title="Project Variables">
-  <ResponseField name="{{ project_name }}" type="text">
-    The name of the current project. **Example:** `{{ project_name }}`
+<Expandable title="Location Information">
+  <ResponseField name="{{address_line_1}}" type="text" default="123 Washington Street">
+    References the contact's address line 1.
   </ResponseField>
-  <ResponseField name="{{ project_version }}" type="text">
-    The version of the current project. **Example:** `{{ project_version }}`
+  <ResponseField name="{{address_line_2}}" type="text" default="Apt 101">
+    References the contact's address line 2.
   </ResponseField>
-</Expandable>
-
----
-
-### **Custom Variables**
-
-<Expandable title="Custom Variables">
-  <ResponseField name="{{ custom_variable1 }}" type="text">
-    A custom-defined variable. **Example:** `{{ custom_variable1 }}`
+  <ResponseField name="{{city}}" type="text" default="New York">
+    References the contact's city.
   </ResponseField>
-  <ResponseField name="{{ custom_flag }}" type="boolean">
-    A custom boolean flag. **Example:** `{{ custom_flag }}`
+  <ResponseField name="{{state}}" type="text" default="Arizona">
+    References the contact's state.
   </ResponseField>
-</Expandable>
-
----
-
-### **Session Variables**
-
-<Expandable title="Session Variables">
-  <ResponseField name="{{ session_id }}" type="text">
-    The unique identifier for the current session. **Example:** `
-    {{ session_id }}`
+  <ResponseField name="{{zip_code}}" type="text" default="10000">
+    References the contact's zip code.
   </ResponseField>
-  <ResponseField name="{{ session_active }}" type="boolean">
-    Indicates if the session is currently active. **Example:** `
-    {{ session_active }}`
+  <ResponseField name="{{country}}" type="text" default="United States">
+    References the contact's country.
   </ResponseField>
 </Expandable>
 
 ---
 
-### **Authentication Variables**
+### **Employement & Company Information**
 
-<Expandable title="Authentication Variables">
-  <ResponseField name="{{ auth_token }}" type="text">
-    The authentication token for the user. **Example:** `{{ auth_token }}`
+<Expandable title="Employment & Company Information">
+  <ResponseField name="{{company_name}}" type="text" default="TELI AI, LLC.">
+    References the contact's company's name.
   </ResponseField>
-  <ResponseField name="{{ auth_status }}" type="text">
-    The authentication status of the user. **Example:** `{{ auth_status }}`
+  <ResponseField name="{{company_position}}" type="text" default="CEO">
+    References the contact's current role at their company.
+  </ResponseField>
+  <ResponseField name="{{company_industry}}" type="text" default="Technology">
+    References the contact's company's industry.
+  </ResponseField>
+  <ResponseField name="{{years_worked}}" type="number" default="3">
+    References how long the contact has worked in their current role.
+  </ResponseField>
+  <ResponseField name="{{company_address_line 1}}" type="text" default="123 Washington Street">
+    References the contact's company's address line 1.
+  </ResponseField>
+  <ResponseField name="{{company_address_line 2}}" type="text" default="Suite 101">
+    References the contact's company's address line 2.
+  </ResponseField>
+  <ResponseField name="{{company_city}}" type="text" default="Lansing">
+    References the contact's company's city.
+  </ResponseField>
+  <ResponseField name="{{company_state}}" type="text" default="Michigan">
+    References the contact's company's state.
+  </ResponseField>
+  <ResponseField name="{{company_zip_code}}" type="text" default="10000">
+    References the contact's company's zip code.
+  </ResponseField>
+  <ResponseField name="{{company_country}}" type="text" default="United States">
+    References the contact's country.
   </ResponseField>
 </Expandable>
 
 ---
 
-### **System Variables**
+### **Finanical Information**
 
-<Expandable title="System Variables">
-  <ResponseField name="{{ system_timezone }}" type="text">
-    The current system timezone. **Example:** `{{ system_timezone }}`
+<Expandable title="Financial Information">
+  <ResponseField name="{{FICO_score}}" type="text" default="800">
+    References the contact's FICO score.
   </ResponseField>
-  <ResponseField name="{{ system_locale }}" type="text">
-    The locale setting of the system. **Example:** `{{ system_locale }}`
+  <ResponseField name="{{loan_balance}}" type="text" default="$0">
+    References the contact's loan or mortgage balance.
+  </ResponseField>
+  <ResponseField name="{{loan_monthly_payment}}" type="text" default="$0">
+    References the contact's loan or mortgage monthly payment.
+  </ResponseField>
+  <ResponseField name="{{loan_type}}" type="text" default="Conventional Loan">
+    References the contact's FICO loan or mortgage type.
+  </ResponseField>
+  <ResponseField name="{{lender_name}}" type="text" default="Bank of Teli">
+    References the contact's lender institution's name.
+  </ResponseField>
+  <ResponseField name="{{cc_balance}}" type="text" default="0">
+    References the contact's credit card balance.
+  </ResponseField>
+  <ResponseField name="{{savings}}" type="text" default="99999">
+    References the contact's savings account balance.
+  </ResponseField>
+  <ResponseField name="{{tax}}" type="text" default="999">
+    References the contact's taxes.
+  </ResponseField>
+  <ResponseField name="{{mortgage date}}" type="date" default="01/01/1990">
+    References the contact's mortgage date.
+  </ResponseField>
+  <ResponseField name="{{months_since_mtg_open}}" type="number" default="30">
+    References how many months since the contact has had an open mortgage.
+  </ResponseField>
+  ### 
+</Expandable>
+
+---
+
+### **Others**
+
+<Expandable title="Employment & Company Information">
+  <ResponseField name="{{sso}}" type="text" default="000-00-0000">
+    References the contact's social security number.
+  </ResponseField>
+  <ResponseField name="{{lead_source}}" type="text" default="Instagram">
+    References the source of contact (Google, Instagram, etc.).
+  </ResponseField>
+  <ResponseField name="{{notes}}" type="text" default="custom notes">
+    References additional notes associated with the contact.
   </ResponseField>
 </Expandable>
