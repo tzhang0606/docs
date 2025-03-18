@@ -5,7 +5,7 @@
     "dark": "/images/light_logo.png",
     "light": "/images/dark logo.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/images/telifavicon.png",
   "colors": {
     "primary": "#1870F3",
     "light": "#1870F3",
