@@ -2,14 +2,14 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Teli AI",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/images/light_logo.png",
+    "light": "/images/dark logo.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#1870F3",
+    "light": "#1870F3",
+    "dark": "#1870F3",
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
