@@ -68,14 +68,14 @@
         {
           "group": "Actions",
           "pages": [
-            "teli-agents/zapier-app/Actions/add-lead-to-campaign",
-            "teli-agents/zapier-app/Actions/upload-lead-to-lead-group"
+            "zapier-app/Actions/add-lead-to-campaign",
+            "zapier-app/Actions/upload-lead-to-lead-group"
           ]
         },
         { "group": "Triggers", 
           "pages": [
-            "teli-agents/zapier-app/Triggers/completed-call-data",
-            "teli-agents/zapier-app/Triggers/qualified-sms-contact"
+            "zapier-app/Triggers/completed-call-data",
+            "zapier-app/Triggers/qualified-sms-contact"
           ]
         }
       ]
