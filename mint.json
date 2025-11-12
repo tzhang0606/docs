@@ -56,14 +56,7 @@
       ]
     },
     {
-      "group": "Integrations & More",
-      "pages": [
-        "teli-agents/integrations",
-        "teli-agents/perks"
-      ]
-    },
-    {
-      "group": "Zapier App",
+      "group": "Integrations",
       "pages": [
         {
           "group": "Actions",
