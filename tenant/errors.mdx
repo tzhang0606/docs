@@ -1,0 +1,241 @@
+---
+title: 'Error Handling'
+description: 'Understanding and handling API errors'
+---
+
+## Error Response Format
+
+All errors follow this structure:
+
+```json
+{
+  "error": "Brief error description",
+  "message": "Detailed error message (optional)",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+---
+
+## HTTP Status Codes
+
+| Code | Meaning | Common Causes |
+|------|---------|---------------|
+| `200` | Success | Request completed successfully |
+| `202` | Accepted | Background processing started (campaigns) |
+| `400` | Bad Request | Missing required fields, invalid data format |
+| `401` | Unauthorized | Missing API key |
+| `403` | Forbidden | Invalid API key |
+| `404` | Not Found | Resource doesn't exist |
+| `500` | Internal Error | Server-side error (contact support) |
+
+---
+
+## Common Errors
+
+### Authentication Errors
+
+**401 - Missing API Key**
+```json
+{
+  "error": "Invalid API key",
+  "powered_by": "Teli"
+}
+```
+
+**Fix:** Add `X-API-Key` header to your request.
+
+---
+
+**403 - Invalid API Key**
+```json
+{
+  "error": "Invalid API key",
+  "powered_by": "Teli"
+}
+```
+
+**Fix:** Verify your API key is correct.
+
+---
+
+### Validation Errors
+
+**400 - Missing Required Fields**
+```json
+{
+  "error": "name is required",
+  "powered_by": "Teli"
+}
+```
+
+**Fix:** Include all required fields in your request body.
+
+---
+
+**400 - Invalid Data**
+```json
+{
+  "error": "agent_type must be 'sms' or 'voice'",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+**Fix:** Check field values match expected formats.
+
+---
+
+### Not Found Errors
+
+**404 - Resource Not Found**
+```json
+{
+  "error": "Organization not found",
+  "powered_by": "Teli"
+}
+```
+
+**Fix:** Verify the ID exists and is spelled correctly.
+
+---
+
+```json
+{
+  "error": "Agent not found",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+**Fix:** Ensure the agent_id is valid and belongs to your organization.
+
+---
+
+### Server Errors
+
+**500 - Internal Server Error**
+```json
+{
+  "error": "Failed to create organization",
+  "message": "Internal server error",
+  "powered_by": "Teli"
+}
+```
+
+**Fix:** Contact support if this persists.
+
+---
+
+## Error Handling Best Practices
+
+<CodeGroup>
+
+```javascript JavaScript
+try {
+  const response = await fetch('https://your-api.modal.run/v1/organizations', {
+    method: 'POST',
+    headers: {
+      'X-API-Key': process.env.API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: 'My Company' })
+  });
+  
+  const data = await response.json();
+  
+  if (!response.ok) {
+    // Handle HTTP errors
+    console.error(`HTTP ${response.status}: ${data.error}`);
+    throw new Error(data.error);
+  }
+  
+  if (!data.success) {
+    // Handle API errors
+    console.error(`API Error: ${data.error}`);
+    throw new Error(data.error);
+  }
+  
+  // Success!
+  return data.organization;
+  
+} catch (error) {
+  console.error('Failed to create organization:', error);
+  // Show user-friendly error message
+}
+```
+
+```python Python
+import requests
+
+try:
+    response = requests.post(
+        'https://your-api.modal.run/v1/organizations',
+        headers={'X-API-Key': os.environ['API_KEY']},
+        json={'name': 'My Company'}
+    )
+    
+    # Raise exception for HTTP errors
+    response.raise_for_status()
+    
+    data = response.json()
+    
+    if not data.get('success'):
+        # Handle API errors
+        raise Exception(data.get('error', 'Unknown error'))
+    
+    # Success!
+    return data['organization']
+    
+except requests.exceptions.HTTPError as e:
+    print(f'HTTP Error: {e}')
+except Exception as e:
+    print(f'Error: {e}')
+```
+
+</CodeGroup>
+
+---
+
+## Retry Logic
+
+For transient errors (500, network timeouts), implement exponential backoff:
+
+```javascript
+async function retryRequest(fn, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      
+      // Exponential backoff: 1s, 2s, 4s
+      const delay = Math.pow(2, i) * 1000;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}
+```
+
+---
+
+## Rate Limiting
+
+Current limits (subject to change):
+- **1000 requests/minute** per API key
+- **100 campaigns/day** per organization
+
+<Note>
+If you need higher limits, contact your account manager.
+</Note>
+
+## Getting Help
+
+If you encounter errors you can't resolve:
+
+1. Check this documentation
+2. Review your request format
+3. Verify all required fields
+4. Contact support: info@teli.ai
+

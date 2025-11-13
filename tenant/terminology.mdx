@@ -1,0 +1,94 @@
+---
+title: 'API Field Reference'
+description: 'Understanding Teli API response fields'
+---
+
+## Organization Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `unique_id` | Organization identifier | string |
+| `name` | Organization name | string |
+| `sms_active` | Can send SMS campaigns (requires 10DLC approval) | boolean |
+| `teli_sms_number` | Your assigned 10DLC phone number | string |
+| `business_registration_id` | 10DLC business registration ID | string |
+| `sms_registration_id` | 10DLC campaign registration ID | string |
+| `sms_registration_status` | Registration status | string |
+| `total_sms_outbound` | Total SMS sent (all-time) | number |
+| `total_sms_inbound` | Total SMS received (all-time) | number |
+
+## User Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `unique_id` | User identifier | string |
+| `name` | User's full name | string |
+| `email` | User's email address | string |
+| `permission` | `admin` or `user` | string |
+| `total_campaigns` | Campaigns created by this user | number |
+| `total_leads` | Contact lists uploaded by this user | number |
+| `total_agents` | Agents created by this user | number |
+| `total_sms_outbound` | SMS sent by this user | number |
+
+## Agent Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `agent_id` | Agent identifier | string |
+| `agent_type` | `sms` or `voice` | string |
+| `agent_name` | Agent display name | string |
+| `starting_message` | First message sent to contacts | string |
+| `general_prompt` | AI behavior instructions | string |
+| `drip_schedule` | Automated follow-up messages | array |
+| `drip_start_datetime` | When drip settings were last updated | timestamp |
+
+## Campaign Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `campaign_id` | Campaign identifier | string |
+| `campaign_name` | Campaign display name | string |
+| `status` | Campaign status | string |
+| `total_contacts` | Number of contacts in campaign | number |
+
+## Contact Fields
+
+| Field | Description | Type |
+|-------|-------------|------|
+| `phone_number` | Contact's phone (E.164 format) | string |
+| `first_name` | Contact's first name | string |
+| `last_name` | Contact's last name | string |
+| `email` | Contact's email | string |
+
+## Registration Status Values
+
+| Status | Description |
+|--------|-------------|
+| `not_started` | 10DLC registration not initiated |
+| `brand_created` | Business registered, pending campaign |
+| `pending_approval` | Campaign submitted, awaiting carrier approval |
+| `approved` | Approved! Organization can send SMS |
+| `rejected` | Registration denied |
+
+## Common Patterns
+
+### Identifiers
+All IDs follow the format: `{timestamp}x{random}`
+
+Example: `1763070568417x631086913669115287`
+
+### Phone Numbers
+All phone numbers use E.164 format:
+
+```
++1XXXXXXXXXX  (US)
++44XXXXXXXXX  (UK)
+```
+
+### Timestamps
+All timestamps are in ISO 8601 UTC format:
+
+```
+2025-11-13T22:19:25.47111+00:00
+```
+

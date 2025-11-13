@@ -1,0 +1,248 @@
+---
+title: 'Contacts API'
+description: 'Upload and manage contact lists'
+---
+
+## Upload Contact List
+
+Upload a list of contacts for SMS campaigns.
+
+<ParamField body="list_name" type="string" required>
+  Name for this contact list
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (uploader)
+</ParamField>
+
+<ParamField body="contacts" type="array" required>
+  Array of contact objects
+</ParamField>
+
+### Contact Object
+
+<ParamField body="contacts[].phone_number" type="string" required>
+  Phone number in E.164 format (e.g., `+15551234567`)
+</ParamField>
+
+<ParamField body="contacts[].first_name" type="string">
+  Contact's first name
+</ParamField>
+
+<ParamField body="contacts[].last_name" type="string">
+  Contact's last name
+</ParamField>
+
+<ParamField body="contacts[].email" type="string">
+  Contact's email address
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://your-api.modal.run/v1/contacts/lists \
+  -H "X-API-Key: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "list_name": "November Leads",
+    "organization_id": "1763070568417x...",
+    "user_id": "1763072368418x...",
+    "contacts": [
+      {
+        "phone_number": "+15551234567",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john@example.com"
+      },
+      {
+        "phone_number": "+15559876543",
+        "first_name": "Jane",
+        "last_name": "Smith"
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://your-api.modal.run/v1/contacts/lists', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'your_api_key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    list_name: 'November Leads',
+    organization_id: orgId,
+    user_id: userId,
+    contacts: [
+      {
+        phone_number: '+15551234567',
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john@example.com'
+      }
+    ]
+  })
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "list_id": "1763072372500x777103986713560785",
+  "list_name": "November Leads",
+  "contacts_imported": 2,
+  "message": "Contact list created with 2 contacts",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 Error
+{
+  "error": "list_name, organization_id, user_id, and contacts are required",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## List Contact Lists
+
+Get all contact lists for an organization.
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all org lists. If false, returns only user's lists.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://your-api.modal.run/v1/contacts/lists?organization_id={org_id}&user_id={user_id}&is_admin=true" \
+  -H "X-API-Key: your_api_key"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "count": 3,
+  "lists": [
+    {
+      "unique_id": "1763072372500x...",
+      "group_name": "November Leads",
+      "total_leads": 25,
+      "uploaded_at": "2025-11-13T22:19:32.53684",
+      "users": {
+        "name": "John Smith"
+      }
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Get Contacts from List
+
+Retrieve all contacts in a specific list.
+
+<ParamField path="list_id" type="string" required>
+  Contact list unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET https://your-api.modal.run/v1/contacts/lists/{list_id}/contacts \
+  -H "X-API-Key": your_api_key"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "total": 25,
+  "contacts": [
+    {
+      "unique_id": "1763072372569x...",
+      "phone_number": "+15551234567",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john@example.com",
+      "lead_id": "1763072372569x..."
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 404 Error
+{
+  "error": "Contact list not found",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Phone Number Format
+
+All phone numbers must be in **E.164 format**:
+
+```
++1XXXXXXXXXX  (US - 11 digits including country code)
++44XXXXXXXXX  (UK)
++91XXXXXXXXXX (India)
+```
+
+Examples:
+- ✅ `+15551234567`
+- ❌ `555-123-4567`
+- ❌ `(555) 123-4567`
+
+## Variable Substitution
+
+Use these in messages for personalization:
+
+- `{{first_name}}` - Contact's first name
+- `{{last_name}}` - Contact's last name
+
+Example:
+```
+"Hi {{first_name}}, are you still interested?"
+```
+
+Becomes:
+```
+"Hi John, are you still interested?"
+```
+

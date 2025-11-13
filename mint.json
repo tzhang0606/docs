@@ -30,6 +30,11 @@
       "name": "Community",
       "icon": "telegram",
       "url": "https://t.me/+v5wRD0hAUpc5MzA5"
+    },
+    {
+      "name": "API Reference",
+      "icon": "code",
+      "url": "tenant-api/introduction"
     }
   ],
   "navigation": [
@@ -65,12 +70,29 @@
             "zapier-app/Actions/upload-lead-to-lead-group"
           ]
         },
-        { "group": "Triggers", 
+        { 
+          "group": "Triggers", 
           "pages": [
             "zapier-app/Triggers/completed-call-data",
             "zapier-app/Triggers/qualified-sms-contact"
           ]
         }
+      ]
+    },
+    {
+      "group": "🔷 Partner API Documentation",
+      "pages": [
+        "tenant/introduction",
+        "tenant/quickstart",
+        "tenant/authentication",
+        "tenant/terminology",
+        "tenant/organizations",
+        "tenant/users",
+        "tenant/agents",
+        "tenant/contacts",
+        "tenant/campaigns",
+        "tenant/dnc",
+        "tenant/errors"
       ]
     }
   ],
@@ -79,3 +101,4 @@
     "linkedin": "https://www.linkedin.com/company/teli-ai/"
   }
 }
+

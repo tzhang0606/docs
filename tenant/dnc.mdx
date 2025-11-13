@@ -1,0 +1,156 @@
+---
+title: 'Do Not Call API'
+description: 'Manage your Do Not Call list'
+---
+
+## What is the DNC List?
+
+The Do Not Call (DNC) list prevents sending messages to contacts who have opted out or requested no contact.
+
+<Warning>
+**Compliance**: Always respect DNC requests. Sending to DNC-listed numbers may violate regulations.
+</Warning>
+
+---
+
+## Add to DNC List
+
+Add a phone number to your organization's DNC list.
+
+<ParamField body="phone_number" type="string" required>
+  Phone number in E.164 format
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://your-api.modal.run/v1/dnc/add \
+  -H "X-API-Key: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phone_number": "+15551234567",
+    "organization_id": "1763070568417x..."
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://your-api.modal.run/v1/dnc/add', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'your_api_key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    phone_number: '+15551234567',
+    organization_id: orgId
+  })
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "message": "Phone number added to DNC list",
+  "phone_number": "+15551234567",
+  "organization_id": "1763070568417x...",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Remove from DNC List
+
+Remove a phone number from your organization's DNC list.
+
+<ParamField body="phone_number" type="string" required>
+  Phone number in E.164 format
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://your-api.modal.run/v1/dnc/remove \
+  -H "X-API-Key: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phone_number": "+15551234567",
+    "organization_id": "1763070568417x..."
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "success": true,
+  "message": "Phone number removed from DNC list",
+  "phone_number": "+15551234567",
+  "organization_id": "1763070568417x...",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## How DNC Works
+
+### Automatic Blocking
+
+When a contact is on the DNC list:
+1. ❌ Campaign messages are **blocked automatically**
+2. ❌ Follow-up messages are **blocked automatically**
+3. ✅ Manual removal required to re-enable messaging
+
+### STOP Keyword Handling
+
+When a contact replies with "STOP":
+1. ✅ Automatically added to DNC list
+2. ✅ All future messages blocked
+3. ✅ Compliant with regulations
+
+Common STOP keywords:
+- STOP, QUIT, UNSUBSCRIBE
+- CANCEL, END, REMOVE
+- OPTOUT, STOPALL
+
+### DNC Scope
+
+- **Organization-level**: Each organization has its own DNC list
+- **Shared across campaigns**: DNC applies to all campaigns in the organization
+- **Permanent**: Stays on DNC until manually removed
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Honor Opt-Outs Immediately">
+    Add contacts to DNC as soon as they request it. Don't wait!
+  </Accordion>
+  
+  <Accordion title="Sync Your CRM">
+    Keep your DNC list in sync with your CRM's opt-out status.
+  </Accordion>
+  
+  <Accordion title="Regular Audits">
+    Periodically review your DNC list for accuracy.
+  </Accordion>
+</AccordionGroup>
+
