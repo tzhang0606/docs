@@ -25,6 +25,16 @@
     "name": "Dashboard",
     "url": "https://teli.ai/dashboard?page=ai"
   },
+  "tabs": [
+    {
+      "name": "Teli Platform",
+      "url": "platform"
+    },
+    {
+      "name": "Partner API",
+      "url": "api"
+    }
+  ],
   "anchors": [
     {
       "name": "Community",
@@ -34,20 +44,20 @@
   ],
   "navigation": [
     {
-      "group": "Teli Platform - Introduction",
+      "group": "Introduction",
       "pages": [
         "introduction"
       ]
     },
     {
-      "group": "Teli Platform - AI Agents",
+      "group": "AI Agents Setup",
       "pages": [
         "teli-agents/agents",
         "teli-agents/dynamic-variables2"
       ]
     },
     {
-      "group": "Teli Platform - Campaigns",
+      "group": "Running Campaigns",
       "pages": [
         "teli-agents/contacts",
         "teli-agents/teli-voice",
@@ -56,7 +66,7 @@
       ]
     },
     {
-      "group": "Teli Platform - Integrations",
+      "group": "Integrations",
       "pages": [
         {
           "group": "Actions",
@@ -73,72 +83,11 @@
           ]
         }
       ]
-    },
-    {
-      "group": "Partner API - Getting Started",
-      "pages": [
-        "tenant/introduction",
-        "tenant/quickstart",
-        "tenant/authentication"
-      ]
-    },
-    {
-      "group": "Partner API - Organizations",
-      "pages": [
-        "tenant/organizations/create",
-        "tenant/organizations/get",
-        "tenant/organizations/list"
-      ]
-    },
-    {
-      "group": "Partner API - Users",
-      "pages": [
-        "tenant/users/create",
-        "tenant/users/list"
-      ]
-    },
-    {
-      "group": "Partner API - SMS Agents",
-      "pages": [
-        "tenant/agents/create",
-        "tenant/agents/list",
-        "tenant/agents/get",
-        "tenant/agents/update",
-        "tenant/agents/delete"
-      ]
-    },
-    {
-      "group": "Partner API - Contacts",
-      "pages": [
-        "tenant/contacts/create",
-        "tenant/contacts/list",
-        "tenant/contacts/get",
-        "tenant/contacts/delete"
-      ]
-    },
-    {
-      "group": "Partner API - Campaigns",
-      "pages": [
-        "tenant/campaigns/create",
-        "tenant/campaigns/list",
-        "tenant/campaigns/delete"
-      ]
-    },
-    {
-      "group": "Partner API - Do Not Call",
-      "pages": [
-        "tenant/dnc/add",
-        "tenant/dnc/remove"
-      ]
-    },
-    {
-      "group": "Partner API - Reference",
-      "pages": [
-        "tenant/terminology",
-        "tenant/errors"
-      ]
     }
   ],
+  "api": {
+    "baseUrl": "https://api.example.com"
+  },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
     "linkedin": "https://www.linkedin.com/company/teli-ai/"
