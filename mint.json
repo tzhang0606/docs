@@ -150,11 +150,7 @@
     }
   ],
   "api": {
-    "baseUrl": "https://api.example.com",
-    "auth": {
-      "method": "key",
-      "name": "X-API-Key"
-    }
+    "baseUrl": "https://api.example.com"
   },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
