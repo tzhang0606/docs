@@ -150,7 +150,7 @@
     }
   ],
   "api": {
-    "baseUrl": "https://api.example.com",
+    "baseUrl": ["https://api.example.com"],
     "auth": {
       "method": "key",
       "name": "X-API-Key"
