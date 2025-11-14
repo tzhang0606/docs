@@ -7,20 +7,44 @@ description: 'Manage users within organizations'
 
 Create a new user in an organization.
 
+### Path Parameters
+
 <ParamField path="org_id" type="string" required>
-  Organization unique_id
+  **Required.** Organization unique_id from URL path.
+  
+  Example: `1763070568417x631086913669115287`
 </ParamField>
 
+### Required Body Parameters
+
 <ParamField body="name" type="string" required>
-  User's full name
+  **Required.** User's full name.
+  
+  Max length: 255 characters
+  
+  Example: `"John Smith"`
 </ParamField>
 
 <ParamField body="email" type="string" required>
-  User's email address (must be unique)
+  **Required.** User's email address.
+  
+  Must be unique across all users.
+  
+  Format: Valid email
+  
+  Example: `"john@mycompany.com"`
 </ParamField>
 
+### Optional Parameters
+
 <ParamField body="permission" type="string" default="user">
-  Permission level: `admin` or `user`
+  **Optional.** User permission level.
+  
+  Values:
+  - `admin`: Full organization access
+  - `user`: Limited to own resources
+  
+  Default: `"user"`
 </ParamField>
 
 <RequestExample>

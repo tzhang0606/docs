@@ -5,6 +5,24 @@ description: 'Manage organizations and 10DLC registration'
 
 ## Create Organization
 
+### Required Parameters
+
+<ParamField body="name" type="string" required>
+  **Required.** Organization name.
+  
+  Max length: 255 characters
+  
+  Example: `"My Company LLC"`
+</ParamField>
+
+<ParamField body="contact_email" type="string" required>
+  **Required.** Primary contact email for the organization.
+  
+  Format: Valid email address
+  
+  Example: `"admin@mycompany.com"`
+</ParamField>
+
 <RequestExample>
 
 ```bash cURL
