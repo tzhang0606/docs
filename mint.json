@@ -87,32 +87,32 @@
     {
       "group": "Getting Started",
       "pages": [
-        "api/introduction",
-        "api/quickstart",
-        "api/authentication"
+        "partner-api/introduction",
+        "partner-api/quickstart",
+        "partner-api/authentication"
       ]
     },
     {
       "group": "Organizations",
       "pages": [
-        "api/organizations/create",
-        "api/organizations/get",
-        "api/organizations/list"
+        "partner-api/organizations/create",
+        "partner-api/organizations/get",
+        "partner-api/organizations/list"
       ]
     },
     {
       "group": "Users",
       "pages": [
-        "api/users/create",
-        "api/users/list"
+        "partner-api/users/create",
+        "partner-api/users/list"
       ]
     },
     {
       "group": "SMS Agents",
       "pages": [
-        "api/agents/create",
-        "api/agents/list",
-        "api/agents/get",
+        "partner-api/agents/create",
+        "partner-api/agents/list",
+        "partner-api/agents/get",
         "api/agents/update",
         "api/agents/delete"
       ]
