@@ -8,7 +8,7 @@ description: 'Get started with Teli API in 5 minutes'
 Contact your Teli representative to receive your API key.
 
 ```bash
-X-API-Key: xxxxxxxxxxxxxxxxxxxxxxx
+X-API-Key: xxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 <Warning>
@@ -100,7 +100,7 @@ curl -X POST https://your-api.modal.run/v1/campaigns \
     "organization_id": "{org_id}",
     "user_id": "{user_id}",
     "sms_agent_id": "{agent_id}",
-    "teli_house_number": "+15551000001",
+    "teli_house_number": "13135727768",
     "contacts": [
       {"phone_number": "+15551234567", "first_name": "John"}
     ]
@@ -108,7 +108,7 @@ curl -X POST https://your-api.modal.run/v1/campaigns \
 ```
 
 <Note>
-**Note:** Before sending campaigns, you need to complete 10DLC registration to get your `teli_sms_number`. See the Organizations documentation.
+**Note:** Before sending campaigns, you need to complete 10DLC registration to get your `teli_house_number`. For now, you could use our test sms number provided in the request. See the Organizations documentation.
 </Note>
 
 ## Next Steps
