@@ -149,16 +149,6 @@
       ]
     }
   ],
-  "api": {
-    "baseUrl": ["https://api.example.com"],
-    "auth": {
-      "method": "key",
-      "name": "X-API-Key"
-    },
-    "playground": {
-      "mode": "simple"
-    }
-  },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
     "linkedin": "https://www.linkedin.com/company/teli-ai/"
