@@ -32,7 +32,7 @@
     },
     {
       "name": "Partner API",
-      "url": "api"
+      "url": "partner-api"
     }
   ],
   "anchors": [
