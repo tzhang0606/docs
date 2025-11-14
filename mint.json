@@ -83,11 +83,72 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Getting Started",
+      "pages": [
+        "api/introduction",
+        "api/quickstart",
+        "api/authentication"
+      ]
+    },
+    {
+      "group": "Organizations",
+      "pages": [
+        "api/organizations/create",
+        "api/organizations/get",
+        "api/organizations/list"
+      ]
+    },
+    {
+      "group": "Users",
+      "pages": [
+        "api/users/create",
+        "api/users/list"
+      ]
+    },
+    {
+      "group": "SMS Agents",
+      "pages": [
+        "api/agents/create",
+        "api/agents/list",
+        "api/agents/get",
+        "api/agents/update",
+        "api/agents/delete"
+      ]
+    },
+    {
+      "group": "Contacts",
+      "pages": [
+        "api/contacts/create",
+        "api/contacts/list",
+        "api/contacts/get",
+        "api/contacts/delete"
+      ]
+    },
+    {
+      "group": "Campaigns",
+      "pages": [
+        "api/campaigns/create",
+        "api/campaigns/list",
+        "api/campaigns/delete"
+      ]
+    },
+    {
+      "group": "Do Not Call",
+      "pages": [
+        "api/dnc/add",
+        "api/dnc/remove"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        "api/terminology",
+        "api/errors"
+      ]
     }
   ],
-  "api": {
-    "baseUrl": "https://api.example.com"
-  },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
     "linkedin": "https://www.linkedin.com/company/teli-ai/"

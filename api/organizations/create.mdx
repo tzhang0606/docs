@@ -4,16 +4,12 @@ api: 'POST /v1/organizations'
 description: 'Create a new organization'
 ---
 
-Create a new organization to manage your SMS campaigns, users, and contacts.
-
-<Note>
-After creating an organization, you'll need to complete 10DLC registration to obtain an SMS phone number before sending campaigns.
-</Note>
+Create a new organization to manage SMS campaigns, users, and contacts.
 
 ## Authorizations
 
 <ParamField header="X-API-Key" type="string" required>
-  Authentication header containing your API key. Contact your account manager to obtain your key.
+  Authentication header containing your API key.
 </ParamField>
 
 ## Body
@@ -25,7 +21,7 @@ After creating an organization, you'll need to complete 10DLC registration to ob
 </ParamField>
 
 <ParamField body="contact_email" type="string" required>
-  Primary contact email address for the organization.
+  Primary contact email.
   
   Example: `"admin@mycompany.com"`
 </ParamField>
@@ -56,7 +52,6 @@ const response = await fetch('https://api.example.com/v1/organizations', {
 });
 
 const data = await response.json();
-console.log(data.organization.unique_id);
 ```
 
 ```python Python
@@ -72,74 +67,39 @@ response = requests.post(
 )
 
 data = response.json()
-print(data['organization']['unique_id'])
 ```
 
 </RequestExample>
 
 <ResponseExample>
 
-```json 200 Success
+```json 200
 {
   "success": true,
-  "message": "Organization created successfully",
   "organization": {
     "unique_id": "1763070568417x631086913669115287",
     "name": "My Company LLC",
     "sms_active": false,
     "teli_sms_number": null,
-    "sms_registration_status": "not_started",
-    "business_registration_id": null,
-    "total_sms_outbound": 0,
-    "total_sms_inbound": 0,
-    "created_at": "2025-11-13T22:19:25.47111+00:00",
-    "updated_at": "2025-11-13T22:19:25.47111+00:00"
+    "sms_registration_status": "not_started"
   },
-  "powered_by": "Teli"
-}
-```
-
-```json 400 Error
-{
-  "error": "name is required",
-  "powered_by": "Teli"
-}
-```
-
-```json 401 Unauthorized
-{
-  "error": "Invalid API key",
   "powered_by": "Teli"
 }
 ```
 
 </ResponseExample>
 
-## Response Fields
+## Response
 
 <ResponseField name="unique_id" type="string">
-  Organization identifier. Use this in all subsequent API calls.
+  Organization identifier
 </ResponseField>
 
 <ResponseField name="sms_active" type="boolean">
-  Whether organization can send SMS campaigns. `false` until 10DLC registration is approved.
+  Whether organization can send SMS
 </ResponseField>
 
 <ResponseField name="teli_sms_number" type="string">
-  Assigned 10DLC phone number for sending SMS. `null` until approved.
+  Assigned phone number (null until 10DLC approved)
 </ResponseField>
-
-<ResponseField name="sms_registration_status" type="string">
-  10DLC registration status: `not_started`, `pending_approval`, `approved`, or `rejected`
-</ResponseField>
-
-## Next Steps
-
-After creating an organization:
-
-1. **Create a user** - Add team members with `POST /v1/organizations/{org_id}/users`
-2. **Register for 10DLC** - Complete SMS registration to get your phone number
-3. **Create SMS agents** - Set up conversation templates
-4. **Upload contacts** - Import your lead lists
-5. **Launch campaigns** - Start sending SMS
 
