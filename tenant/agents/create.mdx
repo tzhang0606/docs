@@ -1,0 +1,152 @@
+---
+title: 'Create SMS Agent'
+api: 'POST /v1/agents'
+description: 'Create a reusable AI conversation agent'
+---
+
+Create a reusable SMS agent with custom prompts and automated follow-ups. SMS agents can be used across multiple campaigns.
+
+<Info>
+SMS agents have no additional voice AI charges - only standard SMS messaging costs apply.
+</Info>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Body
+
+<ParamField body="agent_type" type="string" required>
+  Agent type. Must be `sms` for SMS agents or `voice` for voice-enabled agents.
+  
+  Example: `"sms"`
+</ParamField>
+
+<ParamField body="agent_name" type="string" required>
+  Display name for the agent.
+  
+  Example: `"Sales Follow-up Agent"`
+</ParamField>
+
+<ParamField body="starting_message" type="string" required>
+  First message sent to contacts. Supports variables: `{{first_name}}`, `{{last_name}}`
+  
+  Example: `"Hi {{first_name}}, are you still interested in our services?"`
+</ParamField>
+
+<ParamField body="prompt" type="string" required>
+  AI behavior instructions. Tells the agent how to respond to messages.
+  
+  Example: `"You are a helpful sales agent. Ask about their budget and timeline."`
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id.
+  
+  Example: `"1763070568417x631086913669115287"`
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (agent creator).
+  
+  Example: `"1763072368418x263803518630956376"`
+</ParamField>
+
+<ParamField body="drip_schedule" type="array">
+  **Optional.** Automated follow-up messages.
+  
+  Each item: `{ "day": number, "message": string }`
+  
+  Example:
+  ```json
+  [
+    {"day": 1, "message": "Just checking in!"},
+    {"day": 3, "message": "Happy to help when you're ready!"}
+  ]
+  ```
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.example.com/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Sales Follow-up Agent",
+    "starting_message": "Hi {{first_name}}, interested in our services?",
+    "prompt": "You are a helpful sales agent. Ask about budget and timeline.",
+    "organization_id": "1763070568417x...",
+    "user_id": "1763072368418x...",
+    "drip_schedule": [
+      {"day": 1, "message": "Just checking in!"}
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.example.com/v1/agents', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    agent_type: 'sms',
+    agent_name: 'Sales Follow-up Agent',
+    starting_message: 'Hi {{first_name}}, interested in our services?',
+    prompt: 'You are a helpful sales agent.',
+    organization_id: orgId,
+    user_id: userId
+  })
+});
+
+const data = await response.json();
+console.log(data.agent_id);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Success
+{
+  "success": true,
+  "agent_id": "1763072369786x980265710064263640",
+  "agent_type": "sms",
+  "agent_name": "Sales Follow-up Agent",
+  "has_drip_schedule": true,
+  "organization_id": "1763072364720x...",
+  "created_by": "1763072368418x...",
+  "message": "SMS agent created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 Error
+{
+  "error": "agent_name, organization_id, and user_id are required",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+</ResponseExample>
+
+## Response Fields
+
+<ResponseField name="agent_id" type="string">
+  Agent identifier. Use this when creating campaigns.
+</ResponseField>
+
+<ResponseField name="agent_type" type="string">
+  Confirms the agent type created (`sms` or `voice`).
+</ResponseField>
+
+<ResponseField name="has_drip_schedule" type="boolean">
+  Whether automated follow-ups are configured for this agent.
+</ResponseField>
+

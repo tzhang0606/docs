@@ -30,29 +30,24 @@
       "name": "Community",
       "icon": "telegram",
       "url": "https://t.me/+v5wRD0hAUpc5MzA5"
-    },
-    {
-      "name": "API Reference",
-      "icon": "code",
-      "url": "tenant-api/introduction"
     }
   ],
   "navigation": [
     {
-      "group": "Introduction",
+      "group": "Teli Platform - Introduction",
       "pages": [
         "introduction"
       ]
     },
     {
-      "group": "AI Agents Setup",
+      "group": "Teli Platform - AI Agents",
       "pages": [
         "teli-agents/agents",
         "teli-agents/dynamic-variables2"
       ]
     },
     {
-      "group": "Running Campaigns",
+      "group": "Teli Platform - Campaigns",
       "pages": [
         "teli-agents/contacts",
         "teli-agents/teli-voice",
@@ -61,7 +56,7 @@
       ]
     },
     {
-      "group": "Integrations",
+      "group": "Teli Platform - Integrations",
       "pages": [
         {
           "group": "Actions",
@@ -80,18 +75,66 @@
       ]
     },
     {
-      "group": "Partner API Documentation",
+      "group": "Partner API - Getting Started",
       "pages": [
         "tenant/introduction",
         "tenant/quickstart",
-        "tenant/authentication",
+        "tenant/authentication"
+      ]
+    },
+    {
+      "group": "Partner API - Organizations",
+      "pages": [
+        "tenant/organizations/create",
+        "tenant/organizations/get",
+        "tenant/organizations/list"
+      ]
+    },
+    {
+      "group": "Partner API - Users",
+      "pages": [
+        "tenant/users/create",
+        "tenant/users/list"
+      ]
+    },
+    {
+      "group": "Partner API - SMS Agents",
+      "pages": [
+        "tenant/agents/create",
+        "tenant/agents/list",
+        "tenant/agents/get",
+        "tenant/agents/update",
+        "tenant/agents/delete"
+      ]
+    },
+    {
+      "group": "Partner API - Contacts",
+      "pages": [
+        "tenant/contacts/create",
+        "tenant/contacts/list",
+        "tenant/contacts/get",
+        "tenant/contacts/delete"
+      ]
+    },
+    {
+      "group": "Partner API - Campaigns",
+      "pages": [
+        "tenant/campaigns/create",
+        "tenant/campaigns/list",
+        "tenant/campaigns/delete"
+      ]
+    },
+    {
+      "group": "Partner API - Do Not Call",
+      "pages": [
+        "tenant/dnc/add",
+        "tenant/dnc/remove"
+      ]
+    },
+    {
+      "group": "Partner API - Reference",
+      "pages": [
         "tenant/terminology",
-        "tenant/organizations",
-        "tenant/users",
-        "tenant/agents",
-        "tenant/contacts",
-        "tenant/campaigns",
-        "tenant/dnc",
         "tenant/errors"
       ]
     }
