@@ -1,0 +1,47 @@
+---
+title: 'List Users'  
+api: 'GET /v1/organizations/{org_id}/users'
+description: 'Get all users in an organization'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET https://api.example.com/v1/organizations/{org_id}/users \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "count": 2,
+  "users": [
+    {
+      "unique_id": "1763072368418x...",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "permission": "admin"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

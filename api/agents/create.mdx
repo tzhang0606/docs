@@ -4,10 +4,10 @@ api: 'POST /v1/agents'
 description: 'Create a reusable AI conversation agent'
 ---
 
-Create a reusable SMS agent with custom prompts and automated follow-ups. SMS agents can be used across multiple campaigns.
+Create a reusable SMS agent with custom conversation prompts and automated follow-ups.
 
 <Info>
-SMS agents have no additional voice AI charges - only standard SMS messaging costs apply.
+SMS agents have no additional charges beyond standard SMS costs.
 </Info>
 
 ## Authorizations
@@ -19,7 +19,7 @@ SMS agents have no additional voice AI charges - only standard SMS messaging cos
 ## Body
 
 <ParamField body="agent_type" type="string" required>
-  Agent type. Must be `sms` for SMS agents or `voice` for voice-enabled agents.
+  Agent type. Must be `sms` for SMS agents.
   
   Example: `"sms"`
 </ParamField>
@@ -33,13 +33,13 @@ SMS agents have no additional voice AI charges - only standard SMS messaging cos
 <ParamField body="starting_message" type="string" required>
   First message sent to contacts. Supports variables: `{{first_name}}`, `{{last_name}}`
   
-  Example: `"Hi {{first_name}}, are you still interested in our services?"`
+  Example: `"Hi {{first_name}}, are you interested in our services?"`
 </ParamField>
 
 <ParamField body="prompt" type="string" required>
-  AI behavior instructions. Tells the agent how to respond to messages.
+  AI behavior instructions. Tells the agent how to respond.
   
-  Example: `"You are a helpful sales agent. Ask about their budget and timeline."`
+  Example: `"You are a helpful sales agent. Ask about budget and timeline."`
 </ParamField>
 
 <ParamField body="organization_id" type="string" required>
@@ -62,8 +62,8 @@ SMS agents have no additional voice AI charges - only standard SMS messaging cos
   Example:
   ```json
   [
-    {"day": 1, "message": "Just checking in!"},
-    {"day": 3, "message": "Happy to help when you're ready!"}
+    {"day": 1, "message": "Just checking in from yesterday!"},
+    {"day": 3, "message": "Still here if you need anything!"}
   ]
   ```
 </ParamField>
@@ -78,11 +78,12 @@ curl -X POST https://api.example.com/v1/agents \
     "agent_type": "sms",
     "agent_name": "Sales Follow-up Agent",
     "starting_message": "Hi {{first_name}}, interested in our services?",
-    "prompt": "You are a helpful sales agent. Ask about budget and timeline.",
+    "prompt": "You are a helpful sales agent. Ask about their budget and timeline.",
     "organization_id": "1763070568417x...",
     "user_id": "1763072368418x...",
     "drip_schedule": [
-      {"day": 1, "message": "Just checking in!"}
+      {"day": 1, "message": "Just checking in!"},
+      {"day": 3, "message": "Happy to help when you'\''re ready!"}
     ]
   }'
 ```
@@ -108,11 +109,31 @@ const data = await response.json();
 console.log(data.agent_id);
 ```
 
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.example.com/v1/agents',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'agent_type': 'sms',
+        'agent_name': 'Sales Follow-up Agent',
+        'starting_message': 'Hi {{first_name}}, interested?',
+        'prompt': 'You are a helpful sales agent.',
+        'organization_id': org_id,
+        'user_id': user_id
+    }
+)
+
+data = response.json()
+print(data['agent_id'])
+```
+
 </RequestExample>
 
 <ResponseExample>
 
-```json 201 Success
+```json 201
 {
   "success": true,
   "agent_id": "1763072369786x980265710064263640",
@@ -126,7 +147,7 @@ console.log(data.agent_id);
 }
 ```
 
-```json 400 Error
+```json 400
 {
   "error": "agent_name, organization_id, and user_id are required",
   "powered_by": "Teli",
@@ -136,17 +157,17 @@ console.log(data.agent_id);
 
 </ResponseExample>
 
-## Response Fields
+## Response
 
 <ResponseField name="agent_id" type="string">
   Agent identifier. Use this when creating campaigns.
 </ResponseField>
 
 <ResponseField name="agent_type" type="string">
-  Confirms the agent type created (`sms` or `voice`).
+  Confirms the agent type: `sms` or `voice`
 </ResponseField>
 
 <ResponseField name="has_drip_schedule" type="boolean">
-  Whether automated follow-ups are configured for this agent.
+  Whether automated follow-ups are configured
 </ResponseField>
 

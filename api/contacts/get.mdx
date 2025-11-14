@@ -1,0 +1,47 @@
+---
+title: 'Get Contacts'
+api: 'GET /v1/contacts/lists/{id}/contacts'
+description: 'Get contacts from a list'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>
+  Contact list unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X GET https://api.example.com/v1/contacts/lists/{list_id}/contacts \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "total": 25,
+  "contacts": [
+    {
+      "unique_id": "1763072372569x...",
+      "phone_number": "+15551234567",
+      "first_name": "John",
+      "last_name": "Doe"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

@@ -1,0 +1,45 @@
+---
+title: 'Add to DNC'
+api: 'POST /v1/dnc/add'
+description: 'Add phone to Do Not Call list'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Body
+
+<ParamField body="phone_number" type="string" required>
+  Phone in E.164 format
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X POST https://api.example.com/v1/dnc/add \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"phone_number": "+15551234567", "organization_id": "{org_id}"}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "message": "Phone number added to DNC list",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

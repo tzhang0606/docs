@@ -1,0 +1,45 @@
+---
+title: 'Get Agent'
+api: 'GET /v1/agents/{id}'
+description: 'Get agent details'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>
+  Agent unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X GET https://api.example.com/v1/agents/{agent_id} \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "agent": {
+    "agent_id": "1763072369786x...",
+    "agent_name": "Sales Agent",
+    "agent_type": "sms",
+    "general_prompt": "You are helpful.",
+    "greeting_prompt": "Hi {{first_name}}!"
+  },
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

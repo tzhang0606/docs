@@ -1,0 +1,54 @@
+---
+title: 'List Contact Lists'
+api: 'GET /v1/contacts/lists'
+description: 'Get all contact lists'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Query
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean">
+  Show all org lists if true
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X GET "https://api.example.com/v1/contacts/lists?organization_id={org_id}&user_id={user_id}&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "count": 3,
+  "lists": [
+    {
+      "unique_id": "1763072372500x...",
+      "group_name": "November Leads",
+      "total_leads": 25
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
