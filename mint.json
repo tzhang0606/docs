@@ -113,39 +113,39 @@
         "partner-api/agents/create",
         "partner-api/agents/list",
         "partner-api/agents/get",
-        "api/agents/update",
-        "api/agents/delete"
+        "partner-api/agents/update",
+        "partner-api/agents/delete"
       ]
     },
     {
       "group": "Contacts",
       "pages": [
-        "api/contacts/create",
-        "api/contacts/list",
-        "api/contacts/get",
-        "api/contacts/delete"
+        "partner-api/contacts/create",
+        "partner-api/contacts/list",
+        "partner-api/contacts/get",
+        "partner-api/contacts/delete"
       ]
     },
     {
       "group": "Campaigns",
       "pages": [
-        "api/campaigns/create",
-        "api/campaigns/list",
-        "api/campaigns/delete"
+        "partner-api/campaigns/create",
+        "partner-api/campaigns/list",
+        "partner-api/campaigns/delete"
       ]
     },
     {
       "group": "Do Not Call",
       "pages": [
-        "api/dnc/add",
-        "api/dnc/remove"
+        "partner-api/dnc/add",
+        "partner-api/dnc/remove"
       ]
     },
     {
       "group": "Reference",
       "pages": [
-        "api/terminology",
-        "api/errors"
+        "partner-api/terminology",
+        "partner-api/errors"
       ]
     }
   ],
