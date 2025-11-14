@@ -149,6 +149,9 @@
       ]
     }
   ],
+  "api": {
+    "baseUrl": "https://api.example.com"
+  },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
     "linkedin": "https://www.linkedin.com/company/teli-ai/"
