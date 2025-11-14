@@ -150,7 +150,7 @@
     }
   ],
   "api": {
-    "baseUrl": "https://api.example.com"
+    "baseUrl": "https://teli-bevri--transfer-message-service-fastapi-app.modal.run"
   },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
