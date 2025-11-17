@@ -146,6 +146,7 @@
         "partner-api/10dlc/overview",
         "partner-api/10dlc/subgroup-create",
         "partner-api/10dlc/brand-create",
+        "partner-api/10dlc/phone-purchase",
         "partner-api/10dlc/campaign-create",
         "partner-api/10dlc/reference"
       ]
