@@ -32,7 +32,7 @@
     },
     {
       "name": "Partner API",
-      "url": "partner-api"
+      "url": "api"
     }
   ],
   "anchors": [
@@ -122,8 +122,7 @@
       "pages": [
         "partner-api/contacts/create",
         "partner-api/contacts/list",
-        "partner-api/contacts/get",
-        "partner-api/contacts/delete"
+        "partner-api/contacts/get"
       ]
     },
     {
@@ -142,6 +141,16 @@
       ]
     },
     {
+      "group": "10DLC Registration",
+      "pages": [
+        "partner-api/10dlc/overview",
+        "partner-api/10dlc/subgroup-create",
+        "partner-api/10dlc/brand-create",
+        "partner-api/10dlc/campaign-create",
+        "partner-api/10dlc/reference"
+      ]
+    },
+    {
       "group": "Reference",
       "pages": [
         "partner-api/terminology",
@@ -149,9 +158,6 @@
       ]
     }
   ],
-  "api": {
-    "baseUrl": "https://teli-bevri--transfer-message-service-fastapi-app.modal.run"
-  },
   "footerSocials": {
     "x": "https://x.com/TELI__AI",
     "linkedin": "https://www.linkedin.com/company/teli-ai/"

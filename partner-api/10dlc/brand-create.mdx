@@ -1,0 +1,143 @@
+---
+title: 'Register Business Brand'
+api: 'POST /v1/10dlc/brand'
+description: 'Register your business for 10DLC'
+---
+
+Register your business brand for 10DLC SMS messaging.
+
+<Note>
+You must create a subgroup first using `POST /v1/10dlc/subgroup` before registering a brand.
+</Note>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Body
+
+<ParamField body="entityType" type="string" required>
+  Business type: `PRIVATE_PROFIT`, `PUBLIC_PROFIT`, `NON_PROFIT`, `GOVERNMENT`, `SOLE_PROPRIETOR`
+</ParamField>
+
+<ParamField body="companyName" type="string" required>
+  Legal company name
+</ParamField>
+
+<ParamField body="displayName" type="string" required>
+  Brand/DBA name
+</ParamField>
+
+<ParamField body="ein" type="string" required>
+  Tax ID/EIN (9 digits)
+</ParamField>
+
+<ParamField body="phone" type="string" required>
+  Support phone (E.164 format)
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Support email
+</ParamField>
+
+<ParamField body="street" type="string" required>
+  Street address
+</ParamField>
+
+<ParamField body="city" type="string" required>
+  City
+</ParamField>
+
+<ParamField body="state" type="string" required>
+  State (2-letter code)
+</ParamField>
+
+<ParamField body="postalCode" type="string" required>
+  ZIP code
+</ParamField>
+
+<ParamField body="country" type="string" required>
+  Country (2-letter code, e.g., `US`)
+</ParamField>
+
+<ParamField body="vertical" type="string" required>
+  Industry: `REAL_ESTATE`, `FINANCIAL`, `HEALTHCARE`, `RETAIL`, etc.
+</ParamField>
+
+<ParamField body="website" type="string">
+  Company website URL
+</ParamField>
+
+<ParamField body="brandRelationship" type="string" required>
+  Relationship: `BASIC_ACCOUNT`, `MEDIUM_ACCOUNT`, `HIGH_ACCOUNT`
+</ParamField>
+
+<ParamField body="referenceId" type="string" required>
+  Your internal reference ID (prevents duplicates)
+</ParamField>
+
+<ParamField body="groupId" type="string" required>
+  Your account group ID (provided during onboarding)
+</ParamField>
+
+<ParamField body="subGroupId" type="array">
+  **Optional but recommended.** Array of subgroup IDs to assign this brand to.
+  
+  Get from: `POST /v1/10dlc/subgroup` response
+  
+  Example: `["SQ8YFT"]`
+</ParamField>
+
+<ParamField body="nonBlocking" type="boolean">
+  Set to `true` for async processing
+</ParamField>
+
+<ParamField body="mock" type="boolean">
+  Set to `true` for testing (no charges)
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.example.com/v1/10dlc/brand \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "entityType": "PRIVATE_PROFIT",
+    "companyName": "My Company LLC",
+    "displayName": "My Company",
+    "ein": "12-3456789",
+    "phone": "+13135551234",
+    "email": "admin@mycompany.com",
+    "street": "123 Main St",
+    "city": "Detroit",
+    "state": "MI",
+    "postalCode": "48201",
+    "country": "US",
+    "vertical": "REAL_ESTATE",
+    "website": "https://mycompany.com",
+    "brandRelationship": "BASIC_ACCOUNT",
+    "referenceId": "my_company_001",
+    "groupId": "YOUR_GROUP_ID",
+    "nonBlocking": true,
+    "mock": true
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "brandId": "B4KRR4F",
+  "companyName": "My Company LLC",
+  "status": "ACTIVE",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
