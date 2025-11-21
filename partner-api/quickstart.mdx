@@ -42,7 +42,7 @@ curl -X POST https://api.example.com/v1/agents \
   -d '{
     "agent_type": "sms",
     "agent_name": "Sales Agent",
-    "starting_message": "Hi {{first_name}}, interested in our services?",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},interested in our services?",
     "prompt": "You are a helpful sales agent.",
     "organization_id": "{org_id}",
     "user_id": "{user_id}"

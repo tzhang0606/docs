@@ -189,7 +189,7 @@ curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x3891737988614315
       "campaign_create_time": "2025-11-12T16:31:02+00:00",
       "sms_agent_id": "1762904472817x422002938962921563",
       "teli_sms_number": "13135727768",
-      "starting_message": "Hi {{first_name}}, did you want to develop a software for your business? I want to be able to help you with software consulting. Whether it's ed tech or bio tech or advanced automonomous technology, I am here to help you out. Please let me know if there's anything you want from me for your best software solution! ",
+      "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? I want to be able to help you with software consulting. Whether it's ed tech or bio tech or advanced automonomous technology, I am here to help you out. Please let me know if there's anything you want from me for your best software solution! ",
       "objective_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. \n\nIf you are able to get a budget. Please make an estimate and tell them what their budget is worth! 1000 for software UI, 1000 for simple backend infrastructure. 2000 on top of 1000 for tier 1 complexity. If they agree to consult, ask when is it best time to reach out by our team. ",
       "organization_id": "1762896364768x389173798861431550",
       "user_id": "1762896366429x599348279945132448",
@@ -219,7 +219,7 @@ curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x3891737988614315
       "campaign_create_time": "2025-11-18T21:15:01+00:00",
       "sms_agent_id": "1763490401240x434214358565169285",
       "teli_sms_number": "13135727768",
-      "starting_message": "Hi {{first_name}}, did you want to develop a software for your business? \n",
+      "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? \n",
       "objective_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. \n\nIf the user wants to talk over phone, make sure to trigger a call and ask the deatils. if user wants to schedule a call, schedule the call and call them at the given time. ",
       "organization_id": "1762896364768x389173798861431550",
       "user_id": "1762896366429x599348279945132448",
@@ -286,9 +286,9 @@ When enabled:
 ## Variable Substitution
 
 All message templates support dynamic variables:
-- `{{first_name}}` - Contact's first name
-- `{{last_name}}` - Contact's last name
-- `{{email}}` - Contact's email
+- `{'{'}{'{'}}first_name{'}'}{'}'}}` - Contact's first name
+- `{'{'}{'{'}}last_name{'}'}{'}'}}` - Contact's last name
+- `{'{'}{'{'}}email{'}'}{'}'}}` - Contact's email
 - Custom fields from lead data
 
 ## Notes

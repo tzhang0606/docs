@@ -71,7 +71,7 @@ Returns all AI agents (SMS and Voice) for an organization. Admins see all org ag
     </ResponseField>
     
     <ResponseField name="greeting_prompt" type="string">
-      Initial message sent to contacts (supports {{first_name}}, {{last_name}} variables)
+      Initial message sent to contacts (supports `{"{{first_name}}"}`, `{"{{last_name}}"}` variables)
     </ResponseField>
     
     <ResponseField name="general_prompt" type="string">
@@ -239,7 +239,7 @@ curl -X GET "https://api.teli.ai/v1/agents?organization_id=1762896364768x3891737
       "agent_name": "Voice Agent 1",
       "agent_type": "voice",
       "agent_status": "active",
-      "greeting_prompt": "Hi {{first_name}}, how can I help you today?",
+      "greeting_prompt": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
       "general_prompt": "You are a helpful AI assistant.",
       "follow_up_prompt": null,
       "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
@@ -280,7 +280,7 @@ curl -X GET "https://api.teli.ai/v1/agents?organization_id=1762896364768x3891737
       "agent_name": "SMS Agent",
       "agent_type": "sms",
       "agent_status": "active",
-      "greeting_prompt": "Hi {{first_name}}, did you want to develop a software for your business? \n",
+      "greeting_prompt": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? \n",
       "general_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. \n",
       "follow_up_prompt": null,
       "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
@@ -321,7 +321,7 @@ curl -X GET "https://api.teli.ai/v1/agents?organization_id=1762896364768x3891737
       "agent_name": "Ronaldo",
       "agent_type": "voice",
       "agent_status": "active",
-      "greeting_prompt": "Hi {{first_name}}, did you want to develop a software for your business? \n",
+      "greeting_prompt": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? \n",
       "general_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. Make sure to book an appointment with the team. If they miss the call, try to call them back just once more.\n",
       "follow_up_prompt": null,
       "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
@@ -373,5 +373,5 @@ Add `agent_type=voice` to get only voice agents, or `agent_type=sms` for SMS age
 
 - Voice agents have `voice_agent_id` and `voice_llm_id`
 - SMS agents have `drip_schedule` for automated follow-ups
-- Both agent types support variable substitution: `{{first_name}}`, `{{last_name}}`
+- Both agent types support variable substitution: `{"{{first_name}}"}`, `{"{{last_name}}"}`
 - Usage metrics are tracked per agent for billing
