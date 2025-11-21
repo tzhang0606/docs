@@ -108,7 +108,7 @@
       ]
     },
     {
-      "group": "SMS Agents",
+      "group": "AI Agents",
       "pages": [
         "partner-api/agents/create",
         "partner-api/agents/list",
@@ -118,36 +118,61 @@
       ]
     },
     {
-      "group": "Contacts",
+      "group": "Contacts & Leads",
       "pages": [
         "partner-api/contacts/create",
         "partner-api/contacts/list",
+        "partner-api/contacts/list-leads",
         "partner-api/contacts/get"
       ]
     },
     {
-      "group": "Campaigns",
+      "group": "SMS Campaigns",
       "pages": [
         "partner-api/campaigns/create",
         "partner-api/campaigns/list",
+        "partner-api/campaigns/list-sms",
         "partner-api/campaigns/delete"
       ]
     },
     {
-      "group": "Do Not Call",
+      "group": "Voice Campaigns",
+      "pages": [
+        "partner-api/voice-campaigns/create",
+        "partner-api/voice-campaigns/list",
+        "partner-api/voice-campaigns/delete"
+      ]
+    },
+    {
+      "group": "Phone Numbers",
+      "pages": [
+        "partner-api/phone-numbers/create",
+        "partner-api/phone-numbers/list"
+      ]
+    },
+    {
+      "group": "Call History",
+      "pages": [
+        "partner-api/call-history/list",
+        "partner-api/call-history/get"
+      ]
+    },
+    {
+      "group": "Do Not Call (DNC)",
       "pages": [
         "partner-api/dnc/add",
         "partner-api/dnc/remove"
       ]
     },
     {
-      "group": "10DLC Registration",
+      "group": "10DLC SMS Registration",
       "pages": [
+        "partner-api/10dlc/introduction",
         "partner-api/10dlc/overview",
         "partner-api/10dlc/subgroup-create",
         "partner-api/10dlc/brand-create",
-        "partner-api/10dlc/phone-purchase",
         "partner-api/10dlc/campaign-create",
+        "partner-api/10dlc/phone-purchase",
         "partner-api/10dlc/reference"
       ]
     },
@@ -164,4 +189,3 @@
     "linkedin": "https://www.linkedin.com/company/teli-ai/"
   }
 }
-

@@ -1,0 +1,105 @@
+---
+title: 'Create Organization'
+api: 'POST /v1/organizations'
+description: 'Create a new organization'
+---
+
+Create a new organization to manage SMS campaigns, users, and contacts.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Body
+
+<ParamField body="name" type="string" required>
+  Organization name.
+  
+  Example: `"My Company LLC"`
+</ParamField>
+
+<ParamField body="contact_email" type="string" required>
+  Primary contact email.
+  
+  Example: `"admin@mycompany.com"`
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.example.com/v1/organizations \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Company LLC",
+    "contact_email": "admin@mycompany.com"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.example.com/v1/organizations', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'My Company LLC',
+    contact_email: 'admin@mycompany.com'
+  })
+});
+
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.example.com/v1/organizations',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'name': 'My Company LLC',
+        'contact_email': 'admin@mycompany.com'
+    }
+)
+
+data = response.json()
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "organization": {
+    "unique_id": "1763070568417x631086913669115287",
+    "name": "My Company LLC",
+    "sms_active": false,
+    "teli_sms_number": null,
+    "sms_registration_status": "not_started"
+  },
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="unique_id" type="string">
+  Organization identifier
+</ResponseField>
+
+<ResponseField name="sms_active" type="boolean">
+  Whether organization can send SMS
+</ResponseField>
+
+<ResponseField name="teli_sms_number" type="string">
+  Assigned phone number (null until 10DLC approved)
+</ResponseField>
+

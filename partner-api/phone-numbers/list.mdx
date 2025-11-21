@@ -1,0 +1,193 @@
+---
+title: 'List Phone Numbers'
+api: 'GET /v1/voice/phone-numbers'
+description: 'Get all voice phone numbers for a user/organization'
+---
+
+## Description
+
+Returns all voice phone numbers owned by a user or organization. Admin users see all organization phone numbers.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="user_id" type="string" required>
+  User unique_id (phone numbers are user-owned)
+</ParamField>
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all org phone numbers. If false, returns only user's phone numbers.
+</ParamField>
+
+<ParamField query="phone_type" type="string" default="voice">
+  Filter by phone type: `voice` or `sms`
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of phone numbers
+</ResponseField>
+
+<ResponseField name="phone_numbers" type="array">
+  Array of phone number objects
+  
+  <Expandable title="Phone Number Object">
+    <ResponseField name="phone_number" type="string">
+      Phone number in E.164 format (e.g., "+15174686941")
+    </ResponseField>
+    
+    <ResponseField name="pretty_phone_number" type="string">
+      Formatted phone number (e.g., "+1 517-468-6941")
+    </ResponseField>
+    
+    <ResponseField name="id" type="uuid">
+      Internal phone number UUID
+    </ResponseField>
+    
+    <ResponseField name="area_code" type="string">
+      Area code (3 digits)
+    </ResponseField>
+    
+    <ResponseField name="phone_type" type="string">
+      Phone type: `voice` or `sms`
+    </ResponseField>
+    
+    <ResponseField name="provider" type="string">
+      Provider identifier: `teli-voice` or `teli_voice`
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="uuid">
+      User UUID who owns this phone number
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="uuid">
+      Organization UUID
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="outbound_agent_id" type="uuid">
+      Agent UUID for outbound calls (optional)
+    </ResponseField>
+    
+    <ResponseField name="inbound_agent_id" type="uuid">
+      Agent UUID for inbound calls (optional)
+    </ResponseField>
+    
+    <ResponseField name="nickname" type="string">
+      Custom nickname for the phone number (optional)
+    </ResponseField>
+    
+    <ResponseField name="location" type="string">
+      Geographic location of the number (optional)
+    </ResponseField>
+    
+    <ResponseField name="accessible_by" type="array">
+      List of user IDs who can access this number (optional)
+    </ResponseField>
+    
+    <ResponseField name="stripe_subscription_id" type="string">
+      Stripe subscription ID for billing (optional)
+    </ResponseField>
+    
+    <ResponseField name="zapier" type="boolean">
+      Whether Zapier integration is enabled
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      Phone number creation timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/phone-numbers?user_id=1762896366429x599348279945132448&organization_id=1762896364768x389173798861431550&is_admin=true&phone_type=voice" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 2,
+  "phone_numbers": [
+    {
+      "phone_number": "+15174686941",
+      "pretty_phone_number": "+1 517-468-6941",
+      "id": "2fa5412b-c6a1-495f-b546-a3cadc0316d9",
+      "area_code": "517",
+      "phone_type": "voice",
+      "provider": "teli_voice",
+      "user_id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "tenant_id": "your_tenant",
+      "outbound_agent_id": "74014854-b110-46c8-b037-18f0149baae6",
+      "inbound_agent_id": null,
+      "nickname": null,
+      "location": null,
+      "accessible_by": null,
+      "stripe_subscription_id": null,
+      "zapier": false,
+      "created_at": "2025-11-18T16:42:54.719787"
+    },
+    {
+      "phone_number": "+12489071796",
+      "pretty_phone_number": "+1 248-907-1796",
+      "id": "55027d16-d590-41d9-a508-bcbd216aedf2",
+      "area_code": "248",
+      "phone_type": "voice",
+      "provider": "teli-voice",
+      "user_id": "e4de5844-5b7b-45bb-8717-2c6f1f3f52ca",
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "tenant_id": "your_tenant",
+      "outbound_agent_id": null,
+      "inbound_agent_id": null,
+      "created_at": "2025-11-20T19:16:27.594576"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+## Ownership Model
+
+- **User-Level**: Phone numbers are owned by individual users
+- **Admin View**: Admin users can see all phone numbers in their organization
+- **Regular Users**: See only their own phone numbers
+
+## Agent Linking
+
+- `outbound_agent_id`: Agent used for outbound calls from this number
+- `inbound_agent_id`: Agent used for inbound calls to this number
+- Both are optional and can be set via `POST /v1/voice/phone-numbers/{number}/update-agent`
+
+## Notes
+
+- Phone numbers are provisioned through Teli Voice
+- Numbers can be linked to voice agents for automated calling
+- Admin users see all org numbers regardless of owner
+- E.164 format required: +[country code][number]
+

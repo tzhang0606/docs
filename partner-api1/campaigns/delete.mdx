@@ -1,0 +1,43 @@
+---
+title: 'Delete Campaign'
+api: 'DELETE /v1/campaigns/{id}'
+description: 'Delete a campaign'
+---
+
+Delete a campaign and all associated data.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>
+  Campaign unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X DELETE https://api.example.com/v1/campaigns/{campaign_id} \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 202
+{
+  "success": true,
+  "message": "Campaign deletion started",
+  "campaign_id": "1763072374x...",
+  "status": "processing",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

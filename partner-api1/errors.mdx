@@ -1,0 +1,52 @@
+---
+title: 'Error Handling'
+description: 'Understanding API errors'
+---
+
+## Error Format
+
+```json
+{
+  "error": "Brief description",
+  "message": "Detailed message",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+## Status Codes
+
+| Code | Meaning |
+|------|---------|
+| `200` | Success |
+| `202` | Accepted (processing) |
+| `400` | Bad request |
+| `401` | Unauthorized |
+| `403` | Forbidden |
+| `404` | Not found |
+| `500` | Server error |
+
+## Common Errors
+
+**401 - Missing API Key**
+```json
+{"error": "Invalid API key", "powered_by": "Teli"}
+```
+
+**400 - Missing Fields**
+```json
+{"error": "name is required", "powered_by": "Teli"}
+```
+
+**404 - Not Found**
+```json
+{"error": "Organization not found", "powered_by": "Teli"}
+```
+
+## Best Practices
+
+- Check `success` field in responses
+- Handle errors gracefully
+- Implement retry logic for 500 errors
+- Log errors for debugging
+

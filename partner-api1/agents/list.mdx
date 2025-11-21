@@ -1,0 +1,54 @@
+---
+title: 'List Agents'
+api: 'GET /v1/agents'
+description: 'Get all agents'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Query
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean">
+  Show all org agents if true
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X GET "https://api.example.com/v1/agents?organization_id={org_id}&user_id={user_id}&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "count": 3,
+  "agents": [
+    {
+      "agent_id": "1763072369786x...",
+      "agent_name": "Sales Agent",
+      "agent_type": "sms"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

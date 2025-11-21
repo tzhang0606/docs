@@ -1,0 +1,43 @@
+---
+title: 'List Organizations'
+api: 'GET /v1/organizations'
+description: 'List all organizations'
+---
+
+Retrieve all organizations accessible to your API key.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET https://api.example.com/v1/organizations \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "count": 3,
+  "organizations": [
+    {
+      "unique_id": "1763070568417x...",
+      "name": "Company A",
+      "sms_active": true,
+      "teli_sms_number": "+13135559999"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

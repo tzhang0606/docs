@@ -1,43 +1,183 @@
 ---
 title: 'List Organizations'
 api: 'GET /v1/organizations'
-description: 'List all organizations'
+description: 'Get all organizations in your account'
 ---
 
-Retrieve all organizations accessible to your API key.
+## Description
 
-## Authorizations
+Returns a list of all organizations in your Teli account with their registration status, usage metrics, and SMS settings.
+
+## Authentication
 
 <ParamField header="X-API-Key" type="string" required>
-  Authentication header containing your API key.
+  Your Teli API key
 </ParamField>
 
-<RequestExample>
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of organizations
+</ResponseField>
+
+<ResponseField name="organizations" type="array">
+  Array of organization objects
+  
+  <Expandable title="Organization Object">
+    <ResponseField name="unique_id" type="string">
+      Organization unique identifier (used in API calls)
+    </ResponseField>
+    
+    <ResponseField name="id" type="uuid">
+      Internal organization UUID
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      Organization display name
+    </ResponseField>
+    
+    <ResponseField name="organization_name" type="string">
+      Organization legal name
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier for multi-tenant isolation
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Organization status: `active`, `suspended`, `inactive`
+    </ResponseField>
+    
+    <ResponseField name="contact_email" type="string">
+      Primary contact email address
+    </ResponseField>
+    
+    <ResponseField name="sms_active" type="boolean">
+      Whether SMS messaging is active
+    </ResponseField>
+    
+    <ResponseField name="teli_sms_number" type="string">
+      Assigned Teli SMS phone number (E.164 format or without + prefix)
+    </ResponseField>
+    
+    <ResponseField name="sms_phone_number" type="string">
+      Internal database field
+    </ResponseField>
+    
+    <ResponseField name="business_registration_id" type="string">
+      Business registration ID for SMS compliance
+    </ResponseField>
+    
+    <ResponseField name="sms_registration_id" type="string">
+      SMS campaign registration ID
+    </ResponseField>
+    
+    <ResponseField name="sms_registration_uuid" type="string">
+      SMS campaign registration UUID
+    </ResponseField>
+    
+    <ResponseField name="sms_registration_status" type="string">
+      SMS registration status: `not_started`, `brand_created`, `pending_approval`, `approved`, `rejected`
+    </ResponseField>
+    
+    <ResponseField name="registration_submitted_at" type="timestamp">
+      When SMS registration was submitted
+    </ResponseField>
+    
+    <ResponseField name="registration_approved_at" type="timestamp">
+      When SMS registration was approved
+    </ResponseField>
+    
+    <ResponseField name="total_sms_outbound" type="integer">
+      Total outbound SMS messages sent
+    </ResponseField>
+    
+    <ResponseField name="total_sms_inbound" type="integer">
+      Total inbound SMS messages received
+    </ResponseField>
+    
+    <ResponseField name="total_mms_outbound" type="integer">
+      Total outbound MMS messages sent
+    </ResponseField>
+    
+    <ResponseField name="total_mms_inbound" type="integer">
+      Total inbound MMS messages received
+    </ResponseField>
+    
+    <ResponseField name="total_voice_seconds" type="integer">
+      Total voice call duration in seconds
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      Organization creation timestamp
+    </ResponseField>
+    
+    <ResponseField name="modified_at" type="timestamp">
+      Last modification timestamp
+    </ResponseField>
+    
+    <ResponseField name="updated_at" type="timestamp">
+      Last update timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
 
 ```bash cURL
-curl -X GET https://api.example.com/v1/organizations \
+curl -X GET "https://api.teli.ai/v1/organizations" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
-</RequestExample>
-
-<ResponseExample>
+## Example Response
 
 ```json 200
 {
   "success": true,
-  "count": 3,
+  "count": 2,
   "organizations": [
     {
-      "unique_id": "1763070568417x...",
-      "name": "Company A",
-      "sms_active": true,
-      "teli_sms_number": "+13135559999"
+      "unique_id": "1762896364768x389173798861431550",
+      "id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "name": "test org",
+      "organization_name": "test org",
+      "tenant_id": "your_tenant",
+      "status": "active",
+      "contact_email": null,
+      "sms_active": false,
+      "teli_sms_number": null,
+      "business_registration_id": null,
+      "sms_registration_id": null,
+      "sms_registration_uuid": null,
+      "sms_registration_status": "not_started",
+      "registration_submitted_at": null,
+      "registration_approved_at": null,
+      "total_sms_outbound": 45,
+      "total_sms_inbound": 38,
+      "total_mms_outbound": 0,
+      "total_mms_inbound": 2,
+      "total_voice_seconds": 942,
+      "created_at": "2025-11-11T21:26:05.028562",
+      "modified_at": "2025-11-11T21:26:05.028562",
+      "updated_at": "2025-11-20T19:45:24.927039+00:00"
     }
   ],
   "powered_by": "Teli"
 }
 ```
 
-</ResponseExample>
+## Notes
 
+- Organizations are the top-level entity in Teli
+- Each organization can have multiple users
+- SMS registration status determines messaging capabilities
+- Usage metrics are updated in real-time
+- Phone numbers are assigned after SMS registration approval

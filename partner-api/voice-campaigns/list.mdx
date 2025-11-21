@@ -1,0 +1,138 @@
+---
+title: 'List Voice Campaigns'
+api: 'GET /v1/voice/campaigns'
+description: 'Get all voice campaigns for an organization'
+---
+
+## Description
+
+Returns all voice campaigns (bulk calling campaigns) for an organization filtered by tenant.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="tenant_id" type="string" required>
+  Tenant identifier
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all org campaigns. If false, returns only user's campaigns.
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of campaigns
+</ResponseField>
+
+<ResponseField name="campaigns" type="array">
+  Array of voice campaign objects
+  
+  <Expandable title="Voice Campaign Object">
+    <ResponseField name="campaign_id" type="string">
+      Campaign unique identifier
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Campaign status: `active`, `paused`, `completed`, `ended`
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID used for calls
+    </ResponseField>
+    
+    <ResponseField name="agent_id" type="string">
+      Agent ID (alternative field, same as voice_agent_id)
+    </ResponseField>
+    
+    <ResponseField name="contacts_count" type="integer">
+      Number of contacts in campaign
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="string">
+      Organization unique_id
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="campaign_begin_time" type="timestamp">
+      When campaign calling started
+    </ResponseField>
+    
+    <ResponseField name="campaign_end_time" type="timestamp">
+      When campaign calling ended (or scheduled to end)
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      Campaign creation timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns?organization_id=1762896364768x389173798861431550&tenant_id=your_tenant&is_admin=false" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 1,
+  "campaigns": [
+    {
+      "campaign_id": "vc 1",
+      "status": "completed",
+      "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "contacts_count": 1,
+      "organization_id": "1762896364768x389173798861431550",
+      "tenant_id": "your_tenant",
+      "campaign_begin_time": "2025-11-20T19:44:46.536728",
+      "campaign_end_time": "2025-11-27T19:44:46.536728",
+      "created_at": ""
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+## Campaign Statuses
+
+| Status | Description |
+|--------|-------------|
+| `active` | Campaign is currently making calls |
+| `paused` | Campaign is temporarily paused |
+| `completed` | All contacts have been called |
+| `ended` | Campaign has been manually ended |
+
+## Notes
+
+- Voice campaigns make automated calls to contact lists
+- Uses Teli Voice agents for AI-powered conversations
+- Supports pause/resume/end operations
+- Admin users see all org campaigns, regular users see filtered view
+- Campaigns are scoped by tenant_id for multi-tenant isolation
+

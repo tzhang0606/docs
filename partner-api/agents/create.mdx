@@ -1,13 +1,13 @@
 ---
-title: 'Create SMS Agent'
+title: 'Create AI Agent'
 api: 'POST /v1/agents'
-description: 'Create a reusable AI conversation agent'
+description: 'Create a reusable AI conversation agent (SMS or Voice)'
 ---
 
-Create a reusable SMS agent with custom conversation prompts and automated follow-ups.
+Create a reusable AI agent with custom conversation prompts. Supports both SMS and Voice agents.
 
 <Info>
-SMS agents have no additional charges beyond standard SMS costs.
+SMS agents have no additional charges beyond standard SMS costs. Voice agents use Teli Voice platform with per-second billing.
 </Info>
 
 ## Authorizations
@@ -19,27 +19,27 @@ SMS agents have no additional charges beyond standard SMS costs.
 ## Body
 
 <ParamField body="agent_type" type="string" required>
-  Agent type. Must be `sms` for SMS agents.
+  Agent type: `sms` or `voice`
   
-  Example: `"sms"`
+  Example: `"voice"`
 </ParamField>
 
 <ParamField body="agent_name" type="string" required>
   Display name for the agent.
   
-  Example: `"Sales Follow-up Agent"`
+  Example: `"Sales Follow-up Agent"` or `"Ronaldo"`
 </ParamField>
 
 <ParamField body="starting_message" type="string" required>
-  First message sent to contacts. Supports variables: `{{first_name}}`, `{{last_name}}`
+  First message/greeting sent to contacts. Supports variables: `{{first_name}}`, `{{last_name}}`
   
-  Example: `"Hi {{first_name}}, are you interested in our services?"`
+  Example: `"Hi {{first_name}}, did you want to develop a software for your business?"`
 </ParamField>
 
 <ParamField body="prompt" type="string" required>
   AI behavior instructions. Tells the agent how to respond.
   
-  Example: `"You are a helpful sales agent. Ask about budget and timeline."`
+  Example: `"You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software."`
 </ParamField>
 
 <ParamField body="organization_id" type="string" required>
@@ -55,7 +55,7 @@ SMS agents have no additional charges beyond standard SMS costs.
 </ParamField>
 
 <ParamField body="drip_schedule" type="array">
-  **Optional.** Automated follow-up messages.
+  **SMS agents only.** Automated follow-up messages.
   
   Each item: `{ "day": number, "message": string }`
   
@@ -68,9 +68,25 @@ SMS agents have no additional charges beyond standard SMS costs.
   ```
 </ParamField>
 
+<ParamField body="voice_id" type="string">
+  **Voice agents only.** Voice ID for text-to-speech (e.g., "11labs-Adrian", "11labs-Josh")
+  
+  Default: `"11labs-Adrian"`
+</ParamField>
+
+<ParamField body="detect_voicemail" type="boolean">
+  **Voice agents only.** Enable voicemail detection.
+  
+  Default: `false`
+</ParamField>
+
+<ParamField body="voicemail_message" type="string">
+  **Voice agents only.** Message to leave if voicemail is detected.
+</ParamField>
+
 <RequestExample>
 
-```bash cURL
+```bash cURL (SMS Agent)
 curl -X POST https://api.example.com/v1/agents \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -85,6 +101,22 @@ curl -X POST https://api.example.com/v1/agents \
       {"day": 1, "message": "Just checking in!"},
       {"day": 3, "message": "Happy to help when you'\''re ready!"}
     ]
+  }'
+```
+
+```bash cURL (Voice Agent)
+curl -X POST https://api.example.com/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Ronaldo",
+    "starting_message": "Hi {{first_name}}, did you want to develop a software for your business?",
+    "prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. Make sure to book an appointment with the team. If they miss the call, try to call them back just once more.",
+    "organization_id": "1762896364768x389173798861431550",
+    "user_id": "1762896366429x599348279945132448",
+    "voice_id": "11labs-Adrian",
+    "detect_voicemail": false
   }'
 ```
 
@@ -133,7 +165,7 @@ print(data['agent_id'])
 
 <ResponseExample>
 
-```json 201
+```json 201 (SMS Agent)
 {
   "success": true,
   "agent_id": "1763072369786x980265710064263640",
@@ -143,6 +175,23 @@ print(data['agent_id'])
   "organization_id": "1763072364720x...",
   "created_by": "1763072368418x...",
   "message": "SMS agent created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 201 (Voice Agent)
+{
+  "success": true,
+  "agent_id": "1763500416653x437043850941191495",
+  "unique_id": "1763500417669x523666197914196602",
+  "agent_type": "voice",
+  "agent_name": "Ronaldo",
+  "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+  "voice_llm_id": "llm_768537625c23c0da51a0c10861e0",
+  "voice_id": "11labs-Adrian",
+  "organization_id": "1762896364768x389173798861431550",
+  "user_id": "1762896366429x599348279945132448",
+  "message": "Voice agent created successfully",
   "powered_by": "Teli"
 }
 ```
@@ -163,11 +212,58 @@ print(data['agent_id'])
   Agent identifier. Use this when creating campaigns.
 </ResponseField>
 
+<ResponseField name="unique_id" type="string">
+  Agent unique identifier (alternative ID)
+</ResponseField>
+
 <ResponseField name="agent_type" type="string">
   Confirms the agent type: `sms` or `voice`
 </ResponseField>
 
-<ResponseField name="has_drip_schedule" type="boolean">
-  Whether automated follow-ups are configured
+<ResponseField name="agent_name" type="string">
+  Agent display name
 </ResponseField>
+
+<ResponseField name="has_drip_schedule" type="boolean">
+  Whether automated follow-ups are configured (SMS agents only)
+</ResponseField>
+
+<ResponseField name="voice_agent_id" type="string">
+  Voice agent ID (voice agents only)
+</ResponseField>
+
+<ResponseField name="voice_llm_id" type="string">
+  Voice LLM ID (voice agents only)
+</ResponseField>
+
+<ResponseField name="voice_id" type="string">
+  Voice ID for TTS (voice agents only)
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Agent Types
+
+### SMS Agents
+- Used for text-based conversations
+- Support drip schedules for automated follow-ups
+- No additional charges beyond SMS costs
+- Can be configured with SMS-to-voice transfer
+
+### Voice Agents
+- Used for phone call conversations
+- Powered by Teli Voice platform
+- Support voicemail detection and custom voicemails
+- Billed per second of call time
+- Can be used standalone or with SMS-to-voice transfer
+
+## Notes
+
+- Agent IDs are unique across your organization
+- Prompts support variable substitution: `{{first_name}}`, `{{last_name}}`
+- Voice agents are created on Teli Voice platform and automatically configured
+- SMS agents can trigger voice agents when SMS-to-voice is enabled in campaigns
+- Both agent types support organization-wide or user-specific visibility
 
