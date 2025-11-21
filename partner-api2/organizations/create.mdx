@@ -73,7 +73,7 @@ data = response.json()
 
 <ResponseExample>
 
-```json 200 Success
+```json 200
 {
   "success": true,
   "organization": {
@@ -83,27 +83,6 @@ data = response.json()
     "teli_sms_number": null,
     "sms_registration_status": "not_started"
   },
-  "powered_by": "Teli"
-}
-```
-
-```json 400 Missing Field
-{
-  "error": "name is required",
-  "powered_by": "Teli"
-}
-```
-
-```json 401 No API Key
-{
-  "error": "Invalid API key",
-  "powered_by": "Teli"
-}
-```
-
-```json 403 Invalid Key
-{
-  "error": "Invalid API key",
   "powered_by": "Teli"
 }
 ```

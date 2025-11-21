@@ -1,0 +1,60 @@
+---
+title: 'Update Agent'
+api: 'PATCH /v1/agents/{id}'
+description: 'Update agent properties'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>
+  Agent unique_id
+</ParamField>
+
+## Body
+
+<ParamField body="agent_name" type="string">
+  Updated agent name
+</ParamField>
+
+<ParamField body="starting_message" type="string">
+  Updated starting message
+</ParamField>
+
+<ParamField body="prompt" type="string">
+  Updated AI instructions
+</ParamField>
+
+<ParamField body="drip_schedule" type="array">
+  Updated drip messages
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X PATCH https://api.example.com/v1/agents/{agent_id} \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"agent_name": "Updated Sales Agent"}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "agent_id": "1763072369786x...",
+  "message": "Agent updated successfully",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

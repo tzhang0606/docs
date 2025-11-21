@@ -119,22 +119,6 @@ curl -X GET "https://api.teli.ai/v1/voice/campaigns?organization_id=176289636476
 }
 ```
 
-```json 400 (Missing Organization ID)
-{
-  "error": "organization_id required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 500 (Server Error)
-{
-  "error": "Failed to list voice campaigns",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
 ## Campaign Statuses
 
 | Status | Description |

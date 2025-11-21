@@ -192,22 +192,6 @@ curl -X GET "https://api.teli.ai/v1/voice/calls?organization_id=1762896364768x38
 }
 ```
 
-```json 400 (Missing Organization ID)
-{
-  "error": "organization_id required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 500 (Server Error)
-{
-  "error": "Failed to list calls",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
 ## Notes
 
 - Calls are stored in Teli Voice database after completion

@@ -224,33 +224,9 @@ print(data['campaign_id'])
 }
 ```
 
-```json 400 (Missing Agent ID)
+```json 400
 {
   "error": "voice_agent_id required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 400 (Missing Phone Number)
-{
-  "error": "agent_outbound_number required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 400 (Missing Leads)
-{
-  "error": "leads array required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 500 (Server Error)
-{
-  "error": "Failed to start voice campaign",
   "success": false,
   "powered_by": "Teli"
 }

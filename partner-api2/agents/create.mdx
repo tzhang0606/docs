@@ -196,38 +196,6 @@ print(data['agent_id'])
 }
 ```
 
-```json 400 (Missing Required Fields)
-{
-  "error": "agent_name, organization_id, and user_id are required",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 400 (Invalid Agent Type)
-{
-  "error": "agent_type must be 'sms' or 'voice'",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 400 (Missing Voice ID)
-{
-  "error": "voice_id is required for voice agents",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
-```json 500 (Creation Failed)
-{
-  "error": "Failed to create agent - please check configuration",
-  "success": false,
-  "powered_by": "Teli"
-}
-```
-
 ```json 400
 {
   "error": "agent_name, organization_id, and user_id are required",
