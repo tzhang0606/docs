@@ -1,0 +1,259 @@
+---
+title: 'Voice Quick Start'
+description: 'Get started with Voice campaigns in 5 minutes'
+---
+
+## Overview
+
+This guide will walk you through creating your first voice campaign with AI-powered phone conversations.
+
+## Prerequisites
+
+- API key (contact your account manager)
+- Basic knowledge of REST APIs
+- cURL, JavaScript, or Python
+- Organization and User already created (see SMS Quick Start)
+
+---
+
+## Step 1: Create Voice Agent
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Voice Sales Agent",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
+    "prompt": "You are a professional voice assistant. Ask about their needs and offer solutions.",
+    "voice_id": "11labs-Adrian",
+    "language": "en-US",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}"
+  }'
+```
+
+<Tip>
+Choose from voices like "11labs-Adrian", "11labs-Josh", "11labs-Emily" for different tones!
+</Tip>
+
+**Response:**
+```json
+{
+  "success": true,
+  "agent_id": "1763487456442x530311914019296484",
+  "agent_type": "voice",
+  "voice_agent_id": "agent_76e782f267fad7f112b2339e2f",
+  "voice_llm_id": "llm_76ba232bb992d5bc1ca3b83b6a00",
+  "agent_name": "Voice Sales Agent",
+  "powered_by": "Teli"
+}
+```
+
+<Note>
+Save the `voice_agent_id` - you'll need it to create campaigns!
+</Note>
+
+---
+
+## Step 2: Provision Phone Number
+
+Voice campaigns require an outbound phone number.
+
+```bash
+curl -X POST https://api.teli.ai/v1/voice/phone-numbers/create \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "area_code": "415",
+    "user_id": "{user_id}",
+    "organization_id": "{org_id}",
+    "tenant_id": "{tenant_id}"
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "phone_number_pretty": "+1 415-555-1234",
+  "area_code": "415",
+  "phone_number_type": "teli-voice-twilio",
+  "powered_by": "Teli"
+}
+```
+
+<Tip>
+Phone numbers are instant - no approval needed! Choose any US/Canada area code.
+</Tip>
+
+---
+
+## Step 3: Upload Contacts
+
+```bash
+curl -X POST https://api.teli.ai/v1/contacts/lists \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "list_name": "Voice Leads",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [
+      {
+        "phone_number": "+15177304034",
+        "first_name": "Pranta",
+        "last_name": "Barua",
+        "email": "pranta@example.com"
+      }
+    ]
+  }'
+```
+
+---
+
+## Step 4: Create Voice Campaign
+
+```bash
+curl -X POST https://api.teli.ai/v1/voice/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "leads": [
+      {
+        "phone_number": "+15177304034",
+        "first_name": "Pranta",
+        "last_name": "Barua"
+      }
+    ],
+    "voice_agent_id": "{voice_agent_id}",
+    "agent_outbound_number": "{provisioned_phone}",
+    "organization_id": "{org_id}",
+    "tenant_id": "{tenant_id}"
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "campaign_id": "voice_campaign_4491036864fc",
+  "contacts_count": 1,
+  "invalid_leads_count": 0,
+  "campaign_begin_time": "2025-11-21T21:40:13.089462",
+  "campaign_end_time": "2025-11-28T21:40:13.089462",
+  "message": "Campaign started successfully",
+  "powered_by": "Teli"
+}
+```
+
+<Check>
+  Voice Campaign created! Calls will be placed automatically.
+</Check>
+
+---
+
+## What Happens Next?
+
+1. **Calls Placed** - Your contacts receive phone calls
+2. **AI Conversations** - AI agent conducts natural phone conversations
+3. **Call Recording** - All calls recorded and stored in S3
+4. **Transcripts** - Full transcripts with word-level timing
+5. **Analytics** - Sentiment analysis, call success metrics, cost tracking
+
+---
+
+## View Call History
+
+Track your calls and listen to recordings:
+
+```bash
+curl -X GET "https://api.teli.ai/v1/voice/calls?organization_id={org_id}&user_id={user_id}&is_admin=true&limit=10" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+**Response includes:**
+- Call transcripts
+- Recording URLs
+- Sentiment analysis
+- Call success metrics
+- Duration and cost
+
+---
+
+## Advanced Voice Features
+
+### Voicemail Detection
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -d '{
+    "agent_type": "voice",
+    "detect_voicemail": true,
+    "voicemail_message": "Hi, please call us back at 555-1234"
+  }'
+```
+
+### Custom Voice Settings
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -d '{
+    "agent_type": "voice",
+    "voice_speed": 0.9,
+    "voice_temperature": 1.2,
+    "ambient_sound": "coffee-shop",
+    "interruption_sensitivity": 0.8
+  }'
+```
+
+### Phone Number Linking
+
+Link agents to phone numbers for inbound calls:
+
+```bash
+curl -X POST https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_id": "{voice_agent_id}"
+  }'
+```
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="View Call History" icon="history" href="/partner-api/call-history/list">
+    Track and analyze calls
+  </Card>
+  <Card title="Manage Phone Numbers" icon="phone" href="/partner-api/phone-numbers/list">
+    View your phone numbers
+  </Card>
+  <Card title="Try SMS Campaigns" icon="message" href="/partner-api/quickstart-sms">
+    Get started with SMS
+  </Card>
+  <Card title="API Reference" icon="code" href="/partner-api/agents/create">
+    Explore all endpoints
+  </Card>
+</CardGroup>
+
+## Pricing
+
+Voice calls are billed per second:
+- **Base rate**: ~$0.19/minute
+- **Includes**: LLM processing, TTS, recording, storage
+- **Voicemail**: Same rate (detected automatically)
+
+View detailed cost breakdown in call history API responses.
+
+## Need Help?
+
+- **Support**: support@teli.ai
+- **Documentation**: Full API reference in Partner API tab
+- **Community**: Join our Telegram group
+
+

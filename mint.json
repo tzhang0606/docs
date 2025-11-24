@@ -89,7 +89,8 @@
       "pages": [
         "partner-api/introduction",
         "partner-api/authentication",
-        "partner-api/quickstart"
+        "partner-api/quickstart-sms",
+        "partner-api/quickstart-voice"
       ]
     },
     {
