@@ -130,7 +130,6 @@
       "group": "SMS Campaigns",
       "pages": [
         "partner-api/campaigns/create",
-        "partner-api/campaigns/list",
         "partner-api/campaigns/list-sms",
         "partner-api/campaigns/delete"
       ]
