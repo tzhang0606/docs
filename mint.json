@@ -88,8 +88,8 @@
       "group": "Getting Started",
       "pages": [
         "partner-api/introduction",
-        "partner-api/quickstart",
-        "partner-api/authentication"
+        "partner-api/authentication",
+        "partner-api/quickstart"
       ]
     },
     {
