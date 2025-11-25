@@ -115,6 +115,7 @@
         "partner-api/agents/list",
         "partner-api/agents/get",
         "partner-api/agents/update",
+        "partner-api/agents/update-tools",
         "partner-api/agents/delete"
       ]
     },
