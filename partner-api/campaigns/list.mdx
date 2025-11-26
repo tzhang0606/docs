@@ -1,0 +1,57 @@
+---
+title: 'List Campaigns'
+api: 'GET /v1/organizations/{org_id}/campaigns'
+description: 'Get all campaigns for an organization'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+## Query
+
+<ParamField query="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean">
+  If true, returns all org campaigns. If false, returns only user's campaigns.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.example.com/v1/organizations/{org_id}/campaigns?user_id={user_id}&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "count": 5,
+  "campaigns": [
+    {
+      "campaign_id": "1763072374x...",
+      "campaign_name": "November Outreach",
+      "status": "ACTIVE",
+      "total_clients": 25
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

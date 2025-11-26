@@ -1,0 +1,49 @@
+---
+title: 'API Field Reference'
+description: 'Understanding response fields'
+---
+
+## Organization Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `unique_id` | string | Organization identifier |
+| `sms_active` | boolean | Can send SMS campaigns |
+| `teli_sms_number` | string | Assigned 10DLC phone number |
+| `sms_registration_status` | string | Registration status |
+| `total_sms_outbound` | number | Total SMS sent |
+| `total_sms_inbound` | number | Total SMS received |
+
+## User Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `unique_id` | string | User identifier |
+| `permission` | string | `admin` or `user` |
+| `total_campaigns` | number | Campaigns created |
+| `total_agents` | number | Agents created |
+| `total_leads` | number | Contact lists uploaded |
+
+## Agent Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `agent_id` | string | Agent identifier |
+| `agent_type` | string | `sms` or `voice` |
+| `drip_schedule` | array | Automated follow-ups |
+
+## Phone Number Format
+
+All phone numbers use E.164 format:
+
+```
++1XXXXXXXXXX  (US)
++44XXXXXXXXX  (UK)
+```
+
+## Variable Substitution
+
+Use in messages:
+- `{'{'}{'{'}}first_name{'}'}{'}'}}` - Contact's first name
+- `{'{'}{'{'}}last_name{'}'}{'}'}}` - Contact's last name
+

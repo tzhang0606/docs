@@ -1,0 +1,274 @@
+---
+title: 'Create Voice Campaign'
+api: 'POST /v1/voice/campaigns'
+description: 'Start a bulk voice campaign'
+---
+
+## Description
+
+Creates and starts a bulk voice campaign using your voice agent. Calls contacts in your leads list and conducts AI-powered conversations.
+
+**Use Cases:**
+- Outbound sales calls
+- Customer surveys
+- Appointment reminders
+- Lead qualification
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="leads" type="array" required>
+  Array of contact objects to call
+  
+  Each contact object:
+  ```json
+  {
+    "phone_number": "+14155551234",  // Required
+    "first_name": "John",            // Optional
+    "last_name": "Doe",               // Optional
+    "email": "john@example.com",      // Optional
+    // ... any custom fields for dynamic variables
+  }
+  ```
+</ParamField>
+
+<ParamField body="voice_agent_id" type="string" required>
+  Voice agent ID to use for calls (e.g., "agent_86f826bf8f59bacd5c10ae948a")
+</ParamField>
+
+<ParamField body="agent_outbound_number" type="string" required>
+  Default outbound phone number for the campaign (E.164 format)
+  
+  Example: `"+15174686941"`
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id that owns this campaign
+</ParamField>
+
+<ParamField body="tenant_id" type="string" required>
+  Tenant identifier for multi-tenant isolation
+</ParamField>
+
+<ParamField body="campaign_id" type="string">
+  Optional campaign identifier. Auto-generated if not provided.
+  
+  Default: `"voice_campaign_{random}"`
+</ParamField>
+
+<ParamField body="number_pool" type="array">
+  Optional pool of phone numbers to rotate for outbound calls
+  
+  Example:
+  ```json
+  [
+    {"phone_number": "+14155550001"},
+    {"phone_number": "+14155550002"}
+  ]
+  ```
+</ParamField>
+
+<ParamField body="campaign_begin_time" type="timestamp">
+  When to start calling (ISO 8601 format)
+  
+  Default: Immediately
+</ParamField>
+
+<ParamField body="campaign_end_time" type="timestamp">
+  When to stop calling (ISO 8601 format)
+  
+  Default: 7 days from now
+</ParamField>
+
+<ParamField body="redial_enabled" type="boolean">
+  Whether to retry failed calls
+  
+  Default: `false`
+</ParamField>
+
+<ParamField body="redial_config" type="object">
+  Retry configuration if `redial_enabled` is true
+  
+  ```json
+  {
+    "retry_limit": 3,           // Max retry attempts
+    "call_interval_days": 1     // Days between retries
+  }
+  ```
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the campaign was created successfully
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Unique campaign identifier
+</ResponseField>
+
+<ResponseField name="contacts_count" type="integer">
+  Number of valid contacts added to campaign
+</ResponseField>
+
+<ResponseField name="invalid_leads_count" type="integer">
+  Number of invalid contacts (missing phone numbers)
+</ResponseField>
+
+<ResponseField name="campaign_begin_time" type="timestamp">
+  When campaign will start calling
+</ResponseField>
+
+<ResponseField name="campaign_end_time" type="timestamp">
+  When campaign will stop calling
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/campaigns" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "leads": [
+      {
+        "phone_number": "+15551234567",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "pranta@example.com"
+      }
+    ],
+    "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+    "agent_outbound_number": "+15174686941",
+    "organization_id": "1762896364768x389173798861431550",
+    "tenant_id": "your_tenant"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/voice/campaigns', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    leads: [
+      {
+        phone_number: '+15551234567',
+        first_name: 'John',
+        last_name: 'Doe'
+      }
+    ],
+    voice_agent_id: 'agent_86f826bf8f59bacd5c10ae948a',
+    agent_outbound_number: '+15174686941',
+    organization_id: orgId,
+    tenant_id: tenantId
+  })
+});
+
+const data = await response.json();
+console.log(data.campaign_id);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.teli.ai/v1/voice/campaigns',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'leads': [
+            {
+                'phone_number': '+15551234567',
+                'first_name': 'John',
+                'last_name': 'Doe'
+            }
+        ],
+        'voice_agent_id': 'agent_86f826bf8f59bacd5c10ae948a',
+        'agent_outbound_number': '+15174686941',
+        'organization_id': org_id,
+        'tenant_id': tenant_id
+    }
+)
+
+data = response.json()
+print(data['campaign_id'])
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_4491036864fc",
+  "contacts_count": 1,
+  "invalid_leads_count": 0,
+  "campaign_begin_time": "2025-11-21T21:40:13.089462",
+  "campaign_end_time": "2025-11-28T21:40:13.089462",
+  "message": "Campaign started successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Agent ID)
+{
+  "error": "voice_agent_id required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Phone Number)
+{
+  "error": "agent_outbound_number required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Leads)
+{
+  "error": "leads array required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to start voice campaign",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Calls are made asynchronously after campaign creation
+- Campaign status can be tracked via `GET /v1/voice/campaigns`
+- All calls are recorded and stored in Teli Voice Storage (S3)
+- Call history is available via `GET /v1/voice/calls`
+- Voice agents must be created first via `POST /v1/agents`
+- Phone numbers must be provisioned first via `POST /v1/voice/phone-numbers/create`
+
+## Related Endpoints
+
+- `GET /v1/voice/campaigns` - List campaigns
+- `DELETE /v1/voice/campaigns/{id}` - Delete campaign
+- `POST /v1/agents` - Create voice agent
+- `GET /v1/voice/calls` - View call history
+

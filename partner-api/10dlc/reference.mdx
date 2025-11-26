@@ -1,0 +1,100 @@
+---
+title: '10DLC Field Reference'
+description: 'All options and values for 10DLC registration'
+---
+
+# 10DLC Field Reference
+
+Complete reference for all fields, values, and options in 10DLC registration.
+
+## Entity Types
+
+| Value | Description |
+|-------|-------------|
+| `PRIVATE_PROFIT` | Private for-profit company (most common) |
+| `PUBLIC_PROFIT` | Publicly traded company |
+| `NON_PROFIT` | Non-profit organization |
+| `GOVERNMENT` | Government entity (US only) |
+| `SOLE_PROPRIETOR` | Individual/sole proprietor |
+
+## Vertical Types (Industry)
+
+| Value | Description |
+|-------|-------------|
+| `REAL_ESTATE` | Real estate, property management |
+| `FINANCIAL` | Banking, financial services |
+| `HEALTHCARE` | Medical, healthcare providers |
+| `RETAIL` | Retail, e-commerce |
+| `PROFESSIONAL` | Professional services |
+| `AGRICULTURE` | Agriculture, farming |
+| `AUTOMOTIVE` | Automotive, dealerships |
+| `CONSTRUCTION` | Construction, contractors |
+| `EDUCATION` | Schools, education |
+| `ENERGY` | Energy, utilities |
+| `ENTERTAINMENT` | Entertainment, events |
+| `HOSPITALITY` | Hotels, restaurants |
+| `INSURANCE` | Insurance providers |
+| `LEGAL` | Legal services |
+| `MANUFACTURING` | Manufacturing |
+| `NONPROFIT` | Non-profit organizations |
+| `TECHNOLOGY` | Tech companies, SaaS |
+| `TELECOMMUNICATIONS` | Telecom providers |
+| `TRANSPORTATION` | Transportation, logistics |
+
+## Campaign Use Cases
+
+| Value | Description | Approval Time |
+|-------|-------------|---------------|
+| `CUSTOMER_CARE` | Customer support, service updates | 1-2 days |
+| `2FA` | Two-factor authentication | Instant |
+| `ACCOUNT_NOTIFICATION` | Account alerts, updates | 1-2 days |
+| `MARKETING` | Promotional messages | 3-5 days |
+| `MIXED` | Multiple use cases | 3-5 days |
+| `DELIVERY_NOTIFICATION` | Delivery updates | 1-2 days |
+| `FRAUD_ALERT` | Security, fraud alerts | 1-2 days |
+| `HIGHER_EDUCATION` | University communications | 1-2 days |
+| `LOW_VOLUME` | Low volume mixed messaging | 2-3 days |
+| `POLLING_VOTING` | Surveys, voting | 2-3 days |
+| `PUBLIC_SERVICE_ANNOUNCEMENT` | PSA messages | 1-2 days |
+| `SECURITY_ALERT` | Security notifications | 1-2 days |
+
+## Brand Relationship
+
+| Value | Description |
+|-------|-------------|
+| `BASIC_ACCOUNT` | Standard relationship (most common) |
+| `MEDIUM_ACCOUNT` | Established relationship |
+| `HIGH_ACCOUNT` | Premium relationship |
+
+## Sample Message Requirements
+
+- **Minimum length**: 20 characters
+- **Maximum length**: 1,024 characters
+- **Required count**: 3 minimum (5 recommended)
+- **Must include**: Opt-out language (e.g., "Reply STOP to opt out")
+
+## Compliance Booleans
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| `directLending` | Direct lending/payday loans? | `false` |
+| `ageGated` | Age-restricted content? | `false` |
+| `subscriberOptin` | Requires user opt-in? | `true` |
+| `subscriberOptout` | Provides opt-out? | `true` |
+| `subscriberHelp` | Provides help keywords? | `true` |
+| `embeddedLink` | Contains URLs? | `false` |
+| `embeddedPhone` | Contains phone numbers? | `false` |
+| `numberPool` | Uses number pooling? | `false` |
+
+## Default Keywords
+
+| Type | Default Value |
+|------|---------------|
+| Opt-in | `"START, YES, SUBSCRIBE"` |
+| Opt-out | `"STOP, QUIT, UNSUBSCRIBE, END"` |
+| Help | `"HELP, INFO"` |
+
+<Info>
+Carriers require specific keywords. Using the defaults ensures compliance.
+</Info>
+

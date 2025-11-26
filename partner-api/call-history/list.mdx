@@ -1,0 +1,219 @@
+---
+title: 'List Call History'
+api: 'GET /v1/voice/calls'
+description: 'List call history from your organization'
+---
+
+## Description
+
+Lists all calls from your organization's call history (stored in Teli Voice database). Returns call metadata including duration, sentiment, and recording URLs.
+
+**Data Source**: Teli Voice call history database (NOT live provider data)
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id to filter calls
+</ParamField>
+
+<ParamField query="user_id" type="string">
+  User unique_id (required for non-admin users to filter their calls)
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all organization calls. If false, returns only user's calls.
+</ParamField>
+
+<ParamField query="agent_id" type="string">
+  Filter by specific agent ID (optional)
+</ParamField>
+
+<ParamField query="call_status" type="string" default="ended">
+  Filter by call status: `ended`, `ongoing`, `error`
+</ParamField>
+
+<ParamField query="direction" type="string">
+  Filter by direction: `inbound` or `outbound`
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Number of results (max: 100)
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="calls" type="array">
+  Array of call objects
+  
+  <Expandable title="Call Object">
+    <ResponseField name="call_id" type="string">
+      Unique call identifier
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID used for the call
+    </ResponseField>
+    
+    <ResponseField name="agent_id" type="uuid">
+      Internal agent UUID (database reference)
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="uuid">
+      Organization UUID
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="uuid">
+      User UUID
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="start_timestamp" type="integer">
+      Call start time (milliseconds since epoch)
+    </ResponseField>
+    
+    <ResponseField name="end_timestamp" type="integer">
+      Call end time (milliseconds since epoch)
+    </ResponseField>
+    
+    <ResponseField name="call_status" type="string">
+      Call status: `ended`, `ongoing`, `error`
+    </ResponseField>
+    
+    <ResponseField name="direction" type="string">
+      Call direction: `inbound` or `outbound`
+    </ResponseField>
+    
+    <ResponseField name="user_sentiment" type="string">
+      User sentiment: `Positive`, `Negative`, `Neutral`, `Unknown`
+    </ResponseField>
+    
+    <ResponseField name="call_successful" type="boolean">
+      Whether the call objective was achieved
+    </ResponseField>
+    
+    <ResponseField name="in_voicemail" type="boolean">
+      Whether the call went to voicemail
+    </ResponseField>
+    
+    <ResponseField name="recording_url" type="string">
+      URL to call recording (Teli Voice Storage - S3)
+    </ResponseField>
+    
+    <ResponseField name="recording_s3_key" type="string">
+      S3 key for the recording file
+    </ResponseField>
+    
+    <ResponseField name="recording_downloaded_at" type="timestamp">
+      When recording was downloaded from provider and saved to S3
+    </ResponseField>
+    
+    <ResponseField name="call_started_at" type="timestamp">
+      Webhook event timestamp for call_started
+    </ResponseField>
+    
+    <ResponseField name="call_ended_at" type="timestamp">
+      Webhook event timestamp for call_ended
+    </ResponseField>
+    
+    <ResponseField name="call_analyzed_at" type="timestamp">
+      Webhook event timestamp for call_analyzed
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      Database record creation timestamp
+    </ResponseField>
+    
+    <ResponseField name="updated_at" type="timestamp">
+      Database record last update timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of calls returned
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/calls?organization_id=1762896364768x389173798861431550&user_id=1763661807373x532913854895880007&is_admin=false&limit=50" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 1,
+  "calls": [
+    {
+      "call_id": "call_d35fab7c6bd8cf9aee6c322b7a4",
+      "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "agent_id": "74014854-b110-46c8-b037-18f0149baae6",
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "user_id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "tenant_id": "your_tenant",
+      "start_timestamp": 1763660353696,
+      "end_timestamp": 1763660479604,
+      "call_status": "ended",
+      "direction": "outbound",
+      "user_sentiment": "Neutral",
+      "call_successful": false,
+      "in_voicemail": true,
+      "recording_url": "https://teli-voice-recordings-prod.s3.us-west-2.amazonaws.com/recordings/call_d35fab7c6bd8cf9aee6c322b7a4.wav",
+      "recording_s3_key": "recordings/call_d35fab7c6bd8cf9aee6c322b7a4.wav",
+      "recording_downloaded_at": "2025-11-20T17:42:25.742336",
+      "call_started_at": "2025-11-20T19:45:03.200769",
+      "call_ended_at": "2025-11-20T19:45:02.560947",
+      "call_analyzed_at": "2025-11-20T19:45:03.520027",
+      "created_at": "2025-11-20T17:41:24.234773",
+      "updated_at": "2025-11-20T19:45:03.621498"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Organization ID)
+{
+  "error": "organization_id required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to list calls",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Calls are stored in Teli Voice database after completion
+- Recordings are hosted on Teli Voice Storage (S3)
+- For full call transcript, use `GET /v1/voice/calls/{call_id}`
+- Admin users see all organization calls
+- Regular users see only their own calls
+- Results are ordered by start_timestamp (newest first)
+
