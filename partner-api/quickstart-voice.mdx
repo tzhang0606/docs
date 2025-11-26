@@ -25,7 +25,7 @@ curl -X POST https://api.teli.ai/v1/agents \
   -d '{
     "agent_type": "voice",
     "agent_name": "Voice Sales Agent",
-    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
+    "starting_message": "Hi {{first_name}},how can I help you today?",
     "prompt": "You are a professional voice assistant. Ask about their needs and offer solutions.",
     "voice_id": "11labs-Adrian",
     "language": "en-US",
@@ -241,14 +241,12 @@ curl -X POST https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agen
   </Card>
 </CardGroup>
 
-## Pricing
+## Next Steps
 
-Voice calls are billed per second:
-- **Base rate**: ~$0.19/minute
-- **Includes**: LLM processing, TTS, recording, storage
-- **Voicemail**: Same rate (detected automatically)
-
-View detailed cost breakdown in call history API responses.
+- Explore [voice agent tools](/api-reference/agents/update-tools) for advanced functionality
+- Link [knowledge bases](/api-reference/knowledge-bases/create) for enhanced responses
+- View [call history](/api-reference/call-history/list) for analytics and recordings
+- Check [phone numbers](/api-reference/phone-numbers/list) for available numbers
 
 ## Need Help?
 
