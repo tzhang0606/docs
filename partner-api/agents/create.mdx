@@ -84,6 +84,42 @@ SMS agents have no additional charges beyond standard SMS costs. Voice agents us
   **Voice agents only.** Message to leave if voicemail is detected.
 </ParamField>
 
+<ParamField body="language" type="string">
+  **Voice agents only.** Language code (e.g., "en-US", "es-ES", "fr-FR")
+  
+  Default: `"en-US"`
+</ParamField>
+
+<ParamField body="general_tools" type="array">
+  **Voice agents only.** Tools for function calling (end call, transfer, custom API, etc.)
+  
+  See [Update Agent Tools](/api-reference/agents/update-tools) for details.
+</ParamField>
+
+<ParamField body="knowledge_base_ids" type="array">
+  **Voice agents only.** Array of knowledge base IDs to link to this agent.
+  
+  Example: `["knowledge_base_7a0682ce5fc02413"]`
+  
+  Agent will automatically retrieve relevant information from these KBs during calls.
+</ParamField>
+
+<ParamField body="kb_config" type="object">
+  **Voice agents only.** Knowledge base retrieval configuration.
+  
+  **Properties:**
+  - `top_k` (number): Chunks to retrieve (1-10, default: 3)
+  - `filter_score` (number): Similarity threshold (0-1, default: 0.6)
+  
+  Example:
+  ```json
+  {
+    "top_k": 3,
+    "filter_score": 0.6
+  }
+  ```
+</ParamField>
+
 <RequestExample>
 
 ```bash cURL (SMS Agent)
@@ -104,7 +140,7 @@ curl -X POST https://api.example.com/v1/agents \
   }'
 ```
 
-```bash cURL (Voice Agent)
+```bash Voice Agent (Basic)
 curl -X POST https://api.example.com/v1/agents \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -112,11 +148,32 @@ curl -X POST https://api.example.com/v1/agents \
     "agent_type": "voice",
     "agent_name": "Ronaldo",
     "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business?",
-    "prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. Make sure to book an appointment with the team. If they miss the call, try to call them back just once more.",
+    "prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support.",
     "organization_id": "1762896364768x389173798861431550",
     "user_id": "1762896366429x599348279945132448",
     "voice_id": "11labs-Adrian",
-    "detect_voicemail": false
+    "language": "en-US"
+  }'
+```
+
+```bash Voice Agent with Knowledge Base
+curl -X POST https://api.example.com/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Support Bot",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
+    "prompt": "You are a helpful support assistant. Answer questions using information from the knowledge base.",
+    "organization_id": "1762896364768x389173798861431550",
+    "user_id": "1762896366429x599348279945132448",
+    "voice_id": "11labs-Adrian",
+    "language": "en-US",
+    "knowledge_base_ids": ["knowledge_base_7a0682ce5fc02413"],
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
   }'
 ```
 

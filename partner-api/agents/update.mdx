@@ -1,7 +1,7 @@
 ---
-title: "Update Agent"
-api: "PATCH /v1/agents/{agent_id}"
-description: "Update agent configuration - works for both SMS and Voice agents"
+title: 'Update Agent'
+api: 'PATCH /v1/agents/{agent_id}'
+description: 'Update agent configuration - works for both SMS and Voice agents'
 ---
 
 ## Overview
@@ -9,7 +9,7 @@ description: "Update agent configuration - works for both SMS and Voice agents"
 Update an existing agent's configuration including name, prompts, messages, and settings.
 
 <Note>
-  This endpoint updates **agent properties**. For voice agent **tools** (function calling, transfers, etc.), use [Update Voice Agent Tools](/api-reference/agents/update-tools).
+This endpoint updates **agent properties**. For voice agent **tools** (function calling, transfers, etc.), use [Update Voice Agent Tools](/api-reference/agents/update-tools).
 </Note>
 
 ---
@@ -71,7 +71,6 @@ curl -X PATCH "https://api.teli.ai/v1/agents/1762896437306x529035742905669631" \
   }'
 ```
 
-
 ```javascript JavaScript
 const response = await fetch('https://api.teli.ai/v1/agents/{agent_id}', {
   method: 'PATCH',
@@ -89,7 +88,6 @@ const response = await fetch('https://api.teli.ai/v1/agents/{agent_id}', {
 const data = await response.json();
 console.log(data);
 ```
-
 
 ```python Python
 import requests
@@ -125,10 +123,22 @@ curl -X PATCH "https://api.teli.ai/v1/agents/1763763759612x739630924151608142" \
   -d '{
     "agent_name": "Mbuemo coffee",
     "starting_message": "Hi {{first_name}}, did you want to develop a software for your business?",
-    "prompt": "You are Bryan Mbuemo working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support..."
+    "prompt": "You are Bryan Mbuemo working for Pranta Nir Software Solutions..."
   }'
 ```
 
+```bash Link Knowledge Base
+curl -X PATCH "https://api.teli.ai/v1/agents/{agent_id}" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "knowledge_base_ids": ["knowledge_base_7a0682ce5fc02413"],
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }'
+```
 
 ```javascript JavaScript
 const response = await fetch('https://api.teli.ai/v1/agents/{agent_id}', {
@@ -144,7 +154,6 @@ const response = await fetch('https://api.teli.ai/v1/agents/{agent_id}', {
   })
 });
 ```
-
 
 ```python Python
 import requests
@@ -251,7 +260,6 @@ response = requests.patch(
 }
 ```
 
-
 ```json 400 - Validation Error
 {
   "error": "Invalid agent configuration",
@@ -259,7 +267,6 @@ response = requests.patch(
   "powered_by": "Teli"
 }
 ```
-
 
 ```json 500 - Update Failed
 {
@@ -339,7 +346,6 @@ Modify follow-up message timing and content:
 Use dynamic variables in messages for personalization:
 
 **Common variables:**
-
 - `{{first_name}}` - Customer's first name
 - `{{last_name}}` - Customer's last name
 - `{{phone_number}}` - Customer's phone
@@ -348,7 +354,6 @@ Use dynamic variables in messages for personalization:
 - Custom variables from conversation
 
 **Example:**
-
 ```json
 {
   "starting_message": "Hi {{first_name}} from {{company}}! Ready to discuss your software needs?"
@@ -360,23 +365,23 @@ Use dynamic variables in messages for personalization:
 ## Best Practices
 
 <Check>
-  **Test changes**: Test updated agents before deploying to production campaigns
+**Test changes**: Test updated agents before deploying to production campaigns
 </Check>
 
 <Check>
-  **Iterate gradually**: Update one field at a time to see impact
+**Iterate gradually**: Update one field at a time to see impact
 </Check>
 
 <Check>
-  **Keep prompts focused**: Clear, concise instructions work best
+**Keep prompts focused**: Clear, concise instructions work best
 </Check>
 
 <Check>
-  **Use variables**: Personalize messages with {first_name} and other variables
+**Use variables**: Personalize messages with {{first_name}} and other variables
 </Check>
 
 <Check>
-  **Version control**: Keep copies of working prompts before major changes
+**Version control**: Keep copies of working prompts before major changes
 </Check>
 
 ---
@@ -384,9 +389,9 @@ Use dynamic variables in messages for personalization:
 ## Limitations
 
 <Warning>
-  - **Agent type cannot be changed** - Cannot convert SMS agent to Voice or vice versa
-  - **Drip schedules** - Only apply to SMS agents
-  - **Tools** - Must use `/tools` endpoint (voice agents only)
+- **Agent type cannot be changed** - Cannot convert SMS agent to Voice or vice versa
+- **Drip schedules** - Only apply to SMS agents
+- **Tools** - Must use `/tools` endpoint (voice agents only)
 </Warning>
 
 ---
@@ -401,23 +406,26 @@ Use dynamic variables in messages for personalization:
 
 ---
 
-## Voice Agent Tools
+## Voice Agent Advanced Features
 
 <Info>
-  **For Voice Agents**: To update function calling, transfers, API integrations, and other tools, use the dedicated [Update Voice Agent Tools](/api-reference/agents/update-tools) endpoint.
+**For Voice Agent Tools**: To update function calling, transfers, API integrations, and other tools, use the dedicated [Update Voice Agent Tools](/api-reference/agents/update-tools) endpoint.
 
-  Voice agent tools include:
+Voice agent tools include:
+- End Call, Transfer Call, Custom API Integration
+- Calendar Integration (Cal.com)
+- Agent Transfer, Send SMS, Extract Variables
+- And more!
 
-  - End Call
-  - Transfer Call
-  - Custom API Integration
-  - Calendar Integration (Cal.com)
-  - Agent Transfer
-  - Send SMS
-  - Extract Variables
-  - And more!
+See the [tools documentation](/api-reference/agents/update-tools) for complete details.
+</Info>
 
-  See the [tools documentation](/api-reference/agents/update-tools) for complete details.
+<Info>
+**For Knowledge Bases**: Link knowledge bases to enhance voice agents with URLs, documents, and custom knowledge.
+
+Update `knowledge_base_ids` to link/unlink knowledge bases. Configure retrieval settings via `kb_config`.
+
+See [Create Knowledge Base](/api-reference/knowledge-bases/create) to create KBs first.
 </Info>
 
 ---
@@ -425,7 +433,6 @@ Use dynamic variables in messages for personalization:
 ## Support
 
 Need help updating agents?
-
 - View [agent creation guide](/api-reference/agents/create) for parameter reference
 - Check [tools documentation](/api-reference/agents/update-tools) for voice capabilities
 - Contact Teli support for advanced configurations

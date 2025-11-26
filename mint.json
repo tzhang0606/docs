@@ -119,6 +119,17 @@
         "partner-api/agents/delete"
       ]
     },
+      {
+        "group": "Knowledge Bases",
+        "pages": [
+          "partner-api/knowledge-bases/create",
+          "partner-api/knowledge-bases/list",
+          "partner-api/knowledge-bases/get",
+          "partner-api/knowledge-bases/delete",
+          "partner-api/knowledge-bases/add-sources",
+          "partner-api/knowledge-bases/delete-source"
+        ]
+    },
     {
       "group": "Contacts & Leads",
       "pages": [
