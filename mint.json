@@ -120,7 +120,7 @@
       ]
     },
       {
-        "group": "Knowledge Bases",
+        "group": "Knowledge Base",
         "pages": [
           "partner-api/knowledge-bases/create",
           "partner-api/knowledge-bases/list",
