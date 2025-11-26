@@ -55,6 +55,10 @@ Creates and starts a bulk voice campaign using your voice agent. Calls contacts 
   Tenant identifier for multi-tenant isolation
 </ParamField>
 
+<ParamField body="user_id" type="string" required>
+  User unique_id who is creating the campaign (for user-level isolation)
+</ParamField>
+
 <ParamField body="campaign_id" type="string">
   Optional campaign identifier. Auto-generated if not provided.
   
