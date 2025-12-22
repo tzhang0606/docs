@@ -108,6 +108,14 @@ Lists all calls from your organization's call history (stored in Teli Voice data
       Whether the call went to voicemail
     </ResponseField>
     
+    <ResponseField name="from_number" type="string">
+      Phone number the call originated from (E.164 format)
+    </ResponseField>
+    
+    <ResponseField name="to_number" type="string">
+      Phone number the call was placed to (E.164 format)
+    </ResponseField>
+    
     <ResponseField name="recording_url" type="string">
       URL to call recording (Teli Voice Storage - S3)
     </ResponseField>
@@ -178,6 +186,8 @@ curl -X GET "https://api.teli.ai/v1/voice/calls?organization_id=1762896364768x38
       "user_sentiment": "Neutral",
       "call_successful": false,
       "in_voicemail": true,
+      "from_number": "+15174686941",
+      "to_number": "+15551234567",
       "recording_url": "https://teli-voice-recordings-prod.s3.us-west-2.amazonaws.com/recordings/call_d35fab7c6bd8cf9aee6c322b7a4.wav",
       "recording_s3_key": "recordings/call_d35fab7c6bd8cf9aee6c322b7a4.wav",
       "recording_downloaded_at": "2025-11-20T17:42:25.742336",

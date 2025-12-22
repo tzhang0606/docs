@@ -1,0 +1,225 @@
+---
+title: 'Quick Start Guide'
+description: 'Get started with Teli API in 5 minutes'
+---
+
+## Overview
+
+This guide will walk you through creating your first SMS or Voice campaign. Choose your communication channel below.
+
+## Prerequisites
+
+- API key (contact your account manager)
+- Basic knowledge of REST APIs
+- cURL, JavaScript, or Python
+
+---
+
+# SMS Quick Start
+
+Build SMS campaigns with AI-powered conversations.
+
+## Step 1: Create Organization
+
+```bash
+curl -X POST https://api.teli.ai/v1/organizations \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My Company", "contact_email": "admin@example.com"}'
+```
+
+Save the `unique_id` from the response.
+
+## Step 2: Create User
+
+```bash
+curl -X POST https://api.teli.ai/v1/organizations/{org_id}/users \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Admin", "email": "admin@example.com", "permission": "admin"}'
+```
+
+## Step 3: Create SMS Agent
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Sales Agent",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},interested in our services?",
+    "prompt": "You are a helpful sales agent. Ask about their needs and budget.",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}"
+  }'
+```
+
+Save the `agent_id` from the response.
+
+## Step 4: Upload Contacts
+
+```bash
+curl -X POST https://api.teli.ai/v1/contacts/lists \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "list_name": "My Leads",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [
+      {"phone_number": "+15551234567", "first_name": "John", "last_name": "Doe"}
+    ]
+  }'
+```
+
+## Step 5: Create SMS Campaign
+
+```bash
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "my_first_campaign",
+    "campaign_name": "First SMS Campaign",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "sms_agent_id": "{agent_id}",
+    "teli_sms_number": "+15551000001",
+    "contacts": [{"phone_number": "+15551234567", "first_name": "John"}]
+  }'
+```
+
+<Check>
+  SMS Campaign created! Messages will be sent automatically.
+</Check>
+
+---
+
+# Voice Quick Start
+
+Build voice campaigns with AI-powered phone conversations.
+
+## Step 1-2: Organization & User
+
+Same as SMS Quick Start above. Skip if already completed.
+
+## Step 3: Create Voice Agent
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Voice Sales Agent",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
+    "prompt": "You are a helpful voice assistant. Ask about their needs.",
+    "voice_id": "11labs-Adrian",
+    "language": "en-US",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}"
+  }'
+```
+
+Save the `voice_agent_id` from the response.
+
+## Step 4: Provision Phone Number
+
+```bash
+curl -X POST https://api.teli.ai/v1/voice/phone-numbers/create \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "area_code": "415",
+    "user_id": "{user_id}",
+    "organization_id": "{org_id}",
+    "tenant_id": "{tenant_id}"
+  }'
+```
+
+Save the `phone_number` from the response (e.g., "+14155551234").
+
+## Step 5: Upload Contacts
+
+Same as SMS Quick Start Step 4 above.
+
+## Step 6: Create Voice Campaign
+
+```bash
+curl -X POST https://api.teli.ai/v1/voice/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "leads": [
+      {"phone_number": "+15551234567", "first_name": "John", "last_name": "Doe"}
+    ],
+    "voice_agent_id": "{voice_agent_id}",
+    "agent_outbound_number": "{provisioned_phone}",
+    "organization_id": "{org_id}",
+    "tenant_id": "{tenant_id}"
+  }'
+```
+
+<Check>
+  Voice Campaign created! Calls will be placed automatically.
+</Check>
+
+---
+
+# SMS-to-Voice Transfer
+
+Enable seamless escalation from SMS to voice calls.
+
+## Setup
+
+1. **Create both agents** (SMS + Voice) as shown above
+2. **Provision phone number** for voice calls
+3. **Create SMS campaign with voice transfer enabled**:
+
+```bash
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_name": "SMS with Voice Transfer",
+    "sms_agent_id": "{sms_agent_id}",
+    "teli_sms_number": "+15551000001",
+    "enable_sms_to_voice": true,
+    "voice_agent_id": "{voice_agent_id}",
+    "outbound_number": "{provisioned_phone}",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [{"phone_number": "+15551234567", "first_name": "John"}]
+  }'
+```
+
+**How It Works:**
+- Conversation starts via SMS
+- AI can trigger phone call if user requests
+- Seamless transition to voice
+- Same conversation context maintained
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Explore All Endpoints" icon="code" href="/partner-api/agents/create">
+    View complete API reference
+  </Card>
+  <Card title="Call History" icon="phone" href="/partner-api/call-history/list">
+    Track and analyze your calls
+  </Card>
+  <Card title="10DLC Registration" icon="building" href="/partner-api/10dlc/overview">
+    Get your dedicated SMS number
+  </Card>
+  <Card title="Error Handling" icon="shield" href="/partner-api/errors">
+    Learn about error codes
+  </Card>
+</CardGroup>
+
+## Support
+
+Need help? Contact us at support@teli.ai
+

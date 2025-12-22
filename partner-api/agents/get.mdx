@@ -19,7 +19,7 @@ description: 'Get agent details'
 <RequestExample>
 
 ```bash
-curl -X GET https://api.example.com/v1/agents/{agent_id} \
+curl -X GET https://api.teli.ai/v1/agents/{agent_id} \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
@@ -35,7 +35,7 @@ curl -X GET https://api.example.com/v1/agents/{agent_id} \
     "agent_name": "Sales Agent",
     "agent_type": "sms",
     "general_prompt": "You are helpful.",
-    "greeting_prompt": "Hi {'{'}{'{'}}first_name{'}'}{'}'}}!"
+    "greeting_prompt": "Hi {{first_name}}!"
   },
   "powered_by": "Teli"
 }

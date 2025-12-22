@@ -16,10 +16,20 @@ description: 'Get contacts from a list'
   Contact list unique_id
 </ParamField>
 
+## Query Parameters
+
+<ParamField query="user_id" type="string">
+  User unique_id (for access control)
+</ParamField>
+
+<ParamField query="is_admin" type="boolean">
+  If true, admin can view any list in the org. If false/missing, user can only view their own lists.
+</ParamField>
+
 <RequestExample>
 
 ```bash
-curl -X GET https://api.example.com/v1/contacts/lists/{list_id}/contacts \
+curl -X GET "https://api.teli.ai/v1/contacts/lists/{list_id}/contacts?user_id={user_id}&is_admin=true" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
@@ -33,10 +43,12 @@ curl -X GET https://api.example.com/v1/contacts/lists/{list_id}/contacts \
   "total": 25,
   "contacts": [
     {
+      "lead_id": "1763072372569x...",
       "unique_id": "1763072372569x...",
       "phone_number": "+15551234567",
       "first_name": "John",
-      "last_name": "Doe"
+      "last_name": "Doe",
+      "email": "john@example.com"
     }
   ],
   "powered_by": "Teli"

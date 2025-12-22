@@ -1,0 +1,40 @@
+---
+title: 'Delete Agent'
+api: 'DELETE /v1/agents/{id}'
+description: 'Delete an agent'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path
+
+<ParamField path="id" type="string" required>
+  Agent unique_id
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X DELETE https://api.example.com/v1/agents/{agent_id} \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "message": "Agent deleted successfully",
+  "agent_id": "1763072369786x...",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

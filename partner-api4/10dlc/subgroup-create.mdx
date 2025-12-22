@@ -1,0 +1,70 @@
+---
+title: 'Create SubGroup'
+api: 'POST /v1/10dlc/subgroup'
+description: 'Create an organizational subgroup'
+---
+
+Create a subgroup to organize your brands and campaigns. **This is required before registering brands.**
+
+<Warning>
+You must create a subgroup before creating brands. All brands must be assigned to a subgroup.
+</Warning>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Body
+
+<ParamField body="subGroupName" type="string" required>
+  SubGroup name
+  
+  Example: `"West Coast Division"`
+</ParamField>
+
+<ParamField body="subGroupDescription" type="string">
+  Optional description
+  
+  Example: `"Brands for west coast operations"`
+</ParamField>
+
+<ParamField body="groupId" type="string" required>
+  Your account group ID (provided during onboarding)
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.example.com/v1/10dlc/subgroup \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "subGroupName": "West Coast Division",
+    "subGroupDescription": "California operations",
+    "groupId": "YOUR_GROUP_ID"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "subGroupId": "SQ8YFT",
+  "subGroupName": "West Coast Division",
+  "groupId": "G856KM",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="subGroupId" type="string">
+  SubGroup identifier. Use when creating brands.
+</ResponseField>
+

@@ -1,0 +1,254 @@
+---
+title: 'SMS Quick Start'
+description: 'Get started with SMS campaigns in 5 minutes'
+---
+
+## Overview
+
+This guide will walk you through creating your first SMS campaign with AI-powered conversations.
+
+## Prerequisites
+
+- API key (contact your account manager)
+- Basic knowledge of REST APIs
+- cURL, JavaScript, or Python
+
+---
+
+## Step 1: Create Organization
+
+```bash
+curl -X POST https://api.teli.ai/v1/organizations \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My Company", "contact_email": "admin@example.com"}'
+```
+
+<Tip>
+Save the `unique_id` from the response - you'll need it for all future API calls.
+</Tip>
+
+**Response:**
+```json
+{
+  "success": true,
+  "unique_id": "1762896364768x389173798861431550",
+  "organization_name": "My Company",
+  "powered_by": "Teli"
+}
+```
+
+---
+
+## Step 2: Create User
+
+```bash
+curl -X POST https://api.teli.ai/v1/organizations/{org_id}/users \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "permission": "admin"
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "unique_id": "1762896366429x599348279945132448",
+  "name": "Admin User",
+  "permission": "admin",
+  "powered_by": "Teli"
+}
+```
+
+---
+
+## Step 3: Create SMS Agent
+
+An agent defines the AI personality and conversation flow for your SMS campaigns.
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Sales Agent",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},interested in our services?",
+    "prompt": "You are a helpful sales agent. Ask about their needs and budget.",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}"
+  }'
+```
+
+<Tip>
+Use `{'{'}{'{'}}first_name{'}'}{'}'}}` and `{'{'}{'{'}}last_name{'}'}{'}'}}` for personalization!
+</Tip>
+
+**Response:**
+```json
+{
+  "success": true,
+  "agent_id": "1762904472492x562625923347582024",
+  "agent_type": "sms",
+  "agent_name": "Sales Agent",
+  "powered_by": "Teli"
+}
+```
+
+---
+
+## Step 4: Upload Contacts
+
+```bash
+curl -X POST https://api.teli.ai/v1/contacts/lists \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "list_name": "My First Leads",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [
+      {
+        "phone_number": "+15551234567",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john@example.com"
+      }
+    ]
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "count": 1,
+  "leads": [...],
+  "powered_by": "Teli"
+}
+```
+
+---
+
+## Step 5: Create SMS Campaign
+
+```bash
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "my_first_sms_campaign",
+    "campaign_name": "First SMS Campaign",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "sms_agent_id": "{agent_id}",
+    "teli_sms_number": "+15551000001",
+    "contacts": [
+      {"phone_number": "+15551234567", "first_name": "John"}
+    ]
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "campaign_id": "my_first_sms_campaign",
+  "status": "processing",
+  "details": {
+    "total_contacts": 1,
+    "voice_transfer_enabled": false
+  },
+  "powered_by": "Teli"
+}
+```
+
+<Check>
+  SMS Campaign created! Messages will be sent automatically.
+</Check>
+
+---
+
+## What Happens Next?
+
+1. **Messages Sent** - Your contacts receive the `starting_message`
+2. **AI Conversations** - Contacts can reply and have AI-powered conversations
+3. **Analytics** - Track responses, sentiment, and objective completion
+4. **Follow-ups** - AI sends automated follow-ups based on conversation
+
+---
+
+## Advanced Features
+
+### Drip Campaigns
+
+Add automated follow-ups to your agent:
+
+```bash
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Nurture Agent",
+    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},checking in!",
+    "prompt": "You are helpful.",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "drip_schedule": [
+      {"day": 1, "message": "Just following up!"},
+      {"day": 3, "message": "Still here if you need anything!"}
+    ]
+  }'
+```
+
+### SMS-to-Voice Transfer
+
+Enable voice escalation during SMS conversations:
+
+```bash
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_name": "SMS with Voice",
+    "sms_agent_id": "{sms_agent_id}",
+    "enable_sms_to_voice": true,
+    "voice_agent_id": "{voice_agent_id}",
+    "outbound_number": "+15174686941",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [...]
+  }'
+```
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="View All SMS Campaigns" icon="inbox" href="/partner-api/campaigns/list-sms">
+    Track campaign performance
+  </Card>
+  <Card title="Create Voice Campaign" icon="phone" href="/partner-api/quickstart-voice">
+    Try voice campaigns next
+  </Card>
+  <Card title="10DLC Registration" icon="building" href="/partner-api/10dlc/overview">
+    Get your dedicated SMS number
+  </Card>
+  <Card title="API Reference" icon="code" href="/partner-api/agents/create">
+    Explore all endpoints
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+- **Support**: support@teli.ai
+- **Documentation**: Full API reference in Partner API tab
+- **Community**: Join our Telegram group
+
+

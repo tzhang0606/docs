@@ -111,7 +111,7 @@ Create and launch an SMS campaign to send messages to your contact list.
 <RequestExample>
 
 ```bash cURL (SMS-Only Campaign)
-curl -X POST https://api.example.com/v1/campaigns \
+curl -X POST https://api.teli.ai/v1/campaigns \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -128,7 +128,7 @@ curl -X POST https://api.example.com/v1/campaigns \
 ```
 
 ```bash cURL (SMS + Voice Transfer)
-curl -X POST https://api.example.com/v1/campaigns \
+curl -X POST https://api.teli.ai/v1/campaigns \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -149,7 +149,7 @@ curl -X POST https://api.example.com/v1/campaigns \
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://api.example.com/v1/campaigns', {
+const response = await fetch('https://api.teli.ai/v1/campaigns', {
   method: 'POST',
   headers: {
     'X-API-Key': 'YOUR_API_KEY',
@@ -286,5 +286,5 @@ Response will include `voice_transfer_enabled: true` in details.
 - Use `dry_run: true` for testing without sending real messages
 - SMS-to-voice requires both voice agent and outbound phone number
 - Drip schedules defined in agent configuration (not campaign)
-- All messages support variable substitution: `{'{'}{'{'}}first_name{'}'}{'}'}}`, `{'{'}{'{'}}last_name{'}'}{'}'}}`, etc.
+- All messages support variable substitution: `{{first_name}}`, `{{last_name}}`, etc.
 

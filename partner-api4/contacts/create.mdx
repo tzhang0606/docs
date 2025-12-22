@@ -1,0 +1,62 @@
+---
+title: 'Upload Contact List'
+api: 'POST /v1/contacts/lists'
+description: 'Create a new contact list'
+---
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Body
+
+<ParamField body="list_name" type="string" required>
+  Contact list name
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField body="contacts" type="array" required>
+  Array of contacts. Each: `phone_number` (required), `first_name`, `last_name`, `email`
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X POST https://api.example.com/v1/contacts/lists \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "list_name": "November Leads",
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "contacts": [
+      {"phone_number": "+15551234567", "first_name": "John", "last_name": "Doe"}
+    ]
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201
+{
+  "success": true,
+  "list_id": "1763072372500x777103986713560785",
+  "list_name": "November Leads",
+  "contacts_imported": 1,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

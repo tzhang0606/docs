@@ -1,8 +1,14 @@
 ---
 title: 'Upload Contact List'
 api: 'POST /v1/contacts/lists'
-description: 'Create a new contact list'
+description: 'Create a new contact list (JSON or CSV upload)'
 ---
+
+## Description
+
+Upload contacts as a new contact list. Supports two formats:
+1. **JSON Body** - Send contacts as a JSON array
+2. **CSV Upload** - Upload a CSV file with contacts
 
 ## Authorizations
 
@@ -10,7 +16,7 @@ description: 'Create a new contact list'
   Authentication header
 </ParamField>
 
-## Body
+## Option 1: JSON Body
 
 <ParamField body="list_name" type="string" required>
   Contact list name
@@ -21,17 +27,51 @@ description: 'Create a new contact list'
 </ParamField>
 
 <ParamField body="user_id" type="string" required>
-  User unique_id
+  User unique_id (who is uploading the contacts)
 </ParamField>
 
 <ParamField body="contacts" type="array" required>
-  Array of contacts. Each: `phone_number` (required), `first_name`, `last_name`, `email`
+  Array of contact objects. Each contact must have `phone_number` (required).
+  Optional fields: `first_name`, `last_name`, `email`
 </ParamField>
+
+## Option 2: CSV Upload (multipart/form-data)
+
+<ParamField body="file" type="file" required>
+  CSV file with contacts. Must have `phone_number` (or `phone`, `mobile`, `cell`) column.
+</ParamField>
+
+<ParamField body="list_name" type="string" required>
+  Name for the contact list
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (who is uploading)
+</ParamField>
+
+### Supported CSV Columns
+
+| Column | Alternatives |
+|--------|-------------|
+| `phone_number` | `phone`, `mobile`, `cell` |
+| `first_name` | `firstname`, `first` |
+| `last_name` | `lastname`, `last` |
+| `email` | - |
+| `address_line_1` | `address`, `street` |
+| `city` | - |
+| `state` | - |
+| `zip_code` | `zip`, `postal_code` |
+
+Any additional columns are stored in `extra_data`.
 
 <RequestExample>
 
-```bash
-curl -X POST https://api.example.com/v1/contacts/lists \
+```bash JSON
+curl -X POST https://api.teli.ai/v1/contacts/lists \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -44,6 +84,15 @@ curl -X POST https://api.example.com/v1/contacts/lists \
   }'
 ```
 
+```bash CSV Upload
+curl -X POST https://api.teli.ai/v1/contacts/lists \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -F "file=@contacts.csv" \
+  -F "list_name=November Leads" \
+  -F "organization_id={org_id}" \
+  -F "user_id={user_id}"
+```
+
 </RequestExample>
 
 <ResponseExample>
@@ -53,7 +102,8 @@ curl -X POST https://api.example.com/v1/contacts/lists \
   "success": true,
   "list_id": "1763072372500x777103986713560785",
   "list_name": "November Leads",
-  "contacts_imported": 1,
+  "contacts_imported": 25,
+  "message": "Contact list created with 25 contacts",
   "powered_by": "Teli"
 }
 ```

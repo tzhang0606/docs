@@ -1,0 +1,318 @@
+---
+title: 'List SMS Campaigns'
+api: 'GET /v1/organizations/{org_id}/campaigns'
+description: 'Get all SMS campaigns for an organization'
+---
+
+## Description
+
+Returns all SMS campaigns for an organization. Includes campaign configuration, status, and agent details.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="user_id" type="string" required>
+  User unique_id
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all org campaigns. If false, returns only user's campaigns.
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of campaigns
+</ResponseField>
+
+<ResponseField name="campaigns" type="array">
+  Array of campaign objects
+  
+  <Expandable title="Campaign Object">
+    <ResponseField name="campaign_id" type="string">
+      Campaign unique identifier (used in API calls)
+    </ResponseField>
+    
+    <ResponseField name="campaign_id_pk" type="string">
+      Campaign primary key in DynamoDB (same as campaign_id)
+    </ResponseField>
+    
+    <ResponseField name="campaign_name" type="string">
+      Campaign display name (e.g., "test 4", "emoji test", "Voice campaign test 1")
+    </ResponseField>
+    
+    <ResponseField name="campaign_type" type="string">
+      Campaign type: `OUTBOUND`, `INBOUND`, `DRIP`
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Campaign status: `ACTIVE`, `PAUSED`, `COMPLETED`, `ENDED`
+    </ResponseField>
+    
+    <ResponseField name="campaign_create_time" type="timestamp">
+      Campaign creation timestamp (ISO 8601 format)
+    </ResponseField>
+    
+    <ResponseField name="sms_agent_id" type="string">
+      Agent unique_id used for this campaign
+    </ResponseField>
+    
+    <ResponseField name="teli_sms_number" type="string">
+      Teli SMS phone number used for this campaign (with or without + prefix)
+    </ResponseField>
+    
+    <ResponseField name="starting_message" type="string">
+      Initial message sent to contacts (from agent config)
+    </ResponseField>
+    
+    <ResponseField name="objective_prompt" type="string">
+      AI objective and instructions (from agent config)
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="string">
+      Organization unique_id
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="string">
+      User unique_id who created the campaign
+    </ResponseField>
+    
+    <ResponseField name="created_by_user_id" type="string">
+      User unique_id (alternative field)
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="enable_sms_to_voice" type="boolean">
+      Whether SMS-to-voice transfer is enabled
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID for voice transfer (if enabled)
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID (alternative field)
+    </ResponseField>
+    
+    <ResponseField name="outbound_number" type="string">
+      Outbound phone number for voice calls
+    </ResponseField>
+    
+    <ResponseField name="drip_enabled" type="boolean">
+      Whether drip messaging is enabled
+    </ResponseField>
+    
+    <ResponseField name="drip_schedule" type="array">
+      Automated follow-up messages
+    </ResponseField>
+    
+    <ResponseField name="drip_start_datetime" type="timestamp">
+      When drip sequence starts
+    </ResponseField>
+    
+    <ResponseField name="mms_media_url" type="string">
+      Media URL for MMS campaigns
+    </ResponseField>
+    
+    <ResponseField name="followup_interval" type="integer">
+      Interval between follow-ups (seconds)
+    </ResponseField>
+    
+    <ResponseField name="use_jit_queue" type="boolean">
+      Whether to use just-in-time queue processing
+    </ResponseField>
+    
+    <ResponseField name="dry_run" type="boolean">
+      Whether campaign is in dry-run mode (testing)
+    </ResponseField>
+    
+    <ResponseField name="enable_number_validation" type="boolean">
+      Whether to validate phone numbers before sending
+    </ResponseField>
+    
+    <ResponseField name="extraction_fields" type="array">
+      Custom data fields to extract from conversations
+    </ResponseField>
+    
+    <ResponseField name="custom_follow_up" type="string">
+      Custom follow-up message template
+    </ResponseField>
+    
+    <ResponseField name="campaign_create_time" type="timestamp">
+      Campaign creation timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x389173798861431550/campaigns?user_id=1762896366429x599348279945132448&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 14,
+  "campaigns": [
+    {
+      "campaign_id": "1762965054360x778625532252496000",
+      "campaign_id_pk": "1762965054360x778625532252496000",
+      "campaign_name": "test 4",
+      "campaign_type": "OUTBOUND",
+      "status": "ACTIVE",
+      "campaign_create_time": "2025-11-12T16:31:02+00:00",
+      "sms_agent_id": "1762904472817x422002938962921563",
+      "teli_sms_number": "13135727768",
+      "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? I want to be able to help you with software consulting. Whether it's ed tech or bio tech or advanced automonomous technology, I am here to help you out. Please let me know if there's anything you want from me for your best software solution! ",
+      "objective_prompt": "You are working for John Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. \n\nIf you are able to get a budget. Please make an estimate and tell them what their budget is worth! 1000 for software UI, 1000 for simple backend infrastructure. 2000 on top of 1000 for tier 1 complexity. If they agree to consult, ask when is it best time to reach out by our team. ",
+      "organization_id": "1762896364768x389173798861431550",
+      "user_id": "1762896366429x599348279945132448",
+      "created_by_user_id": "1762896366429x599348279945132448",
+      "tenant_id": "your_tenant",
+      "enable_sms_to_voice": false,
+      "voice_agent_id": null,
+      "voice_agent_id": null,
+      "outbound_number": null,
+      "drip_enabled": false,
+      "drip_schedule": [],
+      "drip_start_datetime": null,
+      "custom_follow_up": "",
+      "mms_media_url": null,
+      "followup_interval": 0,
+      "use_jit_queue": true,
+      "dry_run": false,
+      "enable_number_validation": false,
+      "extraction_fields": []
+    },
+    {
+      "campaign_id": "1763500495035x142476011111897800",
+      "campaign_id_pk": "1763500495035x142476011111897800",
+      "campaign_name": "ronaldo reach",
+      "campaign_type": "OUTBOUND",
+      "status": "ACTIVE",
+      "campaign_create_time": "2025-11-18T21:15:01+00:00",
+      "sms_agent_id": "1763490401240x434214358565169285",
+      "teli_sms_number": "13135727768",
+      "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},did you want to develop a software for your business? \n",
+      "objective_prompt": "You are working for John Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. \n\nIf the user wants to talk over phone, make sure to trigger a call and ask the deatils. if user wants to schedule a call, schedule the call and call them at the given time. ",
+      "organization_id": "1762896364768x389173798861431550",
+      "user_id": "1762896366429x599348279945132448",
+      "created_by_user_id": "1762896366429x599348279945132448",
+      "tenant_id": "your_tenant",
+      "enable_sms_to_voice": true,
+      "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "outbound_number": "+15174686941",
+      "drip_enabled": false,
+      "drip_schedule": [],
+      "drip_start_datetime": null,
+      "custom_follow_up": "",
+      "mms_media_url": null,
+      "followup_interval": 0,
+      "use_jit_queue": true,
+      "dry_run": false,
+      "enable_number_validation": false,
+      "extraction_fields": []
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing User ID)
+{
+  "error": "user_id required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to list campaigns",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Campaign Statuses
+
+| Status | Description |
+|--------|-------------|
+| `ACTIVE` | Campaign is currently running and sending messages |
+| `PAUSED` | Campaign is temporarily paused |
+| `COMPLETED` | All contacts have been messaged |
+| `ENDED` | Campaign has been manually ended |
+
+## SMS-to-Voice Transfer
+
+Campaigns can escalate from SMS to voice calls when `enable_sms_to_voice: true`:
+
+**SMS-Only Campaigns:**
+```json
+{
+  "enable_sms_to_voice": false,
+  "voice_agent_id": null,
+  "voice_agent_id": null,
+  "outbound_number": null
+}
+```
+
+**SMS + Voice Transfer Campaigns:**
+```json
+{
+  "enable_sms_to_voice": true,
+  "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+  "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+  "outbound_number": "+15174686941"
+}
+```
+
+When enabled:
+- AI can trigger phone calls during SMS conversations
+- Uses specified voice agent and outbound number
+- Seamless transition from text to voice
+
+## Variable Substitution
+
+All message templates support dynamic variables:
+- `{{first_name}}` - Contact's first name
+- `{'{'}{'{'}}last_name{'}'}{'}'}}` - Contact's last name
+- `{'{'}{'{'}}email{'}'}{'}'}}` - Contact's email
+- Custom fields from lead data
+
+## Notes
+
+- SMS campaigns use agents for AI-powered conversations
+- Drip schedules enable automated follow-up sequences
+- SMS-to-voice transfer allows escalation to phone calls
+- Emoji support in messages (as shown in "emoji test" campaign)
+- Admin users see all org campaigns, regular users see only their own
+- Phone numbers may appear with or without + prefix in `teli_sms_number`
+

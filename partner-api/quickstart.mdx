@@ -48,7 +48,7 @@ curl -X POST https://api.teli.ai/v1/agents \
   -d '{
     "agent_type": "sms",
     "agent_name": "Sales Agent",
-    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},interested in our services?",
+    "starting_message": "Hi {{first_name}}, interested in our services?",
     "prompt": "You are a helpful sales agent. Ask about their needs and budget.",
     "organization_id": "{org_id}",
     "user_id": "{user_id}"
@@ -113,7 +113,7 @@ curl -X POST https://api.teli.ai/v1/agents \
   -d '{
     "agent_type": "voice",
     "agent_name": "Voice Sales Agent",
-    "starting_message": "Hi {'{'}{'{'}}first_name{'}'}{'}'},how can I help you today?",
+    "starting_message": "Hi {{first_name}}, how can I help you today?",
     "prompt": "You are a helpful voice assistant. Ask about their needs.",
     "voice_id": "11labs-Adrian",
     "language": "en-US",
