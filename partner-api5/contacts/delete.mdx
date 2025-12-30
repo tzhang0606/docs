@@ -1,0 +1,69 @@
+---
+title: 'Delete Contact List'
+api: 'DELETE /v1/contacts/lists/{id}'
+description: 'Delete a contact list'
+---
+
+## Description
+
+Delete a contact list and its associated contacts. Access control is enforced:
+- **Admin users**: Can delete any list in the organization
+- **Regular users**: Can only delete lists they created
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Contact list unique_id
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="user_id" type="string">
+  User unique_id (for access control verification)
+</ParamField>
+
+<ParamField query="is_admin" type="boolean">
+  If true, admin can delete any list. If false/missing, user can only delete their own lists.
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl -X DELETE "https://api.teli.ai/v1/contacts/lists/{list_id}?user_id={user_id}&is_admin=false" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "message": "Contact list deleted successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 403
+{
+  "error": "Access denied. You can only delete your own contact lists.",
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "Contact list not found",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

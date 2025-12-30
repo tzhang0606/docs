@@ -28,8 +28,8 @@ Returns all voice phone numbers owned by a user or organization. Admin users see
   If true, returns all org phone numbers. If false, returns only user's phone numbers.
 </ParamField>
 
-<ParamField query="phone_type" type="string">
-  Filter by phone type: `voice` or `sms`. If omitted, returns all types.
+<ParamField query="phone_type" type="string" default="voice">
+  Filter by phone type: `voice` or `sms`
 </ParamField>
 
 ## Response Fields
@@ -108,14 +108,6 @@ Returns all voice phone numbers owned by a user or organization. Admin users see
     
     <ResponseField name="zapier" type="boolean">
       Whether Zapier integration is enabled
-    </ResponseField>
-    
-    <ResponseField name="is_available" type="boolean">
-      Whether the phone number is available for new campaigns (SMS only)
-    </ResponseField>
-    
-    <ResponseField name="campaign_id" type="string">
-      10DLC Campaign ID this number is assigned to (SMS only, null if not assigned)
     </ResponseField>
     
     <ResponseField name="created_at" type="timestamp">
