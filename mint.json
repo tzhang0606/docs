@@ -111,7 +111,8 @@
     {
       "group": "AI Agents",
       "pages": [
-        "partner-api/agents/create",
+        "partner-api/agents/create-sms",
+        "partner-api/agents/create-voice",
         "partner-api/agents/list",
         "partner-api/agents/get",
         "partner-api/agents/update",
@@ -119,16 +120,16 @@
         "partner-api/agents/delete"
       ]
     },
-      {
-        "group": "Knowledge Base",
-        "pages": [
-          "partner-api/knowledge-bases/create",
-          "partner-api/knowledge-bases/list",
-          "partner-api/knowledge-bases/get",
-          "partner-api/knowledge-bases/delete",
-          "partner-api/knowledge-bases/add-sources",
-          "partner-api/knowledge-bases/delete-source"
-        ]
+    {
+      "group": "Knowledge Base",
+      "pages": [
+        "partner-api/knowledge-bases/create",
+        "partner-api/knowledge-bases/list",
+        "partner-api/knowledge-bases/get",
+        "partner-api/knowledge-bases/delete",
+        "partner-api/knowledge-bases/add-sources",
+        "partner-api/knowledge-bases/delete-source"
+      ]
     },
     {
       "group": "Contacts & Leads",
@@ -160,6 +161,12 @@
       "pages": [
         "partner-api/phone-numbers/create",
         "partner-api/phone-numbers/list"
+      ]
+    },
+    {
+      "group": "Voices",
+      "pages": [
+        "partner-api/voices/list"
       ]
     },
     {
