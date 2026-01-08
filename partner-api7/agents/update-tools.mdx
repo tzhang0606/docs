@@ -1,0 +1,1323 @@
+---
+title: 'Update Voice Agent Tools'
+api: 'PATCH /v1/agents/{agent_id}/tools'
+description: 'Update tools for voice agents to enable function calling, API integrations, transfers, and more'
+---
+
+## Overview
+
+Voice agents can be enhanced with tools that enable advanced functionality during calls:
+- **End calls** gracefully when objectives are met
+- **Transfer calls** to human agents or phone numbers
+- **Integrate with external APIs** (CRM, databases, etc.)
+- **Book appointments** via Cal.com
+- **Send SMS** messages during calls
+- **Transfer to other AI agents** for specialized handling
+- **Extract and save** conversation data
+- **Navigate IVR** systems with DTMF
+- And more!
+
+<Note>
+Tools are only supported for **voice agents**. SMS agents do not support tools.
+</Note>
+
+---
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the voice agent to update
+</ParamField>
+
+---
+
+## Request Body
+
+<ParamField body="tools" type="array" required>
+  Array of tool configurations. Each tool must have `type`, `name`, and type-specific fields.
+</ParamField>
+
+---
+
+## Supported Tool Types
+
+### 1. End Call
+
+End the conversation gracefully when objectives are met.
+
+<CodeGroup>
+
+```json End Call Tool
+{
+  "type": "end_call",
+  "name": "end_conversation",
+  "description": "End the call when the customer's questions are answered"
+}
+```
+
+</CodeGroup>
+
+<ParamField body="type" type="string" required>
+  Must be `"end_call"`
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Unique tool name (snake_case, a-z, 0-9, underscores only)
+</ParamField>
+
+<ParamField body="description" type="string">
+  What the tool does and when to use it
+</ParamField>
+
+---
+
+### 2. Transfer Call
+
+Transfer the call to a human agent or phone number.
+
+<CodeGroup>
+
+```json Cold Transfer
+{
+  "type": "transfer_call",
+  "name": "transfer_to_support",
+  "description": "Transfer to human support team when user requests assistance",
+  "transfer_destination": {
+    "type": "predefined",
+    "number": "+15551234567"
+  },
+  "transfer_option": {
+    "type": "cold_transfer"
+  }
+}
+```
+
+```json Warm Transfer
+{
+  "type": "transfer_call",
+  "name": "transfer_to_sales",
+  "description": "Transfer to sales team for pricing questions",
+  "transfer_destination": {
+    "type": "predefined",
+    "number": "+15559876543"
+  },
+  "transfer_option": {
+    "type": "warm_transfer",
+    "on_hold_music": "relaxing_sound"
+  }
+}
+```
+
+```json Transfer with Extension
+{
+  "type": "transfer_call",
+  "name": "transfer_to_department",
+  "description": "Transfer to specific department",
+  "transfer_destination": {
+    "type": "predefined",
+    "number": "+15551234567",
+    "extension": "123"
+  },
+  "transfer_option": {
+    "type": "cold_transfer"
+  }
+}
+```
+
+</CodeGroup>
+
+<ParamField body="transfer_destination" type="object" required>
+  Where to transfer the call
+
+  **Properties:**
+  - `type`: Must be `"predefined"`
+  - `number`: Phone number in E.164 format (e.g., `"+15551234567"`)
+  - `extension` (optional): Extension digits (e.g., `"123"`)
+</ParamField>
+
+<ParamField body="transfer_option" type="object" required>
+  How to transfer the call
+
+  **Properties:**
+  - `type`: `"cold_transfer"` (immediate) or `"warm_transfer"` (AI introduces)
+  - `on_hold_music` (warm only): `"none"`, `"relaxing_sound"`, `"uplifting_beats"`, `"ringtone"`
+  - `show_transferee_as_caller` (optional): Show caller's number to transfer destination
+</ParamField>
+
+---
+
+### 3. Custom API Integration
+
+Integrate with any external API (CRM, databases, order systems, etc.)
+
+<CodeGroup>
+
+```json GET Request
+{
+  "type": "custom",
+  "name": "check_order_status",
+  "description": "Check order status in CRM when customer provides order number",
+  "url": "https://api.yourcrm.com/orders/{{order_id}}",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer YOUR_API_KEY"
+  },
+  "speak_after_execution": true
+}
+```
+
+```json POST Request
+{
+  "type": "custom",
+  "name": "create_support_ticket",
+  "description": "Create support ticket when customer reports an issue",
+  "url": "https://api.yourcrm.com/tickets",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+  },
+  "speak_after_execution": true
+}
+```
+
+```json With Query Params
+{
+  "type": "custom",
+  "name": "search_products",
+  "description": "Search products by category",
+  "url": "https://api.yourstore.com/products",
+  "method": "GET",
+  "query_params": {
+    "category": "{{product_category}}",
+    "limit": "10"
+  },
+  "headers": {
+    "Authorization": "Bearer YOUR_API_KEY"
+  },
+  "speak_after_execution": true
+}
+```
+
+</CodeGroup>
+
+<ParamField body="url" type="string" required>
+  API endpoint URL. Supports dynamic variables: `{{variable_name}}`
+</ParamField>
+
+<ParamField body="method" type="string" required>
+  HTTP method: `"GET"`, `"POST"`, `"PUT"`, `"PATCH"`, or `"DELETE"`
+</ParamField>
+
+<ParamField body="headers" type="object">
+  HTTP headers (e.g., authorization, content-type)
+</ParamField>
+
+<ParamField body="query_params" type="object">
+  Query parameters to append to URL
+</ParamField>
+
+<ParamField body="speak_after_execution" type="boolean" required>
+  Whether AI should speak the result after API call completes
+</ParamField>
+
+---
+
+### 4. Check Calendar Availability (Cal.com)
+
+Check available time slots in Cal.com calendar.
+
+<CodeGroup>
+
+```json Check Availability
+{
+  "type": "check_availability_cal",
+  "name": "check_doctor_availability",
+  "description": "Check available appointment slots for doctor",
+  "cal_api_key": "cal_live_xxxxxxxxxxxx",
+  "event_type_id": 60444,
+  "timezone": "America/Los_Angeles"
+}
+```
+
+</CodeGroup>
+
+<ParamField body="cal_api_key" type="string" required>
+  Cal.com API key (get from Cal.com dashboard → Settings → Developer → API Keys)
+</ParamField>
+
+<ParamField body="event_type_id" type="number" required>
+  Cal.com event type ID (found in event type URL)
+</ParamField>
+
+<ParamField body="timezone" type="string">
+  IANA timezone (e.g., `"America/New_York"`, `"Europe/London"`). If not specified, uses caller's timezone or server default.
+</ParamField>
+
+---
+
+### 5. Book Appointment (Cal.com)
+
+Book appointments directly via Cal.com.
+
+<CodeGroup>
+
+```json Book Appointment
+{
+  "type": "book_appointment_cal",
+  "name": "book_consultation",
+  "description": "Book a 30-minute consultation appointment",
+  "cal_api_key": "cal_live_xxxxxxxxxxxx",
+  "event_type_id": 60444,
+  "timezone": "America/New_York"
+}
+```
+
+</CodeGroup>
+
+<ParamField body="cal_api_key" type="string" required>
+  Cal.com API key
+</ParamField>
+
+<ParamField body="event_type_id" type="number" required>
+  Cal.com event type ID
+</ParamField>
+
+<ParamField body="timezone" type="string">
+  IANA timezone for booking
+</ParamField>
+
+---
+
+### 6. Agent Transfer
+
+Transfer conversation to another AI agent (not a phone transfer).
+
+<CodeGroup>
+
+```json Agent Transfer
+{
+  "type": "agent_swap",
+  "name": "transfer_to_booking_agent",
+  "description": "Transfer to specialized booking agent",
+  "agent_id": "agent_xxxxxxxxxxxxxxxxxx",
+  "post_call_analysis_setting": "both_agents"
+}
+```
+
+</CodeGroup>
+
+<ParamField body="agent_id" type="string" required>
+  ID of the target AI agent to transfer to
+</ParamField>
+
+<ParamField body="post_call_analysis_setting" type="string" required>
+  `"both_agents"` or `"only_destination_agent"`
+</ParamField>
+
+<ParamField body="agent_version" type="number">
+  Specific version of target agent. If not specified, uses latest.
+</ParamField>
+
+<Info>
+**Agent Transfer vs Phone Transfer**: Agent transfer switches AI handlers instantly with full conversation history, while phone transfer creates a new phone call. Agent transfer is faster and more reliable.
+</Info>
+
+---
+
+### 7. Send SMS
+
+Send one-way SMS message during voice call.
+
+<CodeGroup>
+
+```json Predefined Message
+{
+  "type": "send_sms",
+  "name": "send_confirmation",
+  "description": "Send appointment confirmation via text",
+  "sms_content": {
+    "type": "predefined",
+    "content": "Your appointment is confirmed for {{appointment_date}} at {{appointment_time}}. See you soon!"
+  }
+}
+```
+
+```json AI-Generated Message
+{
+  "type": "send_sms",
+  "name": "send_summary",
+  "description": "Send conversation summary via text",
+  "sms_content": {
+    "type": "inferred",
+    "prompt": "Generate a brief summary of the order details discussed in this call"
+  }
+}
+```
+
+</CodeGroup>
+
+<ParamField body="sms_content" type="object" required>
+  SMS message configuration
+
+  **For predefined messages:**
+  - `type`: `"predefined"`
+  - `content`: The message text (supports dynamic variables like `{{name}}`)
+
+  **For AI-generated messages:**
+  - `type`: `"inferred"`
+  - `prompt`: Instructions for AI to generate the message
+</ParamField>
+
+<Warning>
+SMS tools only work for phone numbers with SMS capability enabled.
+</Warning>
+
+---
+
+### 8. Extract Dynamic Variables
+
+Extract and save conversation data as variables for later use.
+
+<CodeGroup>
+
+```json Extract Variables
+{
+  "type": "extract_dynamic_variable",
+  "name": "extract_customer_info",
+  "description": "Extract customer name, phone, and email from conversation",
+  "variables": [
+    {
+      "type": "string",
+      "name": "customer_name",
+      "description": "The customer's full name"
+    },
+    {
+      "type": "string",
+      "name": "customer_email",
+      "description": "The customer's email address"
+    },
+    {
+      "type": "enum",
+      "name": "interest_level",
+      "description": "Customer's interest level",
+      "choices": ["high", "medium", "low"]
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+<ParamField body="variables" type="array" required>
+  Variables to extract. Each variable has:
+  - `type`: `"string"`, `"number"`, `"enum"`, or `"boolean"`
+  - `name`: Variable name (snake_case)
+  - `description`: What to extract
+  - `choices` (for enum): Array of possible values
+  - `examples` (optional): Example values to guide AI
+</ParamField>
+
+---
+
+### 9. Press Digit (DTMF)
+
+Press phone keypad digits for IVR navigation.
+
+<CodeGroup>
+
+```json Press Digit
+{
+  "type": "press_digit",
+  "name": "press_1_for_sales",
+  "description": "Press 1 to navigate to sales department",
+  "delay_ms": 1000
+}
+```
+
+</CodeGroup>
+
+<ParamField body="delay_ms" type="number">
+  Delay in milliseconds before pressing digit (default: 1000ms, max: 5000ms)
+</ParamField>
+
+<Info>
+Useful for navigating automated phone systems and IVR menus.
+</Info>
+
+---
+
+### 10. MCP (Model Context Protocol)
+
+Connect to MCP servers for advanced integrations.
+
+<CodeGroup>
+
+```json MCP Tool
+{
+  "type": "mcp",
+  "name": "inventory_lookup",
+  "description": "Check inventory via MCP server",
+  "mcp_id": "mcp_xxxxxxxxxxxx"
+}
+```
+
+</CodeGroup>
+
+<ParamField body="mcp_id" type="string" required>
+  Unique ID of the MCP server configuration
+</ParamField>
+
+<Note>
+MCP tools require prior MCP server configuration. Contact support for setup assistance.
+</Note>
+
+---
+
+## Request Examples
+
+### Update with Single Tool
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.teli.ai/v1/agents/1763763759612x739630924151608142/tools" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tools": [
+      {
+        "type": "end_call",
+        "name": "end_conversation",
+        "description": "End the call when objectives are completed"
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/agents/{agent_id}/tools', {
+  method: 'PATCH',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    tools: [
+      {
+        type: 'end_call',
+        name: 'end_conversation',
+        description: 'End the call when objectives are completed'
+      }
+    ]
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.patch(
+    'https://api.teli.ai/v1/agents/{agent_id}/tools',
+    headers={
+        'X-API-Key': 'YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'tools': [
+            {
+                'type': 'end_call',
+                'name': 'end_conversation',
+                'description': 'End the call when objectives are completed'
+            }
+        ]
+    }
+)
+
+print(response.json())
+```
+
+</CodeGroup>
+
+---
+
+### Update with Multiple Tools
+
+<CodeGroup>
+
+```json Multi-Tool Example
+{
+  "tools": [
+    {
+      "type": "custom",
+      "name": "check_order_status",
+      "description": "Check customer order status in CRM",
+      "url": "https://api.yourcrm.com/orders/{{order_id}}",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer YOUR_CRM_API_KEY"
+      },
+      "speak_after_execution": true
+    },
+    {
+      "type": "transfer_call",
+      "name": "transfer_to_support",
+      "description": "Transfer to human support if customer is frustrated",
+      "transfer_destination": {
+        "type": "predefined",
+        "number": "+15551234567"
+      },
+      "transfer_option": {
+        "type": "warm_transfer"
+      }
+    },
+    {
+      "type": "send_sms",
+      "name": "send_order_tracking",
+      "description": "Send order tracking link via SMS",
+      "sms_content": {
+        "type": "predefined",
+        "content": "Your order {{order_id}} is on the way! Track it here: {{tracking_url}}"
+      }
+    },
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End the call after helping customer"
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+---
+
+### Healthcare Appointment Example
+
+<CodeGroup>
+
+```json Healthcare Bot Tools
+{
+  "tools": [
+    {
+      "type": "check_availability_cal",
+      "name": "check_appointment_slots",
+      "description": "Check available appointment slots with Dr. Smith",
+      "cal_api_key": "cal_live_xxxxxxxxxxxx",
+      "event_type_id": 60444,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "type": "book_appointment_cal",
+      "name": "book_appointment",
+      "description": "Book the appointment after customer confirms time",
+      "cal_api_key": "cal_live_xxxxxxxxxxxx",
+      "event_type_id": 60444,
+      "timezone": "America/Los_Angeles"
+    },
+    {
+      "type": "send_sms",
+      "name": "send_appointment_confirmation",
+      "description": "Send appointment confirmation via text",
+      "sms_content": {
+        "type": "predefined",
+        "content": "Your appointment with Dr. Smith is confirmed for {{appointment_date}} at {{appointment_time}}. Reply CANCEL to cancel."
+      }
+    },
+    {
+      "type": "transfer_call",
+      "name": "transfer_to_nurse",
+      "description": "Transfer to nurse for medical questions",
+      "transfer_destination": {
+        "type": "predefined",
+        "number": "+15559876543"
+      },
+      "transfer_option": {
+        "type": "warm_transfer"
+      }
+    },
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End call after appointment is booked"
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+---
+
+### Sales Bot Example
+
+<CodeGroup>
+
+```json Sales Bot Tools
+{
+  "tools": [
+    {
+      "type": "custom",
+      "name": "check_inventory",
+      "description": "Check product inventory and pricing",
+      "url": "https://api.yourstore.com/inventory/{{product_sku}}",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY"
+      },
+      "speak_after_execution": true
+    },
+    {
+      "type": "custom",
+      "name": "create_quote",
+      "description": "Generate price quote for customer",
+      "url": "https://api.yourcrm.com/quotes",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json"
+      },
+      "speak_after_execution": true
+    },
+    {
+      "type": "send_sms",
+      "name": "send_quote",
+      "description": "Text the quote to customer",
+      "sms_content": {
+        "type": "predefined",
+        "content": "Thanks for your interest! Your quote: {{quote_amount}}. Questions? Call us at +15551234567"
+      }
+    },
+    {
+      "type": "transfer_call",
+      "name": "transfer_to_sales_rep",
+      "description": "Transfer to human sales representative for closing",
+      "transfer_destination": {
+        "type": "predefined",
+        "number": "+15551234567"
+      },
+      "transfer_option": {
+        "type": "warm_transfer"
+      }
+    },
+    {
+      "type": "end_call",
+      "name": "end_call",
+      "description": "End call after quote sent or sale completed"
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+### Success Response
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "success": true,
+  "agent_id": "1763763759612x739630924151608142",
+  "tools_count": 5,
+  "message": "Agent tools updated successfully",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+<ResponseField name="success" type="boolean">
+  Indicates successful update
+</ResponseField>
+
+<ResponseField name="agent_id" type="string">
+  The agent's unique identifier
+</ResponseField>
+
+<ResponseField name="tools_count" type="number">
+  Number of tools configured
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Platform identifier
+</ResponseField>
+
+---
+
+### Error Responses
+
+<ResponseExample>
+
+```json 404 - Agent Not Found
+{
+  "error": "Agent not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 - Not Voice Agent
+{
+  "error": "Tools are only supported for voice agents",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 - No Voice Configuration
+{
+  "error": "Agent has no voice configuration",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 - Update Failed
+{
+  "error": "Failed to update agent tools",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Tool Naming Requirements
+
+<Warning>
+Tool names must follow these rules:
+- **Lowercase letters only** (a-z)
+- **Numbers allowed** (0-9)
+- **Underscores allowed** (_)
+- **No spaces**
+- **No special characters**
+- **Maximum 64 characters**
+
+Examples:
+- ✅ `"end_call"`
+- ✅ `"transfer_to_support"`
+- ✅ `"check_order_status"`
+- ❌ `"Transfer to Support"` (spaces, capitals)
+- ❌ `"check-order"` (hyphen not allowed)
+- ❌ `"send SMS!"` (space, special char)
+
+**Our platform auto-sanitizes names**, but following this format ensures consistency.
+</Warning>
+
+---
+
+## Dynamic Variables
+
+Many tools support **dynamic variables** that get substituted at runtime from the conversation:
+
+<CodeGroup>
+
+```json Using Dynamic Variables
+{
+  "type": "custom",
+  "name": "lookup_customer",
+  "url": "https://api.crm.com/customers/{{customer_phone}}",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer {{api_key}}"
+  },
+  "speak_after_execution": true
+}
+```
+
+```json SMS with Variables
+{
+  "type": "send_sms",
+  "name": "send_confirmation",
+  "sms_content": {
+    "type": "predefined",
+    "content": "Hi {{first_name}}! Your order #{{order_id}} ships {{ship_date}}. Total: ${{amount}}"
+  }
+}
+```
+
+</CodeGroup>
+
+**Common variables:**
+- `{{first_name}}`, `{{last_name}}`, `{{customer_name}}`
+- `{{phone_number}}`, `{{email}}`
+- `{{order_id}}`, `{{appointment_date}}`, `{{appointment_time}}`
+- Custom variables extracted during conversation
+
+---
+
+## Best Practices
+
+### 1. Tool Descriptions
+
+Write clear descriptions that tell the AI **when** to use the tool:
+
+<CodeGroup>
+
+```json Good Description
+{
+  "type": "transfer_call",
+  "name": "transfer_to_support",
+  "description": "Transfer to human support ONLY if customer explicitly asks to speak with a person, or if they are frustrated and escalating"
+}
+```
+
+```json Bad Description
+{
+  "type": "transfer_call",
+  "name": "transfer_to_support",
+  "description": "Transfer call"
+}
+```
+
+</CodeGroup>
+
+---
+
+### 2. Tool Combinations
+
+Combine tools for powerful workflows:
+
+**Support Bot**:
+1. `check_order_status` (Custom API)
+2. `transfer_to_support` (Transfer)
+3. `end_call` (End Call)
+
+**Booking Bot**:
+1. `check_availability_cal` (Check Calendar)
+2. `book_appointment_cal` (Book Appointment)
+3. `send_confirmation` (Send SMS)
+4. `end_call` (End Call)
+
+**Sales Bot**:
+1. `check_inventory` (Custom API)
+2. `create_quote` (Custom API)
+3. `send_quote` (Send SMS)
+4. `transfer_to_sales_rep` (Transfer)
+5. `end_call` (End Call)
+
+---
+
+### 3. Error Handling
+
+Tools can timeout or fail. Include fallback instructions in your agent prompt:
+
+```
+If the check_order_status tool fails or times out, apologize and offer to transfer 
+to a human representative who can help.
+```
+
+---
+
+### 4. Tool Naming
+
+Use descriptive, action-oriented names:
+
+- ✅ `check_order_status`
+- ✅ `book_appointment`
+- ✅ `transfer_to_support`
+- ❌ `tool1`
+- ❌ `api_call`
+- ❌ `function`
+
+---
+
+## Common Use Cases
+
+### Customer Support
+
+```json
+{
+  "tools": [
+    {"type": "custom", "name": "check_account_status", ...},
+    {"type": "custom", "name": "update_customer_info", ...},
+    {"type": "send_sms", "name": "send_ticket_number", ...},
+    {"type": "transfer_call", "name": "transfer_to_specialist", ...},
+    {"type": "end_call", "name": "end_call", ...}
+  ]
+}
+```
+
+### Healthcare
+
+```json
+{
+  "tools": [
+    {"type": "check_availability_cal", "name": "check_doctor_slots", ...},
+    {"type": "book_appointment_cal", "name": "book_appointment", ...},
+    {"type": "send_sms", "name": "send_confirmation", ...},
+    {"type": "transfer_call", "name": "transfer_to_nurse", ...},
+    {"type": "end_call", "name": "end_call", ...}
+  ]
+}
+```
+
+### Sales & Lead Qualification
+
+```json
+{
+  "tools": [
+    {"type": "custom", "name": "check_pricing", ...},
+    {"type": "custom", "name": "check_inventory", ...},
+    {"type": "extract_dynamic_variable", "name": "save_lead_info", ...},
+    {"type": "send_sms", "name": "send_brochure_link", ...},
+    {"type": "transfer_call", "name": "transfer_to_sales", ...},
+    {"type": "end_call", "name": "end_call", ...}
+  ]
+}
+```
+
+### Appointment Scheduling
+
+```json
+{
+  "tools": [
+    {"type": "check_availability_cal", "name": "check_slots", ...},
+    {"type": "book_appointment_cal", "name": "book_slot", ...},
+    {"type": "send_sms", "name": "send_calendar_invite", ...},
+    {"type": "end_call", "name": "end_call", ...}
+  ]
+}
+```
+
+---
+
+## Response Examples
+
+### Successful Update
+
+<ResponseExample>
+
+```json 200 - Tools Updated
+{
+  "success": true,
+  "agent_id": "1763763759612x739630924151608142",
+  "tools_count": 4,
+  "message": "Agent tools updated successfully",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+### Error: Not a Voice Agent
+
+<ResponseExample>
+
+```json 400 - SMS Agent
+{
+  "error": "Tools are only supported for voice agents",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+<Note>
+Tools are only available for voice agents. SMS agents use different mechanisms for automation.
+</Note>
+
+---
+
+### Error: Agent Not Found
+
+<ResponseExample>
+
+```json 404 - Not Found
+{
+  "error": "Agent not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+### Error: Invalid Tool Configuration
+
+<ResponseExample>
+
+```json 500 - Configuration Error
+{
+  "error": "Failed to update agent tools",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+<Info>
+Check tool names follow naming requirements (snake_case, no spaces). Our API auto-sanitizes names, but proper formatting helps prevent issues.
+</Info>
+
+---
+
+## Tool Lifecycle
+
+### Creating Agent with Tools
+
+```bash
+POST /v1/agents
+{
+  "agent_type": "voice",
+  "agent_name": "Support Bot",
+  "prompt": "You are a helpful support assistant...",
+  "voice_id": "11labs-Adrian",
+  "language": "en-US",
+  "general_tools": [
+    {"type": "end_call", "name": "end_call", "description": "End the call"}
+  ]
+}
+```
+
+### Updating Tools
+
+```bash
+PATCH /v1/agents/{agent_id}/tools
+{
+  "tools": [
+    {"type": "end_call", ...},
+    {"type": "transfer_call", ...}  ← Added new tool
+  ]
+}
+```
+
+### Getting Tools
+
+```bash
+GET /v1/agents/{agent_id}
+→ Returns agent with "current_tools" array
+```
+
+---
+
+## Limitations & Notes
+
+<Warning>
+**Important Limitations:**
+
+1. **Voice agents only** - SMS agents don't support tools
+2. **Cal.com tools** - Require Cal.com account and API key
+3. **Send SMS tool** - Only works for numbers with SMS capability
+4. **Custom API tools** - Your API must be publicly accessible or allow-list Teli IPs
+5. **Tool count** - No hard limit, but keeping under 10 tools per agent improves AI performance
+</Warning>
+
+<Info>
+**Performance Tips:**
+
+- **Fewer tools = Better AI performance** - Only add tools you actually need
+- **Clear descriptions** - Help AI understand when to use each tool
+- **Tool order doesn't matter** - AI selects appropriate tool based on conversation
+- **Test thoroughly** - Test each tool in various conversation scenarios
+</Info>
+
+---
+
+## Advanced Features
+
+### Warm Transfer Options
+
+Warm transfers support additional configuration:
+
+<CodeGroup>
+
+```json Advanced Warm Transfer
+{
+  "type": "transfer_call",
+  "name": "transfer_with_context",
+  "description": "Transfer to sales with customer context",
+  "transfer_destination": {
+    "type": "predefined",
+    "number": "+15551234567"
+  },
+  "transfer_option": {
+    "type": "warm_transfer",
+    "on_hold_music": "uplifting_beats",
+    "show_transferee_as_caller": true,
+    "agent_detection_timeout_ms": 30000
+  }
+}
+```
+
+</CodeGroup>
+
+<ParamField body="on_hold_music" type="string">
+  Music while caller is on hold:
+  - `"none"` - No music
+  - `"relaxing_sound"` - Calm background music
+  - `"uplifting_beats"` - Energetic music
+  - `"ringtone"` - Standard ringtone
+</ParamField>
+
+<ParamField body="show_transferee_as_caller" type="boolean">
+  If true, shows caller's number to transfer destination (requires telephony support)
+</ParamField>
+
+<ParamField body="agent_detection_timeout_ms" type="number">
+  Maximum time to wait for human detection (default: 30000ms)
+</ParamField>
+
+---
+
+### Custom API Advanced
+
+<CodeGroup>
+
+```json Advanced Custom Tool
+{
+  "type": "custom",
+  "name": "process_payment",
+  "description": "Process customer payment",
+  "url": "https://api.yourpayments.com/charge",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+  },
+  "query_params": {
+    "currency": "USD"
+  },
+  "response_variables": {
+    "transaction_id": "data.transaction.id",
+    "receipt_url": "data.receipt_url"
+  },
+  "speak_during_execution": true,
+  "speak_after_execution": true,
+  "execution_message_description": "Say: Processing your payment now, one moment please",
+  "timeout_ms": 10000
+}
+```
+
+</CodeGroup>
+
+<ParamField body="response_variables" type="object">
+  Extract values from API response as dynamic variables for later use.
+  Key: variable name, Value: JSON path in response
+</ParamField>
+
+<ParamField body="speak_during_execution" type="boolean">
+  Whether AI speaks while API call is in progress
+</ParamField>
+
+<ParamField body="execution_message_description" type="string">
+  What AI should say during execution (only if `speak_during_execution: true`)
+</ParamField>
+
+<ParamField body="timeout_ms" type="number">
+  API call timeout in milliseconds (1000-600000, default: 120000)
+</ParamField>
+
+---
+
+## Testing Tools
+
+### Test in Sandbox
+
+1. Create test agent with tools
+2. Make test calls
+3. Trigger each tool
+4. Verify behavior
+5. Check logs for tool execution
+
+### Monitor Tool Usage
+
+- View call logs to see which tools were triggered
+- Check call analysis for tool execution details
+- Review conversation transcripts for context
+
+---
+
+## Troubleshooting
+
+### Tool Not Triggering
+
+**Problem**: AI doesn't use the tool during calls
+
+**Solutions**:
+1. **Improve description** - Be specific about when to use
+2. **Update prompt** - Explicitly mention tool in agent prompt
+3. **Reduce tool count** - Too many tools confuses AI
+4. **Test prompt** - Include example scenario
+
+### API Tool Errors
+
+**Problem**: Custom API tool returns errors
+
+**Solutions**:
+1. **Verify URL** - Check API endpoint is correct
+2. **Check headers** - Ensure authorization is valid
+3. **Test endpoint** - Call API directly to verify
+4. **Check timeout** - Increase `timeout_ms` if needed
+
+### Transfer Fails
+
+**Problem**: Call transfer doesn't complete
+
+**Solutions**:
+1. **Verify number** - Check E.164 format (+15551234567)
+2. **Check telephony** - Ensure transfer is supported
+3. **Try cold transfer** - If warm transfer fails
+4. **Check extension** - Validate extension digits
+
+---
+
+## Rate Limits
+
+<Info>
+**No specific rate limits** on tool updates, but:
+- Avoid updating same agent tools repeatedly in quick succession
+- Batch your tool changes (update all at once)
+- Cache tool configurations client-side when possible
+</Info>
+
+---
+
+## Related Endpoints
+
+- [Create Agent](/api-reference/agents/create) - Create agent with initial tools
+- [Get Agent](/api-reference/agents/get) - Retrieve agent with current tools
+- [Update Agent](/api-reference/agents/update) - Update agent configuration
+- [List Agents](/api-reference/agents/list) - List all agents
+
+---
+
+## Support
+
+Need help with tools?
+- Check our [agent creation guide](/api-reference/agents/create)
+- View [example implementations](#examples)
+- Contact Teli support for advanced use cases
+
+---
+
+**Ready to enhance your voice agents with powerful tools!** 🚀

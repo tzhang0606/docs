@@ -137,7 +137,8 @@
         "partner-api/contacts/create",
         "partner-api/contacts/list",
         "partner-api/contacts/list-leads",
-        "partner-api/contacts/get"
+        "partner-api/contacts/get",
+        "partner-api/contacts/delete"
       ]
     },
     {
