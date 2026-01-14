@@ -1,0 +1,106 @@
+---
+title: 'Create Contact Group'
+api: 'POST /v1/contacts/groups'
+description: 'Create an empty contact group to organize contacts'
+---
+
+## Description
+
+Create a new contact group (folder) to organize contacts. Groups can be used to:
+- Organize leads from different sources
+- Segment contacts for campaigns
+- Track contacts by status or category
+
+After creating a group, you can add contacts to it using the [Create Single Contact](/partner-api/contacts/create-single) endpoint.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Request Body
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (who is creating the group)
+</ParamField>
+
+<ParamField body="group_name" type="string" required>
+  Name for the contact group
+</ParamField>
+
+<ParamField body="description" type="string">
+  Optional description of the group
+</ParamField>
+
+<RequestExample>
+
+```bash Basic
+curl -X POST https://api.teli.ai/v1/contacts/groups \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "group_name": "November Leads"
+  }'
+```
+
+```bash With Description
+curl -X POST https://api.teli.ai/v1/contacts/groups \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "group_name": "Hot Prospects Q1",
+    "description": "High-value leads from Q1 2026 marketing campaign"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201
+{
+  "success": true,
+  "group_id": "1763072372500x777103986713560785",
+  "group_name": "November Leads",
+  "message": "Contact group created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Validation Error)
+{
+  "error": "organization_id, user_id, and group_name are required",
+  "received": {
+    "organization_id": true,
+    "user_id": true,
+    "group_name": false
+  },
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Duplicate Name)
+{
+  "error": "A group named 'November Leads' already exists",
+  "powered_by": "Teli"
+}
+```
+
+```json 404 (Not Found)
+{
+  "error": "Organization not found",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+

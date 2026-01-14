@@ -134,6 +134,8 @@
     {
       "group": "Contacts & Leads",
       "pages": [
+        "partner-api/contacts/create-single",
+        "partner-api/contacts/create-group",
         "partner-api/contacts/create",
         "partner-api/contacts/list",
         "partner-api/contacts/list-leads",
