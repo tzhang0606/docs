@@ -1,0 +1,393 @@
+---
+title: 'List AI Agents'
+api: 'GET /v1/agents'
+description: 'Get all AI agents (SMS and Voice) for an organization'
+---
+
+## Description
+
+Returns all AI agents (SMS and Voice) for an organization. Admins see all org agents, regular users see only their own agents.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField query="user_id" type="string">
+  User unique_id (required for non-admin users)
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  If true, returns all org agents. If false, returns only user's agents.
+</ParamField>
+
+<ParamField query="agent_type" type="string">
+  Filter by agent type: `sms` or `voice`
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of agents
+</ResponseField>
+
+<ResponseField name="agents" type="array">
+  Array of agent objects
+  
+  <Expandable title="Agent Object">
+    <ResponseField name="agent_id" type="string">
+      Agent unique identifier (internal)
+    </ResponseField>
+    
+    <ResponseField name="unique_id" type="string">
+      Agent unique ID (alternative identifier)
+    </ResponseField>
+    
+    <ResponseField name="id" type="uuid">
+      Internal agent UUID
+    </ResponseField>
+    
+    <ResponseField name="agent_name" type="string">
+      Agent display name
+    </ResponseField>
+    
+    <ResponseField name="agent_type" type="string">
+      Agent type: `sms` or `voice`
+    </ResponseField>
+    
+    <ResponseField name="agent_status" type="string">
+      Agent status: `active`, `inactive`, `archived`
+    </ResponseField>
+    
+    <ResponseField name="greeting_prompt" type="string">
+      Initial message sent to contacts (supports `{{first_name}}`, `{{last_name}}` variables)
+    </ResponseField>
+    
+    <ResponseField name="general_prompt" type="string">
+      AI system prompt defining agent behavior and objectives
+    </ResponseField>
+    
+    <ResponseField name="follow_up_prompt" type="string">
+      Custom follow-up instructions for AI (optional)
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="uuid">
+      Organization UUID this agent belongs to
+    </ResponseField>
+    
+    <ResponseField name="created_by_user_id" type="uuid">
+      UUID of user who created this agent
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="visibility" type="string">
+      Agent visibility: `organization` (all users) or `user` (creator only)
+    </ResponseField>
+    
+    <ResponseField name="accessible_users" type="array">
+      List of user IDs who can access this agent (if visibility is restricted)
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID (only for voice agents, null for SMS agents)
+    </ResponseField>
+    
+    <ResponseField name="voice_llm_id" type="string">
+      Voice LLM ID (only for voice agents, null for SMS agents)
+    </ResponseField>
+    
+    <ResponseField name="voice_id" type="string">
+      Voice ID for TTS (e.g., "11labs-Adrian") - Voice agents only
+    </ResponseField>
+    
+    <ResponseField name="voice_speed" type="number">
+      Voice playback speed multiplier (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="voice_emotion" type="string">
+      Voice emotional tone (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="first_sentence" type="string">
+      First sentence override for voice agents
+    </ResponseField>
+    
+    <ResponseField name="agent_accent" type="string">
+      Voice accent setting (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="agent_gender" type="string">
+      Voice gender preference (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="drip_schedule" type="array">
+      Automated follow-up messages (SMS agents only, null for voice agents)
+      
+      <Expandable title="Drip Message">
+        <ResponseField name="day" type="integer">
+          Day number to send message
+        </ResponseField>
+        
+        <ResponseField name="message" type="string">
+          Message text to send
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="drip_start_datetime" type="timestamp">
+      When drip sequence starts (SMS agents only)
+    </ResponseField>
+    
+    <ResponseField name="first_message_delay" type="number">
+      Delay before sending first message (seconds)
+    </ResponseField>
+    
+    <ResponseField name="detect_voicemail" type="boolean">
+      Whether to detect voicemail (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="voicemail_content" type="string">
+      Message to leave in voicemail (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="backchannel" type="boolean">
+      Whether agent uses backchannel responses (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="interruption_sensitivity" type="number">
+      How sensitive agent is to interruptions (0-1, voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="ambient_sound" type="string">
+      Background ambient sound (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="instant_transfer_number" type="string">
+      Phone number for instant transfer (voice agents only)
+    </ResponseField>
+    
+    <ResponseField name="conversation_flow_id" type="string">
+      Custom conversation flow ID
+    </ResponseField>
+    
+    <ResponseField name="is_chat_bot" type="boolean">
+      Whether this is a chatbot agent
+    </ResponseField>
+    
+    <ResponseField name="is_sms_agent" type="boolean">
+      Internal flag for SMS agent type
+    </ResponseField>
+    
+    <ResponseField name="is_sms_transfer_agent" type="boolean">
+      Whether agent can transfer to SMS
+    </ResponseField>
+    
+    <ResponseField name="ai_agent_name" type="string">
+      Alternative AI agent name
+    </ResponseField>
+    
+    <ResponseField name="last_modification_timestamp" type="timestamp">
+      Last modification timestamp (alternative field)
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      Agent creation timestamp
+    </ResponseField>
+    
+    <ResponseField name="modified_at" type="timestamp">
+      Last modification timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/agents?organization_id=1762896364768x389173798861431550&user_id=1762896366429x599348279945132448&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 8,
+  "agents": [
+    {
+      "agent_id": "1763487456442x530311914019296484",
+      "unique_id": "1763487457756x172633473964121938",
+      "id": "c43fc766-9e49-46aa-9a46-325c8c894a58",
+      "agent_name": "Voice Agent 1",
+      "agent_type": "voice",
+      "agent_status": "active",
+      "greeting_prompt": "Hi {{first_name}}, how can I help you today?",
+      "general_prompt": "You are a helpful AI assistant.",
+      "follow_up_prompt": null,
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "created_by_user_id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "tenant_id": "your_tenant",
+      "visibility": "organization",
+      "accessible_users": null,
+      "voice_agent_id": "agent_76e782f267fad7f112b2339e2f",
+      "voice_llm_id": "llm_76ba232bb992d5bc1ca3b83b6a00",
+      "voice_id": "11labs-Adrian",
+      "voice_speed": null,
+      "voice_emotion": null,
+      "first_sentence": null,
+      "agent_accent": null,
+      "agent_gender": null,
+      "drip_schedule": null,
+      "drip_start_datetime": null,
+      "first_message_delay": null,
+      "detect_voicemail": false,
+      "voicemail_content": null,
+      "backchannel": false,
+      "interruption_sensitivity": null,
+      "ambient_sound": null,
+      "instant_transfer_number": null,
+      "conversation_flow_id": null,
+      "is_chat_bot": false,
+      "is_sms_agent": false,
+      "is_sms_transfer_agent": false,
+      "ai_agent_name": null,
+      "last_modification_timestamp": null,
+      "created_at": "2025-11-18T17:37:37.867912",
+      "modified_at": "2025-11-18T17:37:37.867912"
+    },
+    {
+      "agent_id": "1762896437306x529035742905669631",
+      "unique_id": "1762896437665x972848053812720437",
+      "id": "c7ba209b-a464-44ce-a685-21a5508e8474",
+      "agent_name": "SMS Agent",
+      "agent_type": "sms",
+      "agent_status": "active",
+      "greeting_prompt": "Hi {{first_name}}, did you want to develop a software for your business?\n",
+      "general_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. \n",
+      "follow_up_prompt": null,
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "created_by_user_id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "tenant_id": "your_tenant",
+      "visibility": "organization",
+      "accessible_users": null,
+      "drip_schedule": [],
+      "drip_start_datetime": "2025-11-11T21:27:17.306285+00:00",
+      "first_message_delay": null,
+      "voice_agent_id": null,
+      "voice_llm_id": null,
+      "voice_id": null,
+      "voice_speed": null,
+      "voice_emotion": null,
+      "first_sentence": null,
+      "agent_accent": null,
+      "agent_gender": null,
+      "detect_voicemail": false,
+      "voicemail_content": null,
+      "backchannel": false,
+      "interruption_sensitivity": null,
+      "ambient_sound": null,
+      "instant_transfer_number": null,
+      "conversation_flow_id": null,
+      "is_chat_bot": false,
+      "is_sms_agent": false,
+      "is_sms_transfer_agent": false,
+      "ai_agent_name": null,
+      "last_modification_timestamp": null,
+      "created_at": "2025-11-11T21:27:17.734523",
+      "modified_at": "2025-11-11T21:27:17.734523"
+    },
+    {
+      "agent_id": "1763500416653x437043850941191495",
+      "unique_id": "1763500417669x523666197914196602",
+      "id": "74014854-b110-46c8-b037-18f0149baae6",
+      "agent_name": "Emma Agent",
+      "agent_type": "voice",
+      "agent_status": "active",
+      "greeting_prompt": "Hi {{first_name}}, did you want to develop a software for your business?\n",
+      "general_prompt": "You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software. If they give you a budget, tell them an approximate cost of the software in industry standards. Make sure to book an appointment with the team. If they miss the call, try to call them back just once more.\n",
+      "follow_up_prompt": null,
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "created_by_user_id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "tenant_id": "your_tenant",
+      "visibility": "organization",
+      "accessible_users": null,
+      "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+      "voice_llm_id": "llm_768537625c23c0da51a0c10861e0",
+      "voice_id": "11labs-Adrian",
+      "voice_speed": null,
+      "voice_emotion": null,
+      "first_sentence": null,
+      "agent_accent": null,
+      "agent_gender": null,
+      "drip_schedule": null,
+      "drip_start_datetime": null,
+      "first_message_delay": null,
+      "detect_voicemail": false,
+      "voicemail_content": null,
+      "backchannel": false,
+      "interruption_sensitivity": null,
+      "ambient_sound": null,
+      "instant_transfer_number": null,
+      "conversation_flow_id": null,
+      "is_chat_bot": false,
+      "is_sms_agent": false,
+      "is_sms_transfer_agent": false,
+      "ai_agent_name": null,
+      "last_modification_timestamp": null,
+      "created_at": "2025-11-18T21:13:37.738804",
+      "modified_at": "2025-11-18T21:13:37.738804"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Organization ID)
+{
+  "error": "organization_id required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to list agents",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Filtering
+
+### By Agent Type
+Add `agent_type=voice` to get only voice agents, or `agent_type=sms` for SMS agents only.
+
+### By Permission
+- **Admin users** (`is_admin=true`): See all organization agents
+- **Regular users** (`is_admin=false`): See only their own agents
+
+## Notes
+
+- Voice agents have `voice_agent_id` and `voice_llm_id`
+- SMS agents have `drip_schedule` for automated follow-ups
+- Both agent types support variable substitution: `{{first_name}}`, `{{last_name}}`
+- Usage metrics are tracked per agent for billing

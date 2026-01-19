@@ -1,14 +1,12 @@
 ---
 title: 'Create Single Contact'
 api: 'POST /v1/contacts'
-description: 'Create a new contact and add it to a group'
+description: 'Create a new contact via form submission'
 ---
 
 ## Description
 
-Create a single contact with detailed information including personal, company, and industry-specific fields. 
-
-**Important:** Contacts must belong to a group. Create a group first using `POST /v1/contacts/groups`, then add contacts to it.
+Create a single contact with detailed information including personal, company, and industry-specific fields. This endpoint is designed for form-based contact creation (e.g., from a CRM UI).
 
 ## Authorizations
 
@@ -26,12 +24,18 @@ Create a single contact with detailed information including personal, company, a
   User unique_id (who is creating the contact)
 </ParamField>
 
-<ParamField body="list_id" type="string" required>
-  Group unique_id to add the contact to. Create a group first using `POST /v1/contacts/groups`.
-</ParamField>
-
 <ParamField body="phone_number" type="string" required>
   Contact phone number (E.164 format recommended, e.g., `+15551234567`)
+</ParamField>
+
+## Contact List Options
+
+<ParamField body="list_id" type="string">
+  Add contact to an existing list by its unique_id. If not provided, contact is added to a "Manual Entries" list.
+</ParamField>
+
+<ParamField body="list_name" type="string">
+  Create a new list with this name and add the contact to it. Only used if `list_id` is not provided.
 </ParamField>
 
 ## Personal Information
@@ -191,7 +195,6 @@ curl -X POST https://api.teli.ai/v1/contacts \
   -d '{
     "organization_id": "{org_id}",
     "user_id": "{user_id}",
-    "list_id": "{group_id}",
     "phone_number": "+15551234567",
     "first_name": "John",
     "last_name": "Doe",
@@ -206,7 +209,6 @@ curl -X POST https://api.teli.ai/v1/contacts \
   -d '{
     "organization_id": "{org_id}",
     "user_id": "{user_id}",
-    "list_id": "{group_id}",
     "phone_number": "+15551234567",
     "first_name": "Jane",
     "last_name": "Smith",
@@ -226,7 +228,7 @@ curl -X POST https://api.teli.ai/v1/contacts \
   -d '{
     "organization_id": "{org_id}",
     "user_id": "{user_id}",
-    "list_id": "{group_id}",
+    "list_name": "Refinance Leads",
     "phone_number": "+15551234567",
     "first_name": "Robert",
     "last_name": "Johnson",
@@ -255,7 +257,7 @@ curl -X POST https://api.teli.ai/v1/contacts \
   "success": true,
   "contact_id": "contact_1767123456789x123456789012345",
   "list_id": "1763072372500x777103986713560785",
-  "group_name": "November Leads",
+  "list_created": false,
   "message": "Contact created successfully",
   "powered_by": "Teli"
 }
@@ -263,24 +265,22 @@ curl -X POST https://api.teli.ai/v1/contacts \
 
 ```json 400 (Validation Error)
 {
-  "error": "organization_id, user_id, phone_number, and list_id are required. Create a group first using POST /v1/contacts/groups",
+  "error": "organization_id, user_id, and phone_number are required",
   "received": {
     "organization_id": true,
     "user_id": true,
-    "phone_number": true,
-    "list_id": false
+    "phone_number": false
   },
-  "hint": "Contacts must belong to a group. Create a group first, then add contacts to it.",
   "powered_by": "Teli"
 }
 ```
 
-```json 404 (Group Not Found)
+```json 404 (Not Found)
 {
-  "error": "Contact group 'invalid_id' not found",
-  "hint": "Create a group first using POST /v1/contacts/groups",
+  "error": "Organization not found",
   "powered_by": "Teli"
 }
 ```
 
 </ResponseExample>
+
