@@ -1,0 +1,229 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Teli AI",
+  "colors": {
+    "primary": "#1870F3",
+    "light": "#1870F3",
+    "dark": "#1870F3"
+  },
+  "favicon": "/images/telifavicon.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "introduction"
+            ]
+          },
+          {
+            "group": "AI Agents Setup",
+            "pages": [
+              "teli-agents/agents",
+              "teli-agents/dynamic-variables2"
+            ]
+          },
+          {
+            "group": "Running Campaigns",
+            "pages": [
+              "teli-agents/contacts",
+              "teli-agents/teli-voice",
+              "teli-agents/teli-sms",
+              "teli-agents/reporting"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              {
+                "group": "Actions",
+                "pages": [
+                  "zapier-app/Actions/add-lead-to-campaign",
+                  "zapier-app/Actions/upload-lead-to-lead-group"
+                ]
+              },
+              {
+                "group": "Triggers",
+                "pages": [
+                  "zapier-app/Triggers/completed-call-data",
+                  "zapier-app/Triggers/qualified-sms-contact"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Partner API",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "partner-api/introduction",
+              "partner-api/authentication",
+              "partner-api/quickstart-sms",
+              "partner-api/quickstart-voice"
+            ]
+          },
+          {
+            "group": "Organizations",
+            "pages": [
+              "partner-api/organizations/create",
+              "partner-api/organizations/get",
+              "partner-api/organizations/list"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "partner-api/users/create",
+              "partner-api/users/list"
+            ]
+          },
+          {
+            "group": "AI Agents",
+            "pages": [
+              "partner-api/agents/create-sms",
+              "partner-api/agents/create-voice",
+              "partner-api/agents/list",
+              "partner-api/agents/get",
+              "partner-api/agents/update-sms",
+              "partner-api/agents/update-voice",
+              "partner-api/agents/update-tools",
+              "partner-api/agents/delete"
+            ]
+          },
+          {
+            "group": "Knowledge Base",
+            "pages": [
+              "partner-api/knowledge-bases/create",
+              "partner-api/knowledge-bases/list",
+              "partner-api/knowledge-bases/get",
+              "partner-api/knowledge-bases/delete",
+              "partner-api/knowledge-bases/add-sources",
+              "partner-api/knowledge-bases/delete-source"
+            ]
+          },
+          {
+            "group": "Contacts & Leads",
+            "pages": [
+              "partner-api/contacts/create-single",
+              "partner-api/contacts/create-group",
+              "partner-api/contacts/create",
+              "partner-api/contacts/list",
+              "partner-api/contacts/list-leads",
+              "partner-api/contacts/get",
+              "partner-api/contacts/delete"
+            ]
+          },
+          {
+            "group": "SMS Campaigns",
+            "pages": [
+              "partner-api/campaigns/create",
+              "partner-api/campaigns/list-sms",
+              "partner-api/campaigns/get",
+              "partner-api/campaigns/messages",
+              "partner-api/campaigns/delete"
+            ]
+          },
+          {
+            "group": "Voice Campaigns",
+            "pages": [
+              "partner-api/voice-campaigns/create",
+              "partner-api/voice-campaigns/list",
+              "partner-api/voice-campaigns/delete"
+            ]
+          },
+          {
+            "group": "Phone Numbers",
+            "pages": [
+              "partner-api/phone-numbers/create",
+              "partner-api/phone-numbers/list"
+            ]
+          },
+          {
+            "group": "Voices",
+            "pages": [
+              "partner-api/voices/list"
+            ]
+          },
+          {
+            "group": "Call History",
+            "pages": [
+              "partner-api/call-history/list",
+              "partner-api/call-history/get"
+            ]
+          },
+          {
+            "group": "Do Not Call (DNC)",
+            "pages": [
+              "partner-api/dnc/add",
+              "partner-api/dnc/remove"
+            ]
+          },
+          {
+            "group": "SMS Data Extraction",
+            "pages": [
+              "partner-api/sms-extractions/get",
+              "partner-api/sms-extractions/list-by-phone"
+            ]
+          },
+          {
+            "group": "10DLC SMS Registration",
+            "pages": [
+              "partner-api/10dlc/introduction",
+              "partner-api/10dlc/overview",
+              "partner-api/10dlc/subgroup-create",
+              "partner-api/10dlc/brand-create",
+              "partner-api/10dlc/campaign-create",
+              "partner-api/10dlc/phone-purchase",
+              "partner-api/10dlc/reference"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "partner-api/terminology",
+              "partner-api/errors"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Community",
+          "href": "https://t.me/+v5wRD0hAUpc5MzA5",
+          "icon": "telegram"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/images/dark logo.png",
+    "dark": "/images/light_logo.png"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:info@teli.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://teli.ai/dashboard?page=ai"
+    }
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/TELI__AI",
+      "linkedin": "https://www.linkedin.com/company/teli-ai/"
+    }
+  }
+}
