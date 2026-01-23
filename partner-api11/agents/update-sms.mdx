@@ -48,14 +48,6 @@ All fields are optional. Only include the fields you want to update.
   AI behavior instructions defining personality, goals, and conversation guidelines
 </ParamField>
 
-### Data Extraction
-
-<ParamField body="extraction_fields" type="array">
-  Fields to extract from conversations using AI.
-  
-  **Example:** `["credit_score", "loan_amount", "interested", "timeline"]`
-</ParamField>
-
 ### Drip Schedule
 
 <ParamField body="drip_schedule" type="array">
@@ -66,9 +58,8 @@ All fields are optional. Only include the fields you want to update.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `delay_hours` | number | Hours to wait before sending |
-| `type` | string | `"ai"` for AI-generated or `"custom"` for fixed message |
-| `message` | string | The follow-up message (required if type is `"custom"`) |
+| `message` | string | The follow-up message to send |
+| `follow_up_after` | object | Delay configuration: `{days, hours, minutes}` |
 
 ---
 
@@ -130,36 +121,6 @@ print(response.json())
 
 ---
 
-### Update Extraction Fields
-
-<CodeGroup>
-
-```bash cURL
-curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "extraction_fields": ["credit_score", "loan_amount", "annual_income", "interested", "timeline"]
-  }'
-```
-
-```javascript JavaScript
-const response = await fetch('https://api.teli.ai/v1/agents/agent_abc123', {
-  method: 'PATCH',
-  headers: {
-    'X-API-Key': 'YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    extraction_fields: ['credit_score', 'loan_amount', 'annual_income', 'interested', 'timeline']
-  })
-});
-```
-
-</CodeGroup>
-
----
-
 ### Update Drip Schedule
 
 <CodeGroup>
@@ -171,18 +132,16 @@ curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
   -d '{
     "drip_schedule": [
       {
-        "delay_hours": 4,
-        "type": "ai"
+        "message": "Hi {{first_name}}, just following up on my earlier message...",
+        "follow_up_after": {"days": 0, "hours": 4, "minutes": 0}
       },
       {
-        "delay_hours": 24,
-        "type": "custom",
-        "message": "Hi {{first_name}}, just checking in!"
+        "message": "{{first_name}}, I wanted to make sure you saw my messages. Any questions?",
+        "follow_up_after": {"days": 1, "hours": 0, "minutes": 0}
       },
       {
-        "delay_hours": 72,
-        "type": "custom",
-        "message": "Last follow-up {{first_name}} - let me know if interested!"
+        "message": "Last chance {{first_name}}! Let me know if you are interested.",
+        "follow_up_after": {"days": 2, "hours": 0, "minutes": 0}
       }
     ]
   }'
@@ -191,9 +150,14 @@ curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
 ```json Request Body
 {
   "drip_schedule": [
-    {"delay_hours": 4, "type": "ai"},
-    {"delay_hours": 24, "type": "custom", "message": "Hi {{first_name}}, any questions?"},
-    {"delay_hours": 72, "type": "custom", "message": "Final follow-up!"}
+    {
+      "message": "Hi {{first_name}}, just following up...",
+      "follow_up_after": {"days": 0, "hours": 4, "minutes": 0}
+    },
+    {
+      "message": "{{first_name}}, any questions for me?",
+      "follow_up_after": {"days": 1, "hours": 0, "minutes": 0}
+    }
   ]
 }
 ```
@@ -327,4 +291,3 @@ Personalize messages with lead data:
 - [Get Agent](/partner-api/agents/get) - Retrieve agent details
 - [List Agents](/partner-api/agents/list) - List all agents
 - [Delete Agent](/partner-api/agents/delete) - Delete an agent
-- [Get SMS Extraction](/partner-api/sms-extractions/get) - Get extracted data from conversations

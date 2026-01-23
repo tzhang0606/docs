@@ -1,0 +1,358 @@
+---
+title: 'Create AI Agent'
+api: 'POST /v1/agents'
+description: 'Create a reusable AI conversation agent (SMS or Voice)'
+---
+
+Create a reusable AI agent with custom conversation prompts. Supports both SMS and Voice agents.
+
+<Info>
+SMS agents have no additional charges beyond standard SMS costs. Voice agents use Teli Voice platform with per-second billing.
+</Info>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Body
+
+<ParamField body="agent_type" type="string" required>
+  Agent type: `sms` or `voice`
+  
+  Example: `"voice"`
+</ParamField>
+
+<ParamField body="agent_name" type="string" required>
+  Display name for the agent.
+  
+  Example: `"Sales Follow-up Agent"` or `"Sophie Agent"`
+</ParamField>
+
+<ParamField body="starting_message" type="string" required>
+  First message/greeting sent to contacts. Supports variables: `{{first_name}}`, `{{last_name}}`
+  
+  Example: `"Hi {{first_name}}, interested in our services?"`
+</ParamField>
+
+<ParamField body="prompt" type="string" required>
+  AI behavior instructions. Tells the agent how to respond.
+  
+  Example: `"You are working for Pranta Nir Software Solutions. You are supposed to ask users if they want any consulting or software development support. If yes, ask them their budget for the software."`
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id.
+  
+  Example: `"1763070568417x631086913669115287"`
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (agent creator).
+  
+  Example: `"1763072368418x263803518630956376"`
+</ParamField>
+
+<ParamField body="drip_schedule" type="array">
+  **SMS agents only.** Automated follow-up messages.
+  
+  Each item: `{ "day": number, "message": string }`
+  
+  Example:
+  ```json
+  [
+    {"day": 1, "message": "Just checking in from yesterday!"},
+    {"day": 3, "message": "Still here if you need anything!"}
+  ]
+  ```
+</ParamField>
+
+<ParamField body="voice_id" type="string">
+  **Voice agents only.** Voice ID for text-to-speech (e.g., "11labs-Adrian", "11labs-Josh")
+  
+  Default: `"11labs-Adrian"`
+</ParamField>
+
+<ParamField body="detect_voicemail" type="boolean">
+  **Voice agents only.** Enable voicemail detection.
+  
+  Default: `false`
+</ParamField>
+
+<ParamField body="voicemail_message" type="string">
+  **Voice agents only.** Message to leave if voicemail is detected.
+</ParamField>
+
+<ParamField body="language" type="string">
+  **Voice agents only.** Language code (e.g., "en-US", "es-ES", "fr-FR")
+  
+  Default: `"en-US"`
+</ParamField>
+
+<ParamField body="general_tools" type="array">
+  **Voice agents only.** Tools for function calling (end call, transfer, custom API, etc.)
+  
+  See [Update Agent Tools](/api-reference/agents/update-tools) for details.
+</ParamField>
+
+<ParamField body="knowledge_base_ids" type="array">
+  **Voice agents only.** Array of knowledge base IDs to link to this agent.
+  
+  Example: `["knowledge_base_7a0682ce5fc02413"]`
+  
+  Agent will automatically retrieve relevant information from these KBs during calls.
+</ParamField>
+
+<ParamField body="kb_config" type="object">
+  **Voice agents only.** Knowledge base retrieval configuration.
+  
+  **Properties:**
+  - `top_k` (number): Chunks to retrieve (1-10, default: 3)
+  - `filter_score` (number): Similarity threshold (0-1, default: 0.6)
+  
+  Example:
+  ```json
+  {
+    "top_k": 3,
+    "filter_score": 0.6
+  }
+  ```
+</ParamField>
+
+<RequestExample>
+
+```bash cURL (SMS Agent)
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Sales Follow-up Agent",
+    "starting_message": "Hi {{first_name}}, interested in our services?",
+    "prompt": "You are a helpful sales agent. Ask about their budget and timeline.",
+    "organization_id": "1763070568417x...",
+    "user_id": "1763072368418x...",
+    "drip_schedule": [
+      {"day": 1, "message": "Just checking in!"},
+      {"day": 3, "message": "Happy to help when you'\''re ready!"}
+    ]
+  }'
+```
+
+```bash Voice Agent (Basic)
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Laura Agent",
+    "starting_message": "Hi {{first_name}}, interested in our services?",
+    "prompt": "You are a helpful sales assistant. Ask about customer needs and provide solutions.",
+    "organization_id": "1762896364768x389173798861431550",
+    "user_id": "1762896366429x599348279945132448",
+    "voice_id": "11labs-Adrian",
+    "language": "en-US"
+  }'
+```
+
+```bash Voice Agent with Knowledge Base
+curl -X POST https://api.teli.ai/v1/agents \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "voice",
+    "agent_name": "Support Bot",
+    "starting_message": "Hi {{first_name}}, how can I help you today?",
+    "prompt": "You are a helpful support assistant. Answer questions using information from the knowledge base.",
+    "organization_id": "1762896364768x389173798861431550",
+    "user_id": "1762896366429x599348279945132448",
+    "voice_id": "11labs-Adrian",
+    "language": "en-US",
+    "knowledge_base_ids": ["knowledge_base_7a0682ce5fc02413"],
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/agents', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    agent_type: 'sms',
+    agent_name: 'Sales Follow-up Agent',
+    starting_message: 'Hi {{first_name}}, interested in our services?',
+    prompt: 'You are a helpful sales agent.',
+    organization_id: orgId,
+    user_id: userId
+  })
+});
+
+const data = await response.json();
+console.log(data.agent_id);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.teli.ai/v1/agents',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'agent_type': 'sms',
+        'agent_name': 'Sales Follow-up Agent',
+        'starting_message': 'Hi {{first_name}}, interested?',
+        'prompt': 'You are a helpful sales agent.',
+        'organization_id': org_id,
+        'user_id': user_id
+    }
+)
+
+data = response.json()
+print(data['agent_id'])
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 (SMS Agent)
+{
+  "success": true,
+  "agent_id": "1763072369786x980265710064263640",
+  "agent_type": "sms",
+  "agent_name": "Sales Follow-up Agent",
+  "has_drip_schedule": true,
+  "organization_id": "1763072364720x...",
+  "created_by": "1763072368418x...",
+  "message": "SMS agent created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 201 (Voice Agent)
+{
+  "success": true,
+  "agent_id": "1763500416653x437043850941191495",
+  "unique_id": "1763500417669x523666197914196602",
+  "agent_type": "voice",
+  "agent_name": "Ronaldo",
+  "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+  "voice_llm_id": "llm_768537625c23c0da51a0c10861e0",
+  "voice_id": "11labs-Adrian",
+  "organization_id": "1762896364768x389173798861431550",
+  "user_id": "1762896366429x599348279945132448",
+  "message": "Voice agent created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Required Fields)
+{
+  "error": "agent_name, organization_id, and user_id are required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Invalid Agent Type)
+{
+  "error": "agent_type must be 'sms' or 'voice'",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Missing Voice ID)
+{
+  "error": "voice_id is required for voice agents",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Creation Failed)
+{
+  "error": "Failed to create agent - please check configuration",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400
+{
+  "error": "agent_name, organization_id, and user_id are required",
+  "powered_by": "Teli",
+  "success": false
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="agent_id" type="string">
+  Agent identifier. Use this when creating campaigns.
+</ResponseField>
+
+<ResponseField name="unique_id" type="string">
+  Agent unique identifier (alternative ID)
+</ResponseField>
+
+<ResponseField name="agent_type" type="string">
+  Confirms the agent type: `sms` or `voice`
+</ResponseField>
+
+<ResponseField name="agent_name" type="string">
+  Agent display name
+</ResponseField>
+
+<ResponseField name="has_drip_schedule" type="boolean">
+  Whether automated follow-ups are configured (SMS agents only)
+</ResponseField>
+
+<ResponseField name="voice_agent_id" type="string">
+  Voice agent ID (voice agents only)
+</ResponseField>
+
+<ResponseField name="voice_llm_id" type="string">
+  Voice LLM ID (voice agents only)
+</ResponseField>
+
+<ResponseField name="voice_id" type="string">
+  Voice ID for TTS (voice agents only)
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Agent Types
+
+### SMS Agents
+- Used for text-based conversations
+- Support drip schedules for automated follow-ups
+- No additional charges beyond SMS costs
+- Can be configured with SMS-to-voice transfer
+
+### Voice Agents
+- Used for phone call conversations
+- Powered by Teli Voice platform
+- Support voicemail detection and custom voicemails
+- Billed per second of call time
+- Can be used standalone or with SMS-to-voice transfer
+
+## Notes
+
+- Agent IDs are unique across your organization
+- Prompts support variable substitution: `{{first_name}}`, `{{last_name}}`
+- Voice agents are created on Teli Voice platform and automatically configured
+- SMS agents can trigger voice agents when SMS-to-voice is enabled in campaigns
+- Both agent types support organization-wide or user-specific visibility
+

@@ -149,6 +149,8 @@
       "pages": [
         "partner-api/campaigns/create",
         "partner-api/campaigns/list-sms",
+        "partner-api/campaigns/get",
+        "partner-api/campaigns/messages",
         "partner-api/campaigns/delete"
       ]
     },
@@ -185,6 +187,13 @@
       "pages": [
         "partner-api/dnc/add",
         "partner-api/dnc/remove"
+      ]
+    },
+    {
+      "group": "SMS Data Extraction",
+      "pages": [
+        "partner-api/sms-extractions/get",
+        "partner-api/sms-extractions/list-by-phone"
       ]
     },
     {

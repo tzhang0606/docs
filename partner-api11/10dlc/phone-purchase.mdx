@@ -1,0 +1,144 @@
+---
+title: 'Purchase Phone Number'
+api: 'POST /v1/10dlc/phone-numbers/purchase'
+description: 'Buy a dedicated 10DLC phone number'
+---
+
+Purchase one or more phone numbers for your SMS campaigns.
+
+<Note>
+Phone numbers must be purchased before creating campaigns. Each number can be used for one campaign.
+</Note>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Body
+
+<ParamField body="phoneNumbers" type="array" required>
+  Array of phone numbers to purchase (without country code, 10 digits only).
+  
+  Example: `["3135551234", "3135555678"]`
+  
+  <Warning>
+  Numbers must be available. Purchase may fail if already taken.
+  </Warning>
+</ParamField>
+
+<ParamField body="groupId" type="string" required>
+  Your account group ID
+</ParamField>
+
+<ParamField body="subGroupId" type="string">
+  Optional subgroup ID to assign numbers to
+</ParamField>
+
+<ParamField body="tollFree" type="boolean">
+  Set to `true` for toll-free numbers (800, 888, etc.)
+  
+  Default: `false` (10DLC local numbers)
+</ParamField>
+
+<ParamField body="mock" type="boolean">
+  Set to `true` for testing (no real purchase)
+  
+  Default: `false`
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.teli.ai/v1/10dlc/phone-numbers/purchase \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phoneNumbers": ["3135559999"],
+    "groupId": "YOUR_GROUP_ID",
+    "tollFree": false,
+    "mock": true
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/10dlc/phone-numbers/purchase', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    phoneNumbers: ['3135559999'],
+    groupId: 'YOUR_GROUP_ID',
+    tollFree: false,
+    mock: true
+  })
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "message": "Successfully purchased phone number",
+  "sid": ["47178d4c-6d1d-4cf9-a0aa-djfseifni"],
+  "response": [
+    {
+      "sid": "47178d4c-6d1d-4cf9-a0aa-djfseifni",
+      "phoneNumber": "13135559999",
+      "status": "success"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 200 Partial Failure
+{
+  "message": "Partially successful",
+  "response": [
+    {
+      "phoneNumber": "13135559999",
+      "status": "success"
+    },
+    {
+      "phoneNumber": "3135551234",
+      "status": "failed",
+      "errorMessage": "Number not available"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="response" type="array">
+  Array of purchase results, one per requested number
+</ResponseField>
+
+<ResponseField name="response[].phoneNumber" type="string">
+  Phone number (11 digits with country code)
+</ResponseField>
+
+<ResponseField name="response[].status" type="string">
+  `success` or `failed`
+</ResponseField>
+
+<ResponseField name="response[].sid" type="string">
+  System identifier (if successful)
+</ResponseField>
+
+## Tips
+
+- **Area Code**: Choose numbers in your business's area code for better trust
+- **Multiple Numbers**: You can purchase multiple numbers in one request
+- **Availability**: Popular area codes may have limited availability
+- **Mock Mode**: Test with `mock: true` before real purchases
+

@@ -1,0 +1,190 @@
+---
+title: "Get SMS Extraction"
+description: "Retrieve extracted data from an SMS conversation"
+---
+
+# Get SMS Extraction
+
+Retrieve AI-extracted data from an SMS conversation thread.
+
+<Note>
+Extraction happens automatically when the AI analyzes conversations. Configure extraction fields on your SMS agent to specify what data to extract.
+</Note>
+
+## Endpoint
+
+```
+GET /v1/sms/extractions/{thread_id}
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="thread_id" type="string" required>
+  The conversation thread ID. Format: `{phone_number}_{campaign_id}`
+  
+  Example: `+15551234567_camp_abc123`
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="extraction" type="object">
+  The extraction data (null if no extraction found)
+  
+  <Expandable title="extraction properties">
+    <ResponseField name="thread_id" type="string">
+      Conversation thread identifier
+    </ResponseField>
+    
+    <ResponseField name="phone_number" type="string">
+      Contact's phone number in E.164 format
+    </ResponseField>
+    
+    <ResponseField name="extracted_fields" type="object">
+      Key-value pairs of extracted data. Keys match your configured extraction_fields.
+      
+      Example:
+      ```json
+      {
+        "credit_score": "730",
+        "loan_amount": "250000",
+        "interested": "yes",
+        "timeline": "3 months"
+      }
+      ```
+    </ResponseField>
+    
+    <ResponseField name="lead_outcome" type="string">
+      AI-determined lead classification:
+      - `qualified` - Lead expressed interest and met criteria
+      - `not_interested` - Lead declined
+      - `dnc` - Added to Do Not Contact list
+      - `transferred` - Lead was transferred to a live agent
+      - `pending` - Still in conversation
+    </ResponseField>
+    
+    <ResponseField name="objective_met" type="boolean">
+      Whether the campaign objective was achieved
+    </ResponseField>
+    
+    <ResponseField name="do_not_message" type="boolean">
+      Whether the contact should not receive further messages
+    </ResponseField>
+    
+    <ResponseField name="call_transferred" type="boolean">
+      Whether the conversation was transferred to a live agent
+    </ResponseField>
+    
+    <ResponseField name="call_scheduled" type="boolean">
+      Whether a call was scheduled
+    </ResponseField>
+    
+    <ResponseField name="call_scheduled_time" type="string">
+      ISO 8601 timestamp of scheduled call (if applicable)
+    </ResponseField>
+    
+    <ResponseField name="extracted_at" type="string">
+      ISO 8601 timestamp when extraction occurred
+    </ResponseField>
+    
+    <ResponseField name="campaign_id" type="string">
+      Campaign identifier
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://partner.teli.ai/api/proxy/v1/sms/extractions/%2B15551234567_camp_abc123" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response
+
+### Extraction Found
+
+```json
+{
+  "success": true,
+  "extraction": {
+    "thread_id": "+15551234567_camp_abc123",
+    "phone_number": "+15551234567",
+    "extracted_fields": {
+      "credit_score": "730",
+      "loan_amount": "250000",
+      "interested": "yes",
+      "timeline": "3 months"
+    },
+    "lead_outcome": "qualified",
+    "objective_met": true,
+    "do_not_message": false,
+    "call_transferred": false,
+    "call_scheduled": true,
+    "call_scheduled_time": "2026-01-25T14:00:00Z",
+    "extracted_at": "2026-01-23T19:30:00Z",
+    "campaign_id": "camp_abc123"
+  },
+  "powered_by": "Teli"
+}
+```
+
+### No Extraction Found
+
+```json
+{
+  "success": true,
+  "extraction": null,
+  "message": "No extraction found for this thread",
+  "powered_by": "Teli"
+}
+```
+
+## Configuring Extraction Fields
+
+Extraction fields are configured on your SMS Agent. When creating or updating an SMS agent, specify the fields you want to extract:
+
+```bash
+curl -X POST "https://partner.teli.ai/api/proxy/v1/agents" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_type": "sms",
+    "agent_name": "Mortgage Lead Qualifier",
+    "prompt": "You are a mortgage specialist...",
+    "extraction_fields": [
+      "credit_score",
+      "loan_amount", 
+      "property_value",
+      "annual_income",
+      "interested",
+      "timeline"
+    ],
+    "organization_id": "org_xxx",
+    "user_id": "user_xxx"
+  }'
+```
+
+The AI will automatically extract these fields from the conversation and store them for retrieval.
+
+## Best Practices
+
+1. **Use descriptive field names**: `credit_score` is better than `cs`
+2. **Keep fields focused**: Extract specific data points, not entire paragraphs
+3. **Configure relevant fields**: Only extract what you need for your workflow
+4. **Check lead_outcome**: Use this to prioritize follow-ups
+
+## Related Endpoints
+
+- [Create SMS Agent](/partner-api/agents/create-sms) - Configure extraction fields
+- [Update SMS Agent](/partner-api/agents/update-sms) - Modify extraction fields
+- [List SMS Campaigns](/partner-api/campaigns/list-sms) - View campaigns

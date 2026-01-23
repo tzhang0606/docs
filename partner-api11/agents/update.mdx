@@ -1,0 +1,48 @@
+---
+title: 'Update Agent'
+description: 'Update agent configuration - choose SMS or Voice'
+---
+
+## Update Agent Endpoints
+
+Choose the appropriate endpoint for your agent type:
+
+<CardGroup cols={2}>
+
+<Card title="Update SMS Agent" icon="message" href="/partner-api/agents/update-sms">
+  Update SMS conversation agents including messages, prompts, and drip schedules.
+</Card>
+
+<Card title="Update Voice Agent" icon="phone" href="/partner-api/agents/update-voice">
+  Update Voice AI agents with 40+ configuration options including voice settings, conversation behavior, and voicemail handling.
+</Card>
+
+</CardGroup>
+
+---
+
+## Quick Reference
+
+| Agent Type | Endpoint | Key Features |
+|------------|----------|--------------|
+| SMS | [Update SMS Agent](/partner-api/agents/update-sms) | `agent_name`, `starting_message`, `prompt`, `drip_schedule` |
+| Voice | [Update Voice Agent](/partner-api/agents/update-voice) | All SMS fields + voice settings, ambient sound, voicemail, backchannel, and more |
+
+---
+
+## Common Endpoint
+
+Both agent types use the same HTTP endpoint:
+
+```
+PATCH /v1/agents/{agent_id}
+```
+
+The system automatically detects the agent type and applies the appropriate updates.
+
+---
+
+## Related
+
+- [Update Voice Agent Tools](/partner-api/agents/update-tools) - Manage function calling for voice agents
+- [Get Agent](/partner-api/agents/get) - Retrieve current agent configuration

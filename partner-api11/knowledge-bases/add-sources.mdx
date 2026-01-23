@@ -1,0 +1,168 @@
+---
+title: 'Add Sources to Knowledge Base'
+api: 'POST /v1/knowledge-bases/{id}/sources'
+description: 'Add URLs or text snippets to existing knowledge base'
+---
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Knowledge base ID
+</ParamField>
+
+---
+
+## Request Body
+
+<ParamField body="urls" type="array">
+  Array of URLs to add. Each URL will be scraped and indexed.
+</ParamField>
+
+<ParamField body="texts" type="array">
+  Array of text snippets. Each has `title` (string) and `text` (string).
+</ParamField>
+
+<Note>
+At least one of `urls` or `texts` is required.
+</Note>
+
+---
+
+## Request Examples
+
+<CodeGroup>
+
+```bash Add URLs
+curl -X POST "https://api.teli.ai/v1/knowledge-bases/knowledge_base_7a0682ce5fc02413/sources" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": [
+      "https://example.com/new-docs",
+      "https://example.com/pricing"
+    ]
+  }'
+```
+
+```bash Add Text Snippets
+curl -X POST "https://api.teli.ai/v1/knowledge-bases/knowledge_base_xxx/sources" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -d '{
+    "texts": [
+      {
+        "title": "Refund Policy",
+        "text": "30-day money-back guarantee. No questions asked. Contact support@example.com to process refunds."
+      },
+      {
+        "title": "Business Hours",
+        "text": "Open Monday-Friday 9 AM - 6 PM EST. Closed weekends and holidays."
+      }
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.teli.ai/v1/knowledge-bases/kb_xxx/sources',
+  {
+    method: 'POST',
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      urls: ['https://example.com/new-page'],
+      texts: [
+        {
+          title: 'Quick Facts',
+          text: 'Founded in 2020. 500+ customers...'
+        }
+      ]
+    })
+  }
+)
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.teli.ai/v1/knowledge-bases/kb_xxx/sources',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'urls': ['https://example.com/new-page'],
+        'texts': [
+            {
+                'title': 'Quick Facts',
+                'text': 'Founded in 2020. 500+ customers...'
+            }
+        ]
+    }
+)
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "success": true,
+  "knowledge_base_id": "knowledge_base_7a0682ce5fc02413",
+  "sources_added": 3,
+  "total_sources": 5,
+  "message": "Sources added successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 404 - KB Not Found
+{
+  "error": "Knowledge base not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 400 - No Sources
+{
+  "error": "At least one of urls or texts is required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Processing
+
+After adding sources, the knowledge base status will change to `in_progress` while the new content is:
+- Scraped (URLs)
+- Chunked
+- Embedded
+- Indexed
+
+**Check status** via [Get Knowledge Base](/api-reference/knowledge-bases/get) endpoint.
+
+---
+
+## Related Endpoints
+
+- [Create Knowledge Base](/api-reference/knowledge-bases/create) - Create new KB
+- [Get Knowledge Base](/api-reference/knowledge-bases/get) - Check status
+- [Delete Source](/api-reference/knowledge-bases/delete-source) - Remove individual source
+
