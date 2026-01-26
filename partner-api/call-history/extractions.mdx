@@ -289,7 +289,7 @@ Capture deal information:
 </Check>
 
 <Check>
-  **Use webhooks** - Listen for `call_analyzed` webhook to know when extraction is complete
+  **Poll for results** - Use Get Call Details endpoint to check when extraction is complete
 </Check>
 
 ---
@@ -314,27 +314,4 @@ Capture deal information:
 - [Update Voice Agent](/partner-api/agents/update-voice) - Update extraction_fields
 - [Get Call Details](/partner-api/call-history/get) - Get full call with transcript
 - [List Calls](/partner-api/call-history/list) - List all calls
-
----
-
-## Webhooks
-
-The `call_analyzed` webhook event includes extraction data:
-
-```json
-{
-  "event": "call_analyzed",
-  "call": {
-    "call_id": "call_xxx",
-    "call_analysis": {
-      "custom_analysis_data": {
-        "credit_score": "720",
-        "loan_amount": "$350,000"
-      }
-    }
-  }
-}
-```
-
-Use this webhook to trigger downstream actions when extraction completes.
 
