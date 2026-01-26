@@ -124,24 +124,6 @@ Retrieves complete call details including full transcript and recording URL. Fet
       </Expandable>
     </ResponseField>
     
-    <ResponseField name="extracted_fields" type="object">
-      AI-extracted data from the conversation based on agent's extraction_fields configuration
-      
-      Example:
-      ```json
-      {
-        "budget": "6000 dollars",
-        "callback_time": "",
-        "objections": "No objections raised",
-        "next_steps": "Follow up next week"
-      }
-      ```
-    </ResponseField>
-    
-    <ResponseField name="extraction_config" type="array">
-      List of fields configured for extraction on the agent (e.g., `["budget", "callback_time", "objections"]`)
-    </ResponseField>
-    
     <ResponseField name="call_analysis" type="object">
       Post-call analysis data
       
@@ -264,13 +246,6 @@ curl -X GET "https://api.teli.ai/v1/voice/calls/call_9edb137b8014366b8cf399330da
         "words": [...]
       }
     ],
-    "extracted_fields": {
-      "budget": "6000 dollars",
-      "callback_time": "",
-      "objections": "No objections raised",
-      "next_steps": "Will follow up next week"
-    },
-    "extraction_config": ["budget", "callback_time", "objections", "next_steps"],
     "call_analysis": {
       "call_summary": "The user inquired about product information and was provided with details about features and pricing.",
       "in_voicemail": false,

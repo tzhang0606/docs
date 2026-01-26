@@ -1,0 +1,189 @@
+---
+title: "Get Campaign Messages"
+description: "Retrieve all messages from an SMS campaign"
+---
+
+# Get Campaign Messages
+
+Retrieve conversation messages for all contacts in a campaign. This endpoint returns the full conversation history between contacts and the AI agent.
+
+## Endpoint
+
+```
+GET /v1/campaigns/{campaign_id}/messages
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign ID
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="since" type="string">
+  ISO 8601 timestamp to get messages after this time. Useful for polling new messages.
+  
+  Example: `2026-01-23T00:00:00Z`
+</ParamField>
+
+<ParamField query="limit" type="number" default="100">
+  Maximum number of messages to return
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="messages" type="array">
+  Array of message objects sorted by timestamp (newest first)
+  
+  <Expandable title="message properties">
+    <ResponseField name="message_id" type="string">
+      Unique message identifier
+    </ResponseField>
+    
+    <ResponseField name="phone_number" type="string">
+      Contact's phone number
+    </ResponseField>
+    
+    <ResponseField name="from_number" type="string">
+      Sender phone number
+    </ResponseField>
+    
+    <ResponseField name="to_number" type="string">
+      Recipient phone number
+    </ResponseField>
+    
+    <ResponseField name="message" type="string">
+      Message content
+    </ResponseField>
+    
+    <ResponseField name="sender_type" type="string">
+      `"user"` for contact messages, `"agent"` for AI responses
+    </ResponseField>
+    
+    <ResponseField name="timestamp" type="string">
+      ISO 8601 timestamp
+    </ResponseField>
+    
+    <ResponseField name="thread_id" type="string">
+      Conversation thread identifier (format: `{phone_number}_{campaign_id}`)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="number">
+  Number of messages returned
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  Whether there are more messages available (exceeds limit)
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl "https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/messages?limit=50" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/messages?limit=50',
+  {
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY'
+    }
+  }
+);
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/messages',
+    params={'limit': 50},
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+data = response.json()
+```
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "messages": [
+    {
+      "message_id": "msg_456",
+      "phone_number": "+15551234567",
+      "from_number": "+15551234567",
+      "to_number": "+15559876543",
+      "message": "Yes! My credit score is around 730",
+      "sender_type": "user",
+      "timestamp": "2026-01-23T19:31:00Z",
+      "thread_id": "+15551234567_camp_abc123"
+    },
+    {
+      "message_id": "msg_455",
+      "phone_number": "+15551234567",
+      "from_number": "+15559876543",
+      "to_number": "+15551234567",
+      "message": "Hi John, interested in refinancing your mortgage?",
+      "sender_type": "agent",
+      "timestamp": "2026-01-23T19:30:00Z",
+      "thread_id": "+15551234567_camp_abc123"
+    }
+  ],
+  "count": 2,
+  "has_more": false,
+  "powered_by": "Teli"
+}
+```
+
+## Polling for New Messages
+
+To implement real-time updates, poll with the `since` parameter:
+
+```javascript
+let lastTimestamp = null;
+
+async function pollMessages(campaignId) {
+  const url = lastTimestamp 
+    ? `https://partner.teli.ai/api/proxy/v1/campaigns/${campaignId}/messages?since=${lastTimestamp}`
+    : `https://partner.teli.ai/api/proxy/v1/campaigns/${campaignId}/messages`;
+    
+  const response = await fetch(url, {
+    headers: { 'X-API-Key': 'YOUR_API_KEY' }
+  });
+  const data = await response.json();
+  
+  if (data.messages && data.messages.length > 0) {
+    lastTimestamp = data.messages[0].timestamp;
+    // Process new messages
+    displayMessages(data.messages);
+  }
+}
+
+// Poll every 5 seconds
+setInterval(() => pollMessages('camp_abc123'), 5000);
+```
+
+## Related Endpoints
+
+- [Get Campaign](/partner-api/campaigns/get) - Get campaign details
+- [List Campaigns](/partner-api/campaigns/list-sms) - List all campaigns
+- [Get SMS Extraction](/partner-api/sms-extractions/get) - Get AI extracted data from conversations

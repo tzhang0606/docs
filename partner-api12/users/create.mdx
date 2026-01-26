@@ -1,0 +1,78 @@
+---
+title: 'Create User'
+api: 'POST /v1/organizations/{org_id}/users'
+description: 'Add a user to an organization'
+---
+
+Create a new user with specific permissions in an organization.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Path
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+## Body
+
+<ParamField body="name" type="string" required>
+  User's full name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  User's email address (must be unique)
+</ParamField>
+
+<ParamField body="permission" type="string">
+  Permission level: `admin` or `user`. Default: `user`
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.teli.ai/v1/organizations/{org_id}/users \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Smith",
+    "email": "john@example.com",
+    "permission": "admin"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "user": {
+    "unique_id": "1763072368418x263803518630956376",
+    "name": "John Smith",
+    "email": "john@example.com",
+    "permission": "admin",
+    "total_campaigns": 0,
+    "total_agents": 0
+  },
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="unique_id" type="string">
+  User identifier
+</ResponseField>
+
+<ResponseField name="total_campaigns" type="number">
+  Campaigns created by this user
+</ResponseField>
+

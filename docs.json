@@ -36,22 +36,17 @@
             ]
           },
           {
-            "group": "Integrations",
+            "group": "Integrations - Actions",
             "pages": [
-              {
-                "group": "Actions",
-                "pages": [
-                  "zapier-app/Actions/add-lead-to-campaign",
-                  "zapier-app/Actions/upload-lead-to-lead-group"
-                ]
-              },
-              {
-                "group": "Triggers",
-                "pages": [
-                  "zapier-app/Triggers/completed-call-data",
-                  "zapier-app/Triggers/qualified-sms-contact"
-                ]
-              }
+              "zapier-app/Actions/add-lead-to-campaign",
+              "zapier-app/Actions/upload-lead-to-lead-group"
+            ]
+          },
+          {
+            "group": "Integrations - Triggers",
+            "pages": [
+              "zapier-app/Triggers/completed-call-data",
+              "zapier-app/Triggers/qualified-sms-contact"
             ]
           }
         ]
@@ -154,7 +149,8 @@
             "group": "Call History",
             "pages": [
               "partner-api/call-history/list",
-              "partner-api/call-history/get"
+              "partner-api/call-history/get",
+              "partner-api/call-history/extractions"
             ]
           },
           {

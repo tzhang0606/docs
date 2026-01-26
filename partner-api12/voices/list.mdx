@@ -1,0 +1,169 @@
+---
+title: 'List Voices'
+api: 'GET /v1/voice/voices'
+description: 'Get all available TTS voices for voice agents'
+---
+
+## Description
+
+Returns all available text-to-speech voices that can be used when creating or updating voice agents. Use the `voice_id` from the response when setting the voice for your agents.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of available voices
+</ResponseField>
+
+<ResponseField name="voices" type="array">
+  Array of voice objects
+  
+  <Expandable title="Voice Object">
+    <ResponseField name="voice_id" type="string">
+      Unique voice identifier. Use this value when creating/updating agents.
+      Example: `"11labs-Adrian"`
+    </ResponseField>
+    
+    <ResponseField name="voice_name" type="string">
+      Human-readable voice name.
+      Example: `"Adrian"`
+    </ResponseField>
+    
+    <ResponseField name="provider" type="string">
+      Voice provider. Always returns `"teli-voice"`.
+    </ResponseField>
+    
+    <ResponseField name="gender" type="string">
+      Voice gender: `"male"` or `"female"`
+    </ResponseField>
+    
+    <ResponseField name="accent" type="string">
+      Voice accent (e.g., `"American"`, `"British"`, `"Australian"`)
+    </ResponseField>
+    
+    <ResponseField name="age" type="string">
+      Voice age category (e.g., `"Young"`, `"Middle-aged"`, `"Old"`)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns `"Teli"`
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/voices" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/voice/voices', {
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY'
+  }
+});
+
+const data = await response.json();
+console.log(data.voices);
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.teli.ai/v1/voice/voices',
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+
+print(response.json())
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 3,
+  "voices": [
+    {
+      "voice_id": "11labs-Adrian",
+      "voice_name": "Adrian",
+      "provider": "teli-voice",
+      "gender": "male",
+      "accent": "American",
+      "age": "Young"
+    },
+    {
+      "voice_id": "11labs-Sarah",
+      "voice_name": "Sarah",
+      "provider": "teli-voice",
+      "gender": "female",
+      "accent": "American",
+      "age": "Middle-aged"
+    },
+    {
+      "voice_id": "openai-alloy",
+      "voice_name": "Alloy",
+      "provider": "teli-voice",
+      "gender": "female",
+      "accent": "American",
+      "age": "Young"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+## Usage with Agents
+
+Use the `voice_id` when creating or updating a voice agent:
+
+```json
+{
+  "agent_type": "voice",
+  "agent_name": "Sales Agent",
+  "voice_id": "11labs-Adrian",
+  "starting_message": "Hello! How can I help you today?",
+  "prompt": "You are a helpful sales assistant..."
+}
+```
+
+## Voice Providers
+
+All voices are provided through Teli Voice and include voices from multiple high-quality TTS providers:
+
+| Provider | Voice ID Prefix | Quality |
+|----------|-----------------|---------|
+| Teli Voice (ElevenLabs) | `11labs-` | Ultra-realistic |
+| Teli Voice (OpenAI) | `openai-` | Natural |
+| Teli Voice (Deepgram) | `deepgram-` | Fast |
+| Teli Voice (Cartesia) | `cartesia-` | Expressive |
+
+## Notes
+
+- Voice availability may vary based on your plan
+- Some voices support multiple languages
+- Voice IDs are stable and can be stored for agent configuration
+- Use gender and accent filters in your UI to help users find the right voice
+
+## Related Endpoints
+
+- [Create Agent](/api-reference/agents/create) - Create voice agent with selected voice
+- [Update Agent](/api-reference/agents/update) - Change agent voice
+- [List Agents](/api-reference/agents/list) - View configured agents
+

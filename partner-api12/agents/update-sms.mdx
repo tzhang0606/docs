@@ -1,0 +1,330 @@
+---
+title: 'Update SMS Agent'
+api: 'PATCH /v1/agents/{agent_id}'
+description: 'Update SMS conversation agent settings including messages, prompts, and drip schedules'
+---
+
+## Overview
+
+Update an existing SMS agent's configuration. Modify the agent name, starting message, AI prompt, and automated drip message sequences.
+
+<Note>
+This endpoint is for **SMS agents only**. For voice agents, see [Update Voice Agent](/partner-api/agents/update-voice).
+</Note>
+
+---
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the SMS agent to update
+</ParamField>
+
+---
+
+## Request Body
+
+All fields are optional. Only include the fields you want to update.
+
+### Basic Settings
+
+<ParamField body="agent_name" type="string">
+  Display name for the agent
+</ParamField>
+
+<ParamField body="starting_message" type="string">
+  First message sent to leads. Supports variables: `{{first_name}}`, `{{last_name}}`, `{{company}}`
+</ParamField>
+
+<ParamField body="prompt" type="string">
+  AI behavior instructions defining personality, goals, and conversation guidelines
+</ParamField>
+
+### Data Extraction
+
+<ParamField body="extraction_fields" type="array">
+  Fields to extract from conversations using AI.
+  
+  **Example:** `["credit_score", "loan_amount", "interested", "timeline"]`
+</ParamField>
+
+### Drip Schedule
+
+<ParamField body="drip_schedule" type="array">
+  Automated follow-up message sequence. Each message is sent after a delay if the lead hasn't responded.
+</ParamField>
+
+#### Drip Schedule Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `delay_hours` | number | Hours to wait before sending |
+| `type` | string | `"ai"` for AI-generated or `"custom"` for fixed message |
+| `message` | string | The follow-up message (required if type is `"custom"`) |
+
+---
+
+## Request Examples
+
+### Update Basic Settings
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_name": "Updated Sales Agent",
+    "starting_message": "Hi {{first_name}}! Ready to learn more about our services?",
+    "prompt": "You are a friendly sales representative. Your goal is to qualify leads and schedule demos. Be helpful and not pushy."
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/agents/agent_abc123', {
+  method: 'PATCH',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    agent_name: 'Updated Sales Agent',
+    starting_message: 'Hi {{first_name}}! Ready to learn more?',
+    prompt: 'You are a friendly sales representative...'
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.patch(
+    'https://api.teli.ai/v1/agents/agent_abc123',
+    headers={
+        'X-API-Key': 'YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'agent_name': 'Updated Sales Agent',
+        'starting_message': 'Hi {{first_name}}! Ready to learn more?',
+        'prompt': 'You are a friendly sales representative...'
+    }
+)
+
+print(response.json())
+```
+
+</CodeGroup>
+
+---
+
+### Update Extraction Fields
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "extraction_fields": ["credit_score", "loan_amount", "annual_income", "interested", "timeline"]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/agents/agent_abc123', {
+  method: 'PATCH',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    extraction_fields: ['credit_score', 'loan_amount', 'annual_income', 'interested', 'timeline']
+  })
+});
+```
+
+</CodeGroup>
+
+---
+
+### Update Drip Schedule
+
+<CodeGroup>
+
+```bash cURL
+curl -X PATCH "https://api.teli.ai/v1/agents/agent_abc123" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "drip_schedule": [
+      {
+        "delay_hours": 4,
+        "type": "ai"
+      },
+      {
+        "delay_hours": 24,
+        "type": "custom",
+        "message": "Hi {{first_name}}, just checking in!"
+      },
+      {
+        "delay_hours": 72,
+        "type": "custom",
+        "message": "Last follow-up {{first_name}} - let me know if interested!"
+      }
+    ]
+  }'
+```
+
+```json Request Body
+{
+  "drip_schedule": [
+    {"delay_hours": 4, "type": "ai"},
+    {"delay_hours": 24, "type": "custom", "message": "Hi {{first_name}}, any questions?"},
+    {"delay_hours": 72, "type": "custom", "message": "Final follow-up!"}
+  ]
+}
+```
+
+</CodeGroup>
+
+---
+
+### Disable Drip Messages
+
+Send an empty array to disable automated follow-ups:
+
+```json
+{
+  "drip_schedule": []
+}
+```
+
+---
+
+## Response
+
+### Success Response
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "success": true,
+  "agent_id": "agent_abc123",
+  "message": "Agent updated successfully"
+}
+```
+
+</ResponseExample>
+
+<ResponseField name="success" type="boolean">
+  Indicates successful update
+</ResponseField>
+
+<ResponseField name="agent_id" type="string">
+  The updated agent's unique identifier
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success confirmation message
+</ResponseField>
+
+---
+
+### Error Responses
+
+<ResponseExample>
+
+```json 404 - Agent Not Found
+{
+  "success": false,
+  "error": "Agent not found"
+}
+```
+
+```json 500 - Update Failed
+{
+  "success": false,
+  "error": "Failed to update agent"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Dynamic Variables
+
+Personalize messages with lead data:
+
+| Variable | Description |
+|----------|-------------|
+| `{{first_name}}` | Lead's first name |
+| `{{last_name}}` | Lead's last name |
+| `{{phone_number}}` | Lead's phone number |
+| `{{email}}` | Lead's email address |
+| `{{company}}` | Lead's company name |
+
+**Example:**
+```json
+{
+  "starting_message": "Hi {{first_name}} from {{company}}! I'd love to chat about your needs."
+}
+```
+
+---
+
+## Best Practices
+
+<Check>
+**Test first**: Update a test agent before modifying production agents
+</Check>
+
+<Check>
+**Use personalization**: Include `{{first_name}}` for better engagement
+</Check>
+
+<Check>
+**Keep drips concise**: 2-4 follow-up messages work best
+</Check>
+
+<Check>
+**Space out drips**: Give leads time to respond between messages
+</Check>
+
+<Check>
+**Clear prompts**: Specific AI instructions produce better conversations
+</Check>
+
+---
+
+## Notes
+
+<Warning>
+- **Drip schedule update**: Resets the drip timer for all active leads in campaigns using this agent
+- **Agent type**: Cannot be changed from SMS to Voice
+- **Active campaigns**: Changes take effect for new conversations immediately
+</Warning>
+
+---
+
+## Related Endpoints
+
+- [Create SMS Agent](/partner-api/agents/create-sms) - Create a new SMS agent
+- [Get Agent](/partner-api/agents/get) - Retrieve agent details
+- [List Agents](/partner-api/agents/list) - List all agents
+- [Delete Agent](/partner-api/agents/delete) - Delete an agent
+- [Get SMS Extraction](/partner-api/sms-extractions/get) - Get extracted data from conversations

@@ -324,82 +324,6 @@ What happens when user goes silent.
 
 ---
 
-## Data Extraction (Post-Call Analysis)
-
-Automatically extract custom data from call transcripts after each call ends. Results are stored in the call history and available via [extraction endpoints](/partner-api/call-history/extractions).
-
-<ParamField body="extraction_fields" type="array">
-  List of field names to extract from conversations. Simple string array that auto-generates extraction instructions.
-  
-  Example: `["credit_score", "loan_amount", "annual_income", "interested", "timeline"]`
-  
-  **How it works:**
-  - During calls, AI collects information naturally through conversation
-  - After call ends, AI extracts specified fields from transcript
-  - Results saved to `extracted_fields` in call history
-  - Accessible via [GET /v1/voice/calls/{call_id}/extractions](/partner-api/call-history/extractions)
-</ParamField>
-
-<Info>
-**Recommended Use Cases:**
-- Lead qualification (budget, timeline, interest level)
-- Customer info (email, phone, preferred contact method)
-- Order details (product, quantity, shipping address)
-- Appointment scheduling (date, time, reason)
-
-Extracted data is automatically white-labeled (technology names removed).
-</Info>
-
-<ParamField body="post_call_analysis_data" type="array">
-  **Advanced:** Define custom fields with specific types and validation. Use `extraction_fields` for simpler configuration.
-  
-  Supports four data types:
-  
-  **String Type** - Extract free-form text:
-  ```json
-  {
-    "type": "string",
-    "name": "customer_name",
-    "description": "The full name of the customer",
-    "examples": ["John Doe", "Jane Smith"]
-  }
-  ```
-  
-  **Enum Type** - Extract from predefined choices:
-  ```json
-  {
-    "type": "enum",
-    "name": "interest_level",
-    "description": "How interested is the customer",
-    "choices": ["very_interested", "somewhat_interested", "not_interested"]
-  }
-  ```
-  
-  **Boolean Type** - Extract true/false values:
-  ```json
-  {
-    "type": "boolean",
-    "name": "scheduled_callback",
-    "description": "Whether the customer agreed to a callback"
-  }
-  ```
-  
-  **Number Type** - Extract numeric values:
-  ```json
-  {
-    "type": "number",
-    "name": "budget",
-    "description": "The customer's stated budget amount"
-  }
-  ```
-  
-  <Note>
-  If both `extraction_fields` and `post_call_analysis_data` are provided, `post_call_analysis_data` takes precedence.
-  </Note>
-</ParamField>
-
----
-
 <RequestExample>
 
 ```bash Basic Voice Agent
@@ -415,23 +339,6 @@ curl -X POST https://api.teli.ai/v1/agents \
     "user_id": "1762896366429x599348279945132448",
     "voice_id": "11labs-Adrian",
     "language": "en-US"
-  }'
-```
-
-```bash With Data Extraction
-curl -X POST https://api.teli.ai/v1/agents \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agent_type": "voice",
-    "agent_name": "Lead Qualifier",
-    "starting_message": "Hi {{first_name}}, this is Sarah. Do you have a moment to discuss your mortgage needs?",
-    "prompt": "You are a mortgage lead qualifier. Ask about their credit score, loan amount, interest rate, and loan type.",
-    "organization_id": "1762896364768x389173798861431550",
-    "user_id": "1762896366429x599348279945132448",
-    "voice_id": "11labs-Rachel",
-    "language": "en-US",
-    "extraction_fields": ["credit_score", "loan_amount", "interest_rate", "loan_type"]
   }'
 ```
 
@@ -526,8 +433,6 @@ console.log(data.agent_id);
   "voice_id": "11labs-Adrian",
   "organization_id": "1762896364768x389173798861431550",
   "user_id": "1762896366429x599348279945132448",
-  "has_extraction_fields": true,
-  "extraction_fields": ["credit_score", "loan_amount"],
   "message": "Voice agent created successfully",
   "powered_by": "Teli"
 }
@@ -567,14 +472,6 @@ console.log(data.agent_id);
 
 <ResponseField name="voice_id" type="string">
   Configured voice ID.
-</ResponseField>
-
-<ResponseField name="has_extraction_fields" type="boolean">
-  Whether data extraction is configured for this agent.
-</ResponseField>
-
-<ResponseField name="extraction_fields" type="array">
-  List of fields that will be extracted from calls.
 </ResponseField>
 
 ---

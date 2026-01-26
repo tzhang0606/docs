@@ -233,44 +233,6 @@ All fields are optional. Only include the fields you want to update.
 
 ---
 
-### Data Extraction (Post-Call Analysis)
-
-Automatically extract custom data from call transcripts after each call ends.
-
-<ParamField body="extraction_fields" type="array">
-  List of field names to extract from conversations. Simple string array.
-  
-  Example: `["credit_score", "loan_amount", "annual_income", "interested"]`
-  
-  Extracted data is accessible via [GET /v1/voice/calls/{call_id}/extractions](/partner-api/call-history/extractions).
-</ParamField>
-
-<ParamField body="post_call_analysis_data" type="array">
-  **Advanced:** Define custom fields with specific types. Use `extraction_fields` for simpler configuration.
-  
-  **String Type** - Extract free-form text:
-  ```json
-  { "type": "string", "name": "customer_name", "description": "Full name of customer" }
-  ```
-  
-  **Enum Type** - Extract from predefined choices:
-  ```json
-  { "type": "enum", "name": "interest_level", "description": "Interest level", "choices": ["high", "medium", "low"] }
-  ```
-  
-  **Boolean Type** - Extract true/false:
-  ```json
-  { "type": "boolean", "name": "scheduled_callback", "description": "Agreed to callback" }
-  ```
-  
-  **Number Type** - Extract numeric values:
-  ```json
-  { "type": "number", "name": "budget", "description": "Stated budget amount" }
-  ```
-</ParamField>
-
----
-
 ### Privacy & Storage
 
 <ParamField body="data_storage_setting" type="string" default="everything">
@@ -380,42 +342,6 @@ curl -X PATCH "https://api.teli.ai/v1/agents/agent_voice123" \
       "top_k": 5,
       "filter_score": 0.7
     }
-  }'
-```
-
----
-
-### Update Post-Call Analysis
-
-```bash
-curl -X PATCH "https://api.teli.ai/v1/agents/agent_voice123" \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "post_call_analysis_data": [
-      {
-        "type": "string",
-        "name": "customer_name",
-        "description": "The full name of the customer"
-      },
-      {
-        "type": "enum",
-        "name": "interest_level",
-        "description": "How interested is the customer",
-        "choices": ["very_interested", "somewhat_interested", "not_interested"]
-      },
-      {
-        "type": "boolean",
-        "name": "scheduled_callback",
-        "description": "Whether the customer agreed to a callback"
-      },
-      {
-        "type": "number",
-        "name": "budget",
-        "description": "The customer stated budget amount"
-      }
-    ],
-    "post_call_analysis_model": "gpt-4.1-mini"
   }'
 ```
 
