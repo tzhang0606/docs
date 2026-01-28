@@ -1,0 +1,78 @@
+---
+title: 'End Campaign'
+api: 'POST /v1/voice/campaigns/{campaign_id}/end'
+description: 'Permanently end a voice campaign'
+---
+
+## Description
+
+Permanently ends a voice campaign. Unlike pause, ended campaigns cannot be resumed. Use this when you want to stop a campaign before all contacts are called.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the campaign was ended successfully
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/end" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "message": "Campaign ended",
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "Campaign not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Ending a campaign is permanent - it cannot be resumed
+- Calls currently in progress will complete
+- Call history and analytics remain accessible
+- Use [Failed Numbers](/partner-api/voice-campaigns/failed-numbers) to get uncalled contacts for a new campaign
+
+## Related Endpoints
+
+- [Pause Campaign](/partner-api/voice-campaigns/pause) - Temporarily pause (can resume)
+- [Delete Campaign](/partner-api/voice-campaigns/delete) - Delete campaign and data
+- [Failed Numbers](/partner-api/voice-campaigns/failed-numbers) - Get uncalled contacts

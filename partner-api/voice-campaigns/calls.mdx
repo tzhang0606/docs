@@ -1,0 +1,171 @@
+---
+title: 'List Campaign Calls'
+api: 'GET /v1/voice/campaigns/{campaign_id}/calls'
+description: 'Get all call records for a voice campaign'
+---
+
+## Description
+
+Returns all individual call records for a campaign with full details including transcripts, sentiment, and extracted data.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="status" type="string" default="all">
+  Filter by call outcome: `connected`, `failed`, `voicemail`, `all`
+</ParamField>
+
+<ParamField query="sentiment" type="string">
+  Filter by sentiment: `Positive`, `Negative`, `Neutral`, `Unknown`
+</ParamField>
+
+<ParamField query="limit" type="integer" default="100">
+  Maximum results to return (max: 500)
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of calls returned
+</ResponseField>
+
+<ResponseField name="calls" type="array">
+  Array of call records
+  
+  <Expandable title="Call Object">
+    <ResponseField name="call_id" type="string">
+      Unique call identifier
+    </ResponseField>
+    
+    <ResponseField name="to_number" type="string">
+      Phone number called (E.164 format)
+    </ResponseField>
+    
+    <ResponseField name="from_number" type="string">
+      Outbound phone number used
+    </ResponseField>
+    
+    <ResponseField name="call_successful" type="boolean">
+      Whether the call achieved its objective
+    </ResponseField>
+    
+    <ResponseField name="in_voicemail" type="boolean">
+      Whether the call went to voicemail
+    </ResponseField>
+    
+    <ResponseField name="call_status" type="string">
+      Call status (e.g., `"ended"`)
+    </ResponseField>
+    
+    <ResponseField name="user_sentiment" type="string">
+      Detected sentiment: `Positive`, `Negative`, `Neutral`, `Unknown`
+    </ResponseField>
+    
+    <ResponseField name="call_duration_ms" type="integer">
+      Call duration in milliseconds
+    </ResponseField>
+    
+    <ResponseField name="start_timestamp" type="string">
+      Call start time (ISO 8601 UTC)
+    </ResponseField>
+    
+    <ResponseField name="end_timestamp" type="string">
+      Call end time (ISO 8601 UTC)
+    </ResponseField>
+    
+    <ResponseField name="transcript" type="string">
+      Full call transcript
+    </ResponseField>
+    
+    <ResponseField name="extracted_fields" type="object">
+      Data extracted from conversation (based on agent configuration)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?status=connected&limit=50" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "calls": [
+    {
+      "call_id": "call_xyz789",
+      "to_number": "+15559876543",
+      "from_number": "+15551234567",
+      "call_successful": true,
+      "in_voicemail": false,
+      "call_status": "ended",
+      "user_sentiment": "Positive",
+      "call_duration_ms": 45000,
+      "start_timestamp": "2026-01-28T10:30:00.000000",
+      "end_timestamp": "2026-01-28T10:30:45.000000",
+      "transcript": "Agent: Hi John, how are you today?\nUser: I'm doing well, thanks for calling...",
+      "extracted_fields": {
+        "interest_level": "high",
+        "callback_requested": true
+      }
+    }
+  ],
+  "count": 1,
+  "powered_by": "Teli"
+}
+```
+
+## Status Filter Logic
+
+| Status Value | Returns Calls Where |
+|--------------|---------------------|
+| `connected` | `call_duration_ms > 0` AND `in_voicemail = false` |
+| `voicemail` | `in_voicemail = true` |
+| `failed` | `call_duration_ms = 0` AND `in_voicemail = false` |
+| `all` | All calls (default) |
+
+## Fields NOT Included
+
+| Field | Reason |
+|-------|--------|
+| `disconnection_reason` | Use `call_successful`, `in_voicemail`, and `call_duration_ms` to determine outcome |
+
+## Notes
+
+- Calls are ordered by `start_timestamp` (newest first)
+- Transcripts may be large - use pagination for large campaigns
+- `extracted_fields` depends on your agent's extraction configuration
+
+## Related Endpoints
+
+- [Get Analytics](/partner-api/voice-campaigns/analytics) - Aggregate statistics
+- [Failed Numbers](/partner-api/voice-campaigns/failed-numbers) - Just failed phone numbers
+- [Call History](/partner-api/call-history/list) - Cross-campaign call history

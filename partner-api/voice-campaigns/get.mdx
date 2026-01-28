@@ -1,0 +1,103 @@
+---
+title: 'Get Campaign Status'
+api: 'GET /v1/voice/campaigns/{campaign_id}'
+description: 'Get current status of a voice campaign'
+---
+
+## Description
+
+Returns the current status and progress of a specific voice campaign.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier (e.g., `"voice_campaign_abc123"`)
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Campaign status: `active`, `paused`, `completed`, `ended`
+</ResponseField>
+
+<ResponseField name="progress" type="object">
+  Campaign progress details
+  
+  <Expandable title="Progress Object">
+    <ResponseField name="total" type="integer">
+      Total contacts in campaign
+    </ResponseField>
+    
+    <ResponseField name="completed" type="integer">
+      Contacts that have been called
+    </ResponseField>
+    
+    <ResponseField name="pending" type="integer">
+      Contacts not yet called
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "status": "active",
+  "progress": {
+    "total": 100,
+    "completed": 45,
+    "pending": 55
+  },
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "Campaign not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Campaign Statuses
+
+| Status | Description |
+|--------|-------------|
+| `active` | Campaign is currently making calls |
+| `paused` | Campaign is temporarily paused |
+| `completed` | All contacts have been called |
+| `ended` | Campaign has been manually ended |
+
+## Related Endpoints
+
+- [List Campaigns](/partner-api/voice-campaigns/list) - List all campaigns
+- [Get Analytics](/partner-api/voice-campaigns/analytics) - Detailed call analytics
+- [Pause Campaign](/partner-api/voice-campaigns/pause) - Pause an active campaign

@@ -1,0 +1,174 @@
+---
+title: 'Get Failed Numbers'
+api: 'GET /v1/voice/campaigns/{campaign_id}/failed-numbers'
+description: 'Get phone numbers with failed or unanswered calls'
+---
+
+## Description
+
+Returns phone numbers where calls failed, went unanswered, or hit voicemail. Useful for retry campaigns or manual follow-up.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="format" type="string" default="simple">
+  Response format: `simple` (phone list only) or `detailed` (includes failure reasons)
+</ParamField>
+
+<ParamField query="include_voicemail" type="boolean" default="true">
+  Include voicemail as failed
+</ParamField>
+
+<ParamField query="include_not_called" type="boolean" default="false">
+  Include contacts not yet called
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of failed numbers
+</ResponseField>
+
+<ResponseField name="failed_numbers" type="array">
+  Array of phone numbers (simple format) or failure objects (detailed format)
+  
+  <Expandable title="Detailed Format Object">
+    <ResponseField name="phone_number" type="string">
+      Phone number (E.164 format)
+    </ResponseField>
+    
+    <ResponseField name="failure_reason" type="string">
+      Reason for failure: `no_answer`, `busy`, `voicemail`, `call_declined`, `invalid_number`, `not_called`
+    </ResponseField>
+    
+    <ResponseField name="call_timestamp" type="string">
+      When the call was attempted (ISO 8601 UTC)
+    </ResponseField>
+    
+    <ResponseField name="call_id" type="string">
+      Call identifier (if a call was made)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request (Simple)
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/failed-numbers" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response (Simple)
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "failed_numbers": [
+    "+15559876543",
+    "+15551112222"
+  ],
+  "count": 2,
+  "powered_by": "Teli"
+}
+```
+
+## Example Request (Detailed)
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/failed-numbers?format=detailed" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response (Detailed)
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "failed_numbers": [
+    {
+      "phone_number": "+15559876543",
+      "failure_reason": "no_answer",
+      "call_timestamp": "2026-01-28T10:30:00.000000",
+      "call_id": "call_abc123"
+    },
+    {
+      "phone_number": "+15551112222",
+      "failure_reason": "voicemail",
+      "call_timestamp": "2026-01-28T10:35:00.000000",
+      "call_id": "call_def456"
+    }
+  ],
+  "count": 2,
+  "powered_by": "Teli"
+}
+```
+
+## Failure Reasons
+
+| Reason | Description |
+|--------|-------------|
+| `no_answer` | Call was not answered within timeout |
+| `busy` | Line was busy |
+| `voicemail` | Call went to voicemail |
+| `call_declined` | Recipient declined the call |
+| `invalid_number` | Phone number is invalid or unreachable |
+| `not_called` | Contact has not been called yet (only if `include_not_called=true`) |
+
+## Use Cases
+
+### Retry Campaign
+
+Use the simple format to create a new campaign with failed numbers:
+
+```javascript
+// Get failed numbers
+const response = await fetch(
+  'https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/failed-numbers',
+  { headers: { 'X-API-Key': 'YOUR_KEY' } }
+);
+const data = await response.json();
+
+// Create retry campaign
+const retryCampaign = await fetch(
+  'https://api.teli.ai/v1/voice/campaigns',
+  {
+    method: 'POST',
+    headers: { 'X-API-Key': 'YOUR_KEY', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      voice_agent_id: 'agent_abc',
+      agent_outbound_number: '+15551234567',
+      leads: data.failed_numbers.map(phone => ({ phone_number: phone }))
+    })
+  }
+);
+```
+
+## Related Endpoints
+
+- [List Calls](/partner-api/voice-campaigns/calls) - Full call details
+- [Get Analytics](/partner-api/voice-campaigns/analytics) - Aggregate statistics

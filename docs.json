@@ -129,6 +129,13 @@
             "pages": [
               "partner-api/voice-campaigns/create",
               "partner-api/voice-campaigns/list",
+              "partner-api/voice-campaigns/get",
+              "partner-api/voice-campaigns/analytics",
+              "partner-api/voice-campaigns/calls",
+              "partner-api/voice-campaigns/failed-numbers",
+              "partner-api/voice-campaigns/pause",
+              "partner-api/voice-campaigns/resume",
+              "partner-api/voice-campaigns/end",
               "partner-api/voice-campaigns/delete"
             ]
           },

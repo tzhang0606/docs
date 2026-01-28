@@ -1,0 +1,77 @@
+---
+title: 'Resume Campaign'
+api: 'POST /v1/voice/campaigns/{campaign_id}/resume'
+description: 'Resume a paused voice campaign'
+---
+
+## Description
+
+Resumes a paused voice campaign. Calls will continue to remaining contacts.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the campaign was resumed successfully
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Success message
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/resume" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "message": "Campaign resumed",
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "Campaign not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Only paused campaigns can be resumed
+- Calls resume from where they left off
+- Previously called contacts are not called again (unless redial is configured)
+
+## Related Endpoints
+
+- [Pause Campaign](/partner-api/voice-campaigns/pause) - Pause an active campaign
+- [End Campaign](/partner-api/voice-campaigns/end) - Permanently end a campaign
+- [Get Status](/partner-api/voice-campaigns/get) - Check campaign status

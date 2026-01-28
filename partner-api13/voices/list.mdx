@@ -57,6 +57,10 @@ Returns all available text-to-speech voices that can be used when creating or up
     <ResponseField name="language" type="string">
       Voice language code (e.g., `"en-US"`, `"es-ES"`)
     </ResponseField>
+    
+    <ResponseField name="preview_url" type="string">
+      URL to an audio sample of the voice. Use this to let users preview voices before selecting.
+    </ResponseField>
   </Expandable>
 </ResponseField>
 
@@ -111,7 +115,8 @@ print(response.json())
       "gender": "male",
       "accent": "American",
       "age": "Young",
-      "language": "en-US"
+      "language": "en-US",
+      "preview_url": "https://storage.teli.ai/voice-previews/11labs-Adrian.mp3"
     },
     {
       "voice_id": "cartesia-Sarah",
@@ -120,7 +125,8 @@ print(response.json())
       "gender": "female",
       "accent": "American",
       "age": "Middle-aged",
-      "language": "en-US"
+      "language": "en-US",
+      "preview_url": "https://storage.teli.ai/voice-previews/cartesia-Sarah.mp3"
     },
     {
       "voice_id": "openai-Alloy",
@@ -129,7 +135,8 @@ print(response.json())
       "gender": "female",
       "accent": "American",
       "age": "Young",
-      "language": "en-US"
+      "language": "en-US",
+      "preview_url": "https://storage.teli.ai/voice-previews/openai-Alloy.wav"
     }
   ],
   "powered_by": "Teli"
@@ -167,6 +174,8 @@ All voices are provided through Teli Voice and include voices from multiple high
 - Some voices support multiple languages
 - Voice IDs are stable and can be stored for agent configuration
 - Use gender and accent filters in your UI to help users find the right voice
+- The `preview_url` provides an audio sample - embed it in your UI so users can hear the voice before selecting
+- Preview audio files are hosted on Teli's CDN for fast, reliable playback
 
 ## Related Endpoints
 
