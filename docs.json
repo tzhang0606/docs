@@ -161,6 +161,14 @@
             ]
           },
           {
+            "group": "Analytics",
+            "pages": [
+              "partner-api/analytics/overview",
+              "partner-api/analytics/organizations",
+              "partner-api/analytics/users"
+            ]
+          },
+          {
             "group": "Do Not Call (DNC)",
             "pages": [
               "partner-api/dnc/add",

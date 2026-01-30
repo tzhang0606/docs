@@ -1,0 +1,90 @@
+---
+title: 'Delete Knowledge Base'
+api: 'DELETE /v1/knowledge-bases/{id}'
+description: 'Delete a knowledge base'
+---
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+---
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Knowledge base ID to delete
+</ParamField>
+
+---
+
+## Request Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X DELETE "https://api.teli.ai/v1/knowledge-bases/knowledge_base_7a0682ce5fc02413" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.teli.ai/v1/knowledge-bases/knowledge_base_7a0682ce5fc02413',
+  {
+    method: 'DELETE',
+    headers: { 'X-API-Key': 'YOUR_API_KEY' }
+  }
+)
+```
+
+```python Python
+import requests
+
+response = requests.delete(
+    'https://api.teli.ai/v1/knowledge-bases/knowledge_base_7a0682ce5fc02413',
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+```
+
+</CodeGroup>
+
+---
+
+## Response
+
+<ResponseExample>
+
+```json 200 - Success
+{
+  "success": true,
+  "message": "Knowledge base deleted successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": "Knowledge base not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+---
+
+<Warning>
+Deleting a knowledge base removes it from all linked voice agents. Agents will no longer have access to this knowledge during calls.
+</Warning>
+
+---
+
+## Related Endpoints
+
+- [List Knowledge Bases](/api-reference/knowledge-bases/list) - View all KBs
+- [Get Knowledge Base](/api-reference/knowledge-bases/get) - Get KB details
+- [Create Knowledge Base](/api-reference/knowledge-bases/create) - Create new KB
+

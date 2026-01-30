@@ -1,0 +1,152 @@
+---
+title: 'Get Organization Analytics'
+api: 'GET /v1/analytics/organizations'
+description: 'Get per-organization usage breakdown for your tenant'
+---
+
+# Get Organization Analytics
+
+Returns usage and cost analytics broken down by organization, enabling you to track which organizations are consuming the most resources.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start_date" type="string">
+  Start date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to 30 days ago.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to today.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="tenant_id" type="string">
+  Your tenant identifier
+</ResponseField>
+
+<ResponseField name="period" type="object">
+  The date range for the analytics data
+</ResponseField>
+
+<ResponseField name="organizations" type="array">
+  List of organizations with their analytics
+  <Expandable title="organization object">
+    <ResponseField name="organization_id" type="string">Organization unique ID</ResponseField>
+    <ResponseField name="organization_name" type="string">Organization display name</ResponseField>
+    <ResponseField name="users_count" type="integer">Number of users in this organization</ResponseField>
+    <ResponseField name="total_sms_sent" type="integer">SMS messages sent</ResponseField>
+    <ResponseField name="total_sms_received" type="integer">SMS messages received</ResponseField>
+    <ResponseField name="total_mms_sent" type="integer">MMS messages sent</ResponseField>
+    <ResponseField name="total_mms_received" type="integer">MMS messages received</ResponseField>
+    <ResponseField name="total_voice_calls" type="integer">Voice calls made</ResponseField>
+    <ResponseField name="total_voice_seconds" type="integer">Voice duration in seconds</ResponseField>
+    <ResponseField name="api_requests_count" type="integer">API requests made</ResponseField>
+    <ResponseField name="api_storage_cost" type="number">Storage costs in USD</ResponseField>
+    <ResponseField name="phone_rental_count" type="integer">Phone rental billing events</ResponseField>
+    <ResponseField name="phone_purchase_count" type="integer">Phone numbers purchased</ResponseField>
+    <ResponseField name="brand_registration_count" type="integer">Brands registered</ResponseField>
+    <ResponseField name="kb_count" type="integer">Knowledge bases used</ResponseField>
+    <ResponseField name="total_cost" type="number">Total cost in USD</ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/analytics/organizations?start_date=2024-01-01&end_date=2024-01-31" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "tenant_id": "your_tenant",
+  "period": {
+    "start": "2024-01-01",
+    "end": "2024-01-31"
+  },
+  "organizations": [
+    {
+      "organization_id": "org_abc123",
+      "organization_name": "Acme Corp",
+      "users_count": 8,
+      "total_sms_sent": 5420,
+      "total_sms_received": 1250,
+      "total_mms_sent": 220,
+      "total_mms_received": 80,
+      "total_voice_calls": 840,
+      "total_voice_seconds": 52560,
+      "api_requests_count": 350000,
+      "api_storage_cost": 5.25,
+      "phone_rental_count": 4,
+      "phone_purchase_count": 2,
+      "brand_registration_count": 1,
+      "kb_count": 1,
+      "total_cost": 445.67
+    },
+    {
+      "organization_id": "org_def456",
+      "organization_name": "Beta Inc",
+      "users_count": 5,
+      "total_sms_sent": 3200,
+      "total_sms_received": 890,
+      "total_mms_sent": 150,
+      "total_mms_received": 45,
+      "total_voice_calls": 520,
+      "total_voice_seconds": 31200,
+      "api_requests_count": 250000,
+      "api_storage_cost": 3.75,
+      "phone_rental_count": 2,
+      "phone_purchase_count": 1,
+      "brand_registration_count": 1,
+      "kb_count": 0,
+      "total_cost": 278.90
+    }
+  ]
+}
+```
+
+## Table Columns Reference
+
+When displaying organization analytics in a table, include these columns:
+
+| Column | Field | Description |
+|--------|-------|-------------|
+| Organization | `organization_name` | Organization display name |
+| Users | `users_count` | Number of users |
+| SMS Sent | `total_sms_sent` | Outbound SMS count |
+| SMS Received | `total_sms_received` | Inbound SMS count |
+| MMS Sent | `total_mms_sent` | Outbound MMS count |
+| MMS Received | `total_mms_received` | Inbound MMS count |
+| Voice Calls | `total_voice_calls` | Number of calls |
+| API Requests | `api_requests_count` | API request count |
+| Storage | `api_storage_cost` | Storage cost (USD) |
+| Phone Monthly | `phone_rental_count` | Rental billing events |
+| Phones Purchased | `phone_purchase_count` | Numbers purchased |
+| Brands | `brand_registration_count` | Brands registered |
+| KB Count | `kb_count` | Knowledge bases |
+| Cost | `total_cost` | Total cost (USD) |
+
+## Use Cases
+
+- **Organization comparison** - Compare usage across organizations
+- **Cost allocation** - Attribute costs to specific organizations
+- **Usage reporting** - Generate per-organization reports
+- **Billing insights** - Understand which orgs drive costs
+
+## Related Endpoints
+
+- [Analytics Overview](/partner-api/analytics/overview) - Tenant-level summary
+- [User Analytics](/partner-api/analytics/users) - Drill down into specific organization
