@@ -164,6 +164,7 @@
       "group": "Phone Numbers",
       "pages": [
         "partner-api/phone-numbers/create",
+        "partner-api/phone-numbers/update-agent",
         "partner-api/phone-numbers/list"
       ]
     },
