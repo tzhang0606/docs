@@ -1,0 +1,187 @@
+---
+title: 'Get User Analytics'
+api: 'GET /v1/analytics/users'
+description: 'Get per-user usage breakdown within an organization'
+---
+
+# Get User Analytics
+
+Returns usage and cost analytics broken down by individual users within a specific organization.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string" required>
+  The organization ID to get user analytics for
+</ParamField>
+
+<ParamField query="start_date" type="string">
+  Start date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to 30 days ago.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to today.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="organization_id" type="string">
+  The organization being queried
+</ResponseField>
+
+<ResponseField name="organization_name" type="string">
+  Organization display name
+</ResponseField>
+
+<ResponseField name="period" type="object">
+  The date range for the analytics data
+</ResponseField>
+
+<ResponseField name="users" type="array">
+  List of users with their analytics
+  <Expandable title="user object">
+    <ResponseField name="user_id" type="string">User unique ID</ResponseField>
+    <ResponseField name="user_name" type="string">User display name or email</ResponseField>
+    <ResponseField name="total_sms_sent" type="integer">SMS messages sent</ResponseField>
+    <ResponseField name="total_sms_received" type="integer">SMS messages received</ResponseField>
+    <ResponseField name="total_mms_sent" type="integer">MMS messages sent</ResponseField>
+    <ResponseField name="total_mms_received" type="integer">MMS messages received</ResponseField>
+    <ResponseField name="total_voice_calls" type="integer">Voice calls made</ResponseField>
+    <ResponseField name="total_voice_seconds" type="integer">Voice duration in seconds</ResponseField>
+    <ResponseField name="cost_breakdown" type="object">
+      Detailed cost breakdown for this user
+      <Expandable title="properties">
+        <ResponseField name="messaging_cost" type="number">SMS/MMS costs</ResponseField>
+        <ResponseField name="voice_cost" type="number">Voice costs</ResponseField>
+        <ResponseField name="api_request_cost" type="number">API request costs</ResponseField>
+        <ResponseField name="api_requests_count" type="integer">API requests</ResponseField>
+        <ResponseField name="api_storage_cost" type="number">Storage costs</ResponseField>
+        <ResponseField name="phone_rental_cost" type="number">Phone rental</ResponseField>
+        <ResponseField name="phone_rental_count" type="integer">Rental events</ResponseField>
+        <ResponseField name="phone_purchase_cost" type="number">Phone purchases</ResponseField>
+        <ResponseField name="phone_purchase_count" type="integer">Numbers purchased</ResponseField>
+        <ResponseField name="kb_cost" type="number">Knowledge base cost</ResponseField>
+        <ResponseField name="kb_count" type="integer">Knowledge bases</ResponseField>
+        <ResponseField name="kb_minutes" type="number">KB minutes used</ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="total_cost" type="number">Total cost in USD</ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/analytics/users?organization_id=org_abc123&start_date=2024-01-01&end_date=2024-01-31" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "organization_id": "org_abc123",
+  "organization_name": "Acme Corp",
+  "period": {
+    "start": "2024-01-01",
+    "end": "2024-01-31"
+  },
+  "users": [
+    {
+      "user_id": "user_123",
+      "user_name": "john@acme.com",
+      "total_sms_sent": 2420,
+      "total_sms_received": 650,
+      "total_mms_sent": 120,
+      "total_mms_received": 40,
+      "total_voice_calls": 340,
+      "total_voice_seconds": 21560,
+      "cost_breakdown": {
+        "messaging_cost": 125.50,
+        "voice_cost": 43.12,
+        "api_request_cost": 10.00,
+        "api_requests_count": 250000,
+        "api_storage_cost": 2.25,
+        "phone_rental_cost": 5.98,
+        "phone_rental_count": 2,
+        "phone_purchase_cost": 1.00,
+        "phone_purchase_count": 1,
+        "kb_cost": 5.50,
+        "kb_count": 1,
+        "kb_minutes": 55.0
+      },
+      "total_cost": 193.35
+    },
+    {
+      "user_id": "user_456",
+      "user_name": "jane@acme.com",
+      "total_sms_sent": 1800,
+      "total_sms_received": 420,
+      "total_mms_sent": 65,
+      "total_mms_received": 25,
+      "total_voice_calls": 280,
+      "total_voice_seconds": 18400,
+      "cost_breakdown": {
+        "messaging_cost": 95.20,
+        "voice_cost": 36.80,
+        "api_request_cost": 8.00,
+        "api_requests_count": 200000,
+        "api_storage_cost": 1.50,
+        "phone_rental_cost": 2.99,
+        "phone_rental_count": 1,
+        "phone_purchase_cost": 0.00,
+        "phone_purchase_count": 0,
+        "kb_cost": 0.00,
+        "kb_count": 0,
+        "kb_minutes": 0.0
+      },
+      "total_cost": 144.49
+    }
+  ]
+}
+```
+
+## Table Columns Reference
+
+When displaying user analytics in a modal or table, include these columns:
+
+| Column | Field | Description |
+|--------|-------|-------------|
+| User | `user_name` | User email or name |
+| SMS Sent | `total_sms_sent` | Outbound SMS |
+| SMS Received | `total_sms_received` | Inbound SMS |
+| MMS Sent | `total_mms_sent` | Outbound MMS |
+| MMS Received | `total_mms_received` | Inbound MMS |
+| Voice Calls | `total_voice_calls` | Call count |
+| Voice Min | `total_voice_seconds / 60` | Duration in minutes |
+| API Requests | `cost_breakdown.api_requests_count` | API calls |
+| Storage | `cost_breakdown.api_storage_cost` | Storage (USD) |
+| Phone Monthly | `cost_breakdown.phone_rental_count` | Rental events |
+| Phones Purchased | `cost_breakdown.phone_purchase_count` | Purchases |
+| KB Count | `cost_breakdown.kb_count` | Knowledge bases |
+| KB Min | `cost_breakdown.kb_minutes` | KB minutes |
+| Cost | `total_cost` | Total (USD) |
+
+**Note:** Brand registration is excluded from user-level analytics as it's typically an organization-level activity.
+
+## Use Cases
+
+- **User performance tracking** - See which users are most active
+- **Cost attribution** - Understand per-user resource consumption
+- **Team management** - Identify training or support needs
+- **Billing transparency** - Show users their individual usage
+
+## Related Endpoints
+
+- [Analytics Overview](/partner-api/analytics/overview) - Tenant-level summary
+- [Organization Analytics](/partner-api/analytics/organizations) - Organization breakdown

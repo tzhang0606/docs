@@ -1,0 +1,160 @@
+---
+title: 'Get Analytics Overview'
+api: 'GET /v1/analytics/overview'
+description: 'Get tenant-level analytics overview with usage counts and cost breakdown'
+---
+
+# Get Analytics Overview
+
+Returns comprehensive analytics for your tenant including message counts, voice usage, and detailed cost breakdowns.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start_date" type="string">
+  Start date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to 30 days ago.
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  End date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to today.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="tenant_id" type="string">
+  Your tenant identifier
+</ResponseField>
+
+<ResponseField name="period" type="object">
+  The date range for the analytics data
+  <Expandable title="properties">
+    <ResponseField name="start" type="string">Start date</ResponseField>
+    <ResponseField name="end" type="string">End date</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total_sms_sent" type="integer">
+  Total SMS messages sent
+</ResponseField>
+
+<ResponseField name="total_sms_received" type="integer">
+  Total SMS messages received
+</ResponseField>
+
+<ResponseField name="total_mms_sent" type="integer">
+  Total MMS messages sent
+</ResponseField>
+
+<ResponseField name="total_mms_received" type="integer">
+  Total MMS messages received
+</ResponseField>
+
+<ResponseField name="total_voice_calls" type="integer">
+  Total voice calls made
+</ResponseField>
+
+<ResponseField name="total_voice_seconds" type="integer">
+  Total voice call duration in seconds
+</ResponseField>
+
+<ResponseField name="total_cost" type="number">
+  Total cost in USD
+</ResponseField>
+
+<ResponseField name="cost_breakdown" type="object">
+  Detailed breakdown of costs by category
+  <Expandable title="properties">
+    <ResponseField name="messaging_cost" type="number">SMS and MMS costs</ResponseField>
+    <ResponseField name="voice_cost" type="number">Voice call costs</ResponseField>
+    <ResponseField name="api_request_cost" type="number">API request costs</ResponseField>
+    <ResponseField name="api_requests_count" type="integer">Total API requests</ResponseField>
+    <ResponseField name="api_storage_cost" type="number">Storage costs</ResponseField>
+    <ResponseField name="phone_rental_cost" type="number">Phone number monthly rental</ResponseField>
+    <ResponseField name="phone_rental_count" type="integer">Number of billing events</ResponseField>
+    <ResponseField name="phone_purchase_cost" type="number">Phone number purchase fees</ResponseField>
+    <ResponseField name="phone_purchase_count" type="integer">Numbers purchased</ResponseField>
+    <ResponseField name="brand_registration_cost" type="number">Brand registration fees</ResponseField>
+    <ResponseField name="brand_registration_count" type="integer">Brands registered</ResponseField>
+    <ResponseField name="kb_cost" type="number">Total knowledge base cost</ResponseField>
+    <ResponseField name="kb_monthly_cost" type="number">KB monthly subscription</ResponseField>
+    <ResponseField name="kb_usage_cost" type="number">KB usage (minutes)</ResponseField>
+    <ResponseField name="kb_count" type="integer">Number of knowledge bases</ResponseField>
+    <ResponseField name="kb_minutes" type="number">KB minutes used</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="organizations_count" type="integer">
+  Number of organizations under this tenant
+</ResponseField>
+
+<ResponseField name="users_count" type="integer">
+  Number of users under this tenant
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/analytics/overview?start_date=2024-01-01&end_date=2024-01-31" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "tenant_id": "your_tenant",
+  "period": {
+    "start": "2024-01-01",
+    "end": "2024-01-31"
+  },
+  "total_sms_sent": 15420,
+  "total_sms_received": 3250,
+  "total_mms_sent": 520,
+  "total_mms_received": 180,
+  "total_voice_calls": 2340,
+  "total_voice_seconds": 142560,
+  "total_cost": 1245.67,
+  "cost_breakdown": {
+    "messaging_cost": 845.50,
+    "voice_cost": 285.12,
+    "api_request_cost": 40.00,
+    "api_requests_count": 1000000,
+    "api_storage_cost": 15.00,
+    "phone_rental_cost": 29.90,
+    "phone_rental_count": 10,
+    "phone_purchase_cost": 5.00,
+    "phone_purchase_count": 5,
+    "brand_registration_cost": 12.00,
+    "brand_registration_count": 3,
+    "kb_cost": 13.15,
+    "kb_monthly_cost": 10.00,
+    "kb_usage_cost": 3.15,
+    "kb_count": 2,
+    "kb_minutes": 315.5
+  },
+  "organizations_count": 5,
+  "users_count": 23
+}
+```
+
+## Use Cases
+
+- **Dashboard displays** - Show high-level usage metrics
+- **Invoice reconciliation** - Match costs with Stripe invoices
+- **Usage monitoring** - Track consumption across all services
+- **Budget tracking** - Monitor spend against allocated budgets
+
+## Related Endpoints
+
+- [Organization Analytics](/partner-api/analytics/organizations) - Per-organization breakdown
+- [User Analytics](/partner-api/analytics/users) - Per-user breakdown within an organization

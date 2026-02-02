@@ -125,6 +125,13 @@
             ]
           },
           {
+            "group": "Messages",
+            "pages": [
+              "partner-api/messages/send-sms",
+              "partner-api/messages/send-mms"
+            ]
+          },
+          {
             "group": "Voice Campaigns",
             "pages": [
               "partner-api/voice-campaigns/create",

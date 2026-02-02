@@ -1,0 +1,151 @@
+---
+title: 'Get Campaign Analytics'
+api: 'GET /v1/voice/campaigns/{campaign_id}/analytics'
+description: 'Get detailed call analytics for a voice campaign'
+---
+
+## Description
+
+Returns comprehensive analytics for a voice campaign including call outcomes, sentiment analysis, and success rates.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign identifier
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="total_contacts" type="integer">
+  Total contacts in the campaign
+</ResponseField>
+
+<ResponseField name="total_calls" type="integer">
+  Unique phone numbers that were called
+</ResponseField>
+
+<ResponseField name="connected_calls" type="integer">
+  Calls where person answered (has duration > 0)
+</ResponseField>
+
+<ResponseField name="failed_calls" type="integer">
+  Calls that didn't connect (no answer, busy, etc.)
+</ResponseField>
+
+<ResponseField name="voicemail_calls" type="integer">
+  Calls that went to voicemail
+</ResponseField>
+
+<ResponseField name="not_called" type="integer">
+  Contacts not yet called
+</ResponseField>
+
+<ResponseField name="success_rate" type="number">
+  Percentage of successful calls (connected / total_calls * 100)
+</ResponseField>
+
+<ResponseField name="connection_rate" type="number">
+  Percentage of connected calls
+</ResponseField>
+
+<ResponseField name="voicemail_rate" type="number">
+  Percentage of voicemail calls
+</ResponseField>
+
+<ResponseField name="completion_rate" type="number">
+  Percentage of contacts attempted (total_calls / total_contacts * 100)
+</ResponseField>
+
+<ResponseField name="sentiment_breakdown" type="object">
+  Count of calls by detected user sentiment
+  
+  <Expandable title="Sentiment Breakdown">
+    <ResponseField name="Positive" type="integer">
+      Calls with positive sentiment
+    </ResponseField>
+    
+    <ResponseField name="Neutral" type="integer">
+      Calls with neutral sentiment
+    </ResponseField>
+    
+    <ResponseField name="Negative" type="integer">
+      Calls with negative sentiment
+    </ResponseField>
+    
+    <ResponseField name="Unknown" type="integer">
+      Calls where sentiment couldn't be determined
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/analytics" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaign_id": "voice_campaign_abc123",
+  "total_contacts": 100,
+  "total_calls": 85,
+  "connected_calls": 45,
+  "failed_calls": 25,
+  "voicemail_calls": 15,
+  "not_called": 15,
+  "success_rate": 52.9,
+  "connection_rate": 52.9,
+  "voicemail_rate": 17.6,
+  "completion_rate": 85.0,
+  "sentiment_breakdown": {
+    "Positive": 20,
+    "Neutral": 15,
+    "Negative": 5,
+    "Unknown": 5
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Determining Call Outcomes
+
+Instead of a `disconnection_reason` field, use these fields to determine call outcomes:
+
+| Outcome | How to Detect |
+|---------|---------------|
+| **Connected** | `connected_calls` count, or check if `call_duration_ms > 0` on individual calls |
+| **Voicemail** | `voicemail_calls` count, or check `in_voicemail = true` on individual calls |
+| **Failed** | `failed_calls` count - includes no answer, busy, declined |
+
+## Notes
+
+- Analytics are updated in real-time as calls complete
+- Sentiment is analyzed automatically from call transcripts
+- `not_called` decreases as the campaign progresses
+
+## Related Endpoints
+
+- [List Calls](/partner-api/voice-campaigns/calls) - Get individual call records
+- [Failed Numbers](/partner-api/voice-campaigns/failed-numbers) - Get failed phone numbers
