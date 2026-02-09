@@ -227,8 +227,7 @@ curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x3891737988614315
 
 ## Notes
 
-- Each user record is scoped to a single organization
-- The same email can exist across multiple organizations, each with its own `unique_id` and permissions
+- Users are scoped to a single organization
 - Usage metrics are tracked per user for billing
 - Admin permission grants organization-wide visibility
-- When referencing a user in API calls, always use the `unique_id`, not the email address
+- JWT field is reserved for authentication tokens (not currently used)

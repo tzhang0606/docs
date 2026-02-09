@@ -1,0 +1,290 @@
+---
+title: 'Create SMS Campaign'
+api: 'POST /v1/campaigns'
+description: 'Launch a new SMS campaign'
+---
+
+Create and launch an SMS campaign to send messages to your contact list.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Body
+
+<ParamField body="campaign_id" type="string" required>
+  Unique campaign identifier. Format: `{timestamp}x{random_18_digits}`
+  
+  Example: `"1763072374x123456789012345678"`
+</ParamField>
+
+<ParamField body="campaign_name" type="string" required>
+  Campaign display name.
+  
+  Example: `"November 2024 Outreach"`
+</ParamField>
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id.
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (campaign creator).
+</ParamField>
+
+<ParamField body="sms_agent_id" type="string" required>
+  SMS agent unique_id for conversations.
+</ParamField>
+
+<ParamField body="teli_sms_number" type="string" required>
+  SMS phone number to send from (E.164 format or without + prefix). Use organization's `teli_sms_number`.
+  
+  Example: `"13135727768"` or `"+13135559999"`
+</ParamField>
+
+<ParamField body="contacts" type="array" required>
+  Array of contact objects. Supports all lead fields from contact list.
+  
+  ```json
+  [
+    {
+      "phone_number": "+15551234567",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john@example.com",
+      "unique_id": "1762896414634x733468691531460383"
+    }
+  ]
+  ```
+</ParamField>
+
+<ParamField body="enable_sms_to_voice" type="boolean" default="false">
+  Enable SMS-to-voice transfer. When true, AI can escalate conversation to phone call.
+</ParamField>
+
+<ParamField body="voice_agent_id" type="string">
+  Teli Voice agent ID for voice transfer (required if `enable_sms_to_voice` is true).
+  
+  Example: `"agent_86f826bf8f59bacd5c10ae948a"`
+</ParamField>
+
+<ParamField body="outbound_number" type="string">
+  Outbound phone number for voice calls (required if `enable_sms_to_voice` is true).
+  
+  Example: `"+12489071796"`
+</ParamField>
+
+<ParamField body="dry_run" type="boolean">
+  If true, simulates campaign without sending real SMS.
+  
+  Default: `false`
+</ParamField>
+
+<ParamField body="enable_number_validation" type="boolean">
+  Validate phone numbers before sending.
+  
+  Default: `false`
+</ParamField>
+
+<ParamField body="mms_media_url" type="string">
+  Media URL for MMS campaigns (optional).
+</ParamField>
+
+<ParamField body="followup_interval" type="integer">
+  Interval between follow-ups in seconds.
+  
+  Default: `0`
+</ParamField>
+
+<ParamField body="extraction_fields" type="array">
+  Custom data fields to extract from conversations.
+  
+  Default: `[]`
+</ParamField>
+
+<ParamField body="custom_follow_up" type="string">
+  Custom follow-up message template.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL (SMS-Only Campaign)
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "1763072374x123456789012345678",
+    "campaign_name": "November Outreach",
+    "organization_id": "1763070568417x...",
+    "user_id": "1763072368418x...",
+    "sms_agent_id": "1763072369786x...",
+    "teli_sms_number": "+13135559999",
+    "contacts": [
+      {"phone_number": "+15551234567", "first_name": "John"}
+    ]
+  }'
+```
+
+```bash cURL (SMS + Voice Transfer)
+curl -X POST https://api.teli.ai/v1/campaigns \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "json test",
+    "sms_agent_id": "1763490400021x448481236873124087",
+    "contacts": [
+      {
+        "phone_number": "+15551234567",
+        "first_name": "John",
+        "last_name": "Doe",
+        "unique_id": "1762896414634x733468691531460383"
+      }
+    ],
+    "enable_sms_to_voice": true,
+    "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+    "outbound_number": "+12489071796"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/campaigns', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    campaign_id: `${Date.now()}x${Math.floor(Math.random() * 1e18)}`,
+    campaign_name: 'November Outreach',
+    organization_id: orgId,
+    user_id: userId,
+    sms_agent_id: agentId,
+    teli_sms_number: '+13135559999',
+    contacts: [{phone_number: '+15551234567', first_name: 'John'}]
+  })
+});
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 202
+{
+  "success": true,
+  "campaign_id": "json test",
+  "status": "processing",
+  "message": "Campaign upload started successfully",
+  "agent": {
+    "agent_id": "1763490400021x448481236873124087",
+    "agent_name": "SMS TO Voice"
+  },
+  "details": {
+    "total_contacts": 1,
+    "invalid_leads_count": 0,
+    "estimated_processing_seconds": 0.1,
+    "has_drips": false,
+    "voice_transfer_enabled": true
+  },
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="campaign_id" type="string">
+  Campaign identifier
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Processing status: `processing`, `active`, `completed`
+</ResponseField>
+
+<ResponseField name="agent" type="object">
+  Agent information
+  
+  <Expandable title="Agent Object">
+    <ResponseField name="agent_id" type="string">
+      Agent unique_id
+    </ResponseField>
+    
+    <ResponseField name="agent_name" type="string">
+      Agent display name
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="details" type="object">
+  Campaign processing details
+  
+  <Expandable title="Details Object">
+    <ResponseField name="total_contacts" type="number">
+      Number of valid contacts in campaign
+    </ResponseField>
+    
+    <ResponseField name="invalid_leads_count" type="number">
+      Number of invalid/rejected contacts
+    </ResponseField>
+    
+    <ResponseField name="estimated_processing_seconds" type="number">
+      Estimated time to process campaign
+    </ResponseField>
+    
+    <ResponseField name="has_drips" type="boolean">
+      Whether campaign includes drip messaging
+    </ResponseField>
+    
+    <ResponseField name="voice_transfer_enabled" type="boolean">
+      Whether SMS-to-voice transfer is enabled
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## SMS-to-Voice Transfer
+
+Enable seamless escalation from SMS conversations to phone calls by setting `enable_sms_to_voice: true`.
+
+**Requirements:**
+- Voice agent must be created beforehand (use `POST /v1/agents` with `agent_type: "voice"`)
+- Must provide `voice_agent_id` (Teli Voice agent ID)
+- Must provide `outbound_number` (phone number for making calls)
+
+**How It Works:**
+1. Campaign starts with SMS conversation
+2. AI detects when voice call would be beneficial
+3. System automatically initiates phone call using voice agent
+4. Seamless transition from text to voice conversation
+
+**Example with Voice Transfer:**
+```json
+{
+  "campaign_id": "json test",
+  "sms_agent_id": "1763490400021x448481236873124087",
+  "contacts": [...],
+  "enable_sms_to_voice": true,
+  "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+  "outbound_number": "+12489071796"
+}
+```
+
+Response will include `voice_transfer_enabled: true` in details.
+
+## Notes
+
+- Campaign ID must be unique across your organization
+- Contacts can include all lead fields (email, address, custom fields)
+- Invalid phone numbers are automatically filtered out
+- Campaign starts processing immediately upon creation
+- Use `dry_run: true` for testing without sending real messages
+- SMS-to-voice requires both voice agent and outbound phone number
+- Drip schedules defined in agent configuration (not campaign)
+- All messages support variable substitution: `{{first_name}}`, `{{last_name}}`, etc.
+

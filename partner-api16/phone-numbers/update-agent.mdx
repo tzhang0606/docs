@@ -1,0 +1,251 @@
+---
+title: 'Update Phone Agent'
+api: 'POST /v1/voice/phone-numbers/{phone_number}/update-agent'
+description: 'Link voice agents to a phone number for inbound and outbound calls'
+---
+
+## Description
+
+Updates the agent assignments for a phone number. You can configure separate agents for handling inbound calls (calls received) and outbound calls (calls made from this number).
+
+This is essential for:
+- **Inbound AI receptionist**: Link an agent to answer incoming calls
+- **Outbound campaigns**: Link an agent for making automated outbound calls
+- **Dual-purpose numbers**: Use different agents for inbound vs outbound
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="phone_number" type="string" required>
+  Phone number in E.164 format (e.g., `+14155551234`)
+</ParamField>
+
+## Request Body
+
+<ParamField body="inbound_agent_id" type="string">
+  Agent ID for handling incoming calls to this number.
+  
+  - Use the `agent_id` returned when creating a voice agent
+  - Set to empty string `""` or `null` to clear the assignment
+  
+  Example: `"agent_abc123"`
+</ParamField>
+
+<ParamField body="outbound_agent_id" type="string">
+  Agent ID for making outbound calls from this number.
+  
+  - Used in voice campaigns when this number is the caller ID
+  - Set to empty string `""` or `null` to clear the assignment
+  
+  Example: `"agent_xyz789"`
+</ParamField>
+
+<ParamField body="nickname" type="string">
+  Optional friendly name for the phone number.
+  
+  Example: `"Main Reception Line"`
+</ParamField>
+
+<Note>
+At least one of `inbound_agent_id`, `outbound_agent_id`, or `nickname` is required.
+</Note>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the update was successful
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The phone number that was updated
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Status message
+</ResponseField>
+
+<ResponseField name="inbound_agent_id" type="string">
+  The inbound agent ID (if updated)
+</ResponseField>
+
+<ResponseField name="outbound_agent_id" type="string">
+  The outbound agent ID (if updated)
+</ResponseField>
+
+<ResponseField name="nickname" type="string">
+  The nickname (if updated)
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Requests
+
+### Link Inbound Agent (AI Receptionist)
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inbound_agent_id": "agent_abc123"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent',
+  {
+    method: 'POST',
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      inbound_agent_id: 'agent_abc123'
+    })
+  }
+);
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'inbound_agent_id': 'agent_abc123'
+    }
+)
+
+data = response.json()
+print(data)
+```
+
+### Link Both Inbound and Outbound Agents
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inbound_agent_id": "agent_abc123",
+    "outbound_agent_id": "agent_xyz789",
+    "nickname": "Main Sales Line"
+  }'
+```
+
+### Clear an Agent Assignment
+
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/voice/phone-numbers/+14155551234/update-agent" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inbound_agent_id": ""
+  }'
+```
+
+## Example Responses
+
+```json 200 Success
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "message": "Phone number updated successfully",
+  "inbound_agent_id": "agent_abc123",
+  "outbound_agent_id": "agent_xyz789",
+  "nickname": "Main Sales Line",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 Missing Fields
+{
+  "error": "At least one of inbound_agent_id, outbound_agent_id, or nickname required",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 Agent Not Found
+{
+  "error": "Agent not found or invalid agent ID",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 Phone Not Found
+{
+  "error": "Phone number not found or invalid",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Use Cases
+
+### 1. AI Receptionist (Inbound Only)
+
+Link a voice agent to answer incoming calls automatically:
+
+```json
+{
+  "inbound_agent_id": "agent_receptionist_001"
+}
+```
+
+When calls come in to this number, the linked agent will answer and handle the conversation.
+
+### 2. Outbound Campaign Number
+
+Link an agent for making outbound calls:
+
+```json
+{
+  "outbound_agent_id": "agent_sales_dialer_001"
+}
+```
+
+When starting a voice campaign with this phone number as the caller ID, this agent will be used.
+
+### 3. Dual-Purpose Number
+
+Use different agents for inbound vs outbound:
+
+```json
+{
+  "inbound_agent_id": "agent_support_001",
+  "outbound_agent_id": "agent_sales_001",
+  "nickname": "Customer Success Line"
+}
+```
+
+- Incoming calls: Handled by support agent
+- Outgoing campaigns: Uses sales agent
+
+## Notes
+
+- **Agent IDs**: Use the `agent_id` returned from `POST /v1/agents` (voice agent creation)
+- **Phone format**: Always use E.164 format (`+1XXXXXXXXXX`)
+- **Clearing agents**: Set to empty string `""` or `null` to remove an agent assignment
+- **Both methods supported**: `POST` and `PATCH` are both accepted
+
+## Related Endpoints
+
+- `POST /v1/voice/phone-numbers/create` - Create a new phone number
+- `GET /v1/voice/phone-numbers` - List phone numbers
+- `POST /v1/agents` - Create a voice agent
+- `GET /v1/agents` - List agents
+- `POST /v1/voice/campaigns` - Start a voice campaign

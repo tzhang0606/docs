@@ -1,0 +1,308 @@
+---
+title: 'Get Call Details'
+api: 'GET /v1/voice/calls/{call_id}'
+description: 'Get full call details including transcript and recording'
+---
+
+## Description
+
+Retrieves complete call details including full transcript and recording URL. Fetches transcript from Teli Voice AI, recording URL from Teli Voice Storage.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="call_id" type="string" required>
+  The call ID to retrieve
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="call" type="object">
+  Complete call object with all details
+  
+  <Expandable title="Call Object">
+    <ResponseField name="call_id" type="string">
+      Unique call identifier
+    </ResponseField>
+    
+    <ResponseField name="voice_agent_id" type="string">
+      Voice agent ID used for the call
+    </ResponseField>
+    
+    <ResponseField name="agent_id" type="string">
+      Voice agent ID (same as voice_agent_id)
+    </ResponseField>
+    
+    <ResponseField name="agent_name" type="string">
+      Name of the agent that handled the call
+    </ResponseField>
+    
+    <ResponseField name="agent_version" type="integer">
+      Agent configuration version
+    </ResponseField>
+    
+    <ResponseField name="direction" type="string">
+      Call direction: `inbound` or `outbound`
+    </ResponseField>
+    
+    <ResponseField name="call_type" type="string">
+      Type of call (e.g., `phone_call`)
+    </ResponseField>
+    
+    <ResponseField name="from_number" type="string">
+      Phone number the call originated from (E.164 format)
+    </ResponseField>
+    
+    <ResponseField name="to_number" type="string">
+      Phone number the call was placed to (E.164 format)
+    </ResponseField>
+    
+    <ResponseField name="call_status" type="string">
+      Call status: `ended`, `ongoing`, `error`
+    </ResponseField>
+    
+    <ResponseField name="start_timestamp" type="integer">
+      Call start time (milliseconds since epoch)
+    </ResponseField>
+    
+    <ResponseField name="end_timestamp" type="integer">
+      Call end time (milliseconds since epoch)
+    </ResponseField>
+    
+    <ResponseField name="duration_ms" type="integer">
+      Call duration in milliseconds
+    </ResponseField>
+    
+    <ResponseField name="disconnection_reason" type="string">
+      Reason call ended (e.g., `user_hangup`, `agent_hangup`, `error`)
+    </ResponseField>
+    
+    <ResponseField name="user_sentiment" type="string">
+      User sentiment analysis: `Positive`, `Negative`, `Neutral`, `Unknown`
+    </ResponseField>
+    
+    <ResponseField name="call_successful" type="boolean">
+      Whether the call objective was successfully completed
+    </ResponseField>
+    
+    <ResponseField name="in_voicemail" type="boolean">
+      Whether the call went to voicemail
+    </ResponseField>
+    
+    <ResponseField name="recording_url" type="string">
+      URL to call recording hosted on Teli Voice Storage (S3)
+    </ResponseField>
+    
+    <ResponseField name="transcript" type="string">
+      Full transcript as formatted text
+    </ResponseField>
+    
+    <ResponseField name="transcript_object" type="array">
+      Structured transcript with timestamps
+      
+      <Expandable title="Transcript Entry">
+        <ResponseField name="role" type="string">
+          Speaker role: `agent` or `user`
+        </ResponseField>
+        
+        <ResponseField name="content" type="string">
+          What was said
+        </ResponseField>
+        
+        <ResponseField name="words" type="array">
+          Word-level timing information
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="extracted_fields" type="object">
+      AI-extracted data from the conversation based on agent's extraction_fields configuration
+      
+      Example:
+      ```json
+      {
+        "budget": "6000 dollars",
+        "callback_time": "",
+        "objections": "No objections raised",
+        "next_steps": "Follow up next week"
+      }
+      ```
+    </ResponseField>
+    
+    <ResponseField name="extraction_config" type="array">
+      List of fields configured for extraction on the agent (e.g., `["budget", "callback_time", "objections"]`)
+    </ResponseField>
+    
+    <ResponseField name="call_analysis" type="object">
+      Post-call analysis data
+      
+      <Expandable title="Analysis Object">
+        <ResponseField name="call_summary" type="string">
+          AI-generated summary of the call
+        </ResponseField>
+        
+        <ResponseField name="in_voicemail" type="boolean">
+          Whether voicemail was reached
+        </ResponseField>
+        
+        <ResponseField name="user_sentiment" type="string">
+          User's sentiment during the call
+        </ResponseField>
+        
+        <ResponseField name="call_successful" type="boolean">
+          Whether the call objective was met
+        </ResponseField>
+        
+        <ResponseField name="custom_analysis_data" type="object">
+          Any custom analysis fields defined in agent
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="call_cost" type="object">
+      Cost breakdown for the call
+      
+      <Expandable title="Cost Object">
+        <ResponseField name="combined_cost" type="number">
+          Total cost in cents
+        </ResponseField>
+        
+        <ResponseField name="total_duration_seconds" type="integer">
+          Call duration in seconds
+        </ResponseField>
+        
+        <ResponseField name="total_duration_unit_price" type="number">
+          Price per second
+        </ResponseField>
+        
+        <ResponseField name="product_costs" type="array">
+          Breakdown by product (TTS, LLM, etc.)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="latency" type="object">
+      Performance metrics (e2e, llm, tts latency statistics)
+    </ResponseField>
+    
+    <ResponseField name="llm_token_usage" type="object">
+      LLM token consumption statistics
+    </ResponseField>
+    
+    <ResponseField name="metadata" type="object">
+      Call metadata including campaign_id and dialer_type
+    </ResponseField>
+    
+    <ResponseField name="dynamic_variables" type="object">
+      Dynamic variables used in the call (first_name, last_name, etc.)
+    </ResponseField>
+    
+    <ResponseField name="data_storage_setting" type="string">
+      Data retention setting for this call
+    </ResponseField>
+    
+    <ResponseField name="opt_in_signed_url" type="boolean">
+      Whether signed URLs are enabled
+    </ResponseField>
+    
+    <ResponseField name="telephony_identifier" type="object">
+      Telephony provider identifiers
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/voice/calls/call_9edb137b8014366b8cf399330da" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "call": {
+    "call_id": "call_9edb137b8014366b8cf399330da",
+    "voice_agent_id": "agent_86f826bf8f59bacd5c10ae948a",
+    "direction": "outbound",
+    "call_status": "ended",
+    "start_timestamp": 1763586795333,
+    "end_timestamp": 1763586852943,
+    "duration_ms": 57610,
+    "user_sentiment": "Positive",
+    "call_successful": true,
+    "in_voicemail": false,
+    "recording_url": "https://teli-voice-recordings-prod.s3.us-west-2.amazonaws.com/recordings/call_9edb137b8014366b8cf399330da.wav",
+    "transcript": "Agent: Hi, how can I help you today?\nUser: I need information about your product...",
+    "transcript_object": [
+      {
+        "role": "agent",
+        "content": "Hi, how can I help you today?",
+        "words": [
+          {"word": "Hi", "start": 0.7, "end": 1.3},
+          {"word": "how", "start": 1.5, "end": 1.8}
+        ]
+      },
+      {
+        "role": "user",
+        "content": "I need information about your product",
+        "words": [...]
+      }
+    ],
+    "extracted_fields": {
+      "budget": "6000 dollars",
+      "callback_time": "",
+      "objections": "No objections raised",
+      "next_steps": "Will follow up next week"
+    },
+    "extraction_config": ["budget", "callback_time", "objections", "next_steps"],
+    "call_analysis": {
+      "call_summary": "The user inquired about product information and was provided with details about features and pricing.",
+      "in_voicemail": false,
+      "user_sentiment": "Positive",
+      "call_successful": true,
+      "custom_analysis_data": {}
+    }
+  },
+  "powered_by": "Teli"
+}
+```
+
+```json 404 (Call Not Found)
+{
+  "error": "Call not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to get call details",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Transcript is fetched from Teli Voice AI on-demand
+- Recording URL points to Teli Voice Storage (permanent storage)
+- Call must exist in your organization to be accessed
+- Access control: Regular users can only access their own calls, admins can access all org calls
+

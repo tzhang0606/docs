@@ -132,6 +132,17 @@
             ]
           },
           {
+            "group": "SMS Phone Numbers",
+            "pages": [
+              "partner-api/sms-phone-numbers/overview",
+              "partner-api/sms-phone-numbers/purchase",
+              "partner-api/sms-phone-numbers/list",
+              "partner-api/sms-phone-numbers/assign",
+              "partner-api/sms-phone-numbers/my-number",
+              "partner-api/sms-phone-numbers/config"
+            ]
+          },
+          {
             "group": "Voice Campaigns",
             "pages": [
               "partner-api/voice-campaigns/create",
