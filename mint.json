@@ -228,8 +228,14 @@
         "partner-api/10dlc/introduction",
         "partner-api/10dlc/overview",
         "partner-api/10dlc/subgroup-create",
+        "partner-api/10dlc/subgroup-list",
         "partner-api/10dlc/brand-create",
+        "partner-api/10dlc/brand-list",
+        "partner-api/10dlc/brand-get",
         "partner-api/10dlc/campaign-create",
+        "partner-api/10dlc/campaign-list",
+        "partner-api/10dlc/phone-area-codes",
+        "partner-api/10dlc/phone-search",
         "partner-api/10dlc/phone-purchase",
         "partner-api/10dlc/reference"
       ]

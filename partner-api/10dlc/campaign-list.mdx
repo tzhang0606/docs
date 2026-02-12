@@ -1,0 +1,131 @@
+---
+title: 'List 10DLC Campaigns'
+api: 'GET /v1/10dlc/campaigns'
+description: 'List all 10DLC campaigns for your tenant'
+---
+
+Retrieve all 10DLC campaigns registered for your tenant, optionally filtered by organization.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="tenant_id" type="string">
+  Your tenant identifier. Must match the tenant associated with your API key. If provided with a mismatched value, the request will be rejected with a 403 error.
+</ParamField>
+
+<ParamField query="organization_id" type="string">
+  Filter campaigns by organization unique_id (optional)
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="campaigns" type="array">
+  Array of campaign objects
+
+  <Expandable title="Campaign Object">
+    <ResponseField name="id" type="uuid">
+      Internal campaign record UUID
+    </ResponseField>
+
+    <ResponseField name="campaign_id" type="string">
+      10DLC campaign ID (e.g., `CXXXXXX`)
+    </ResponseField>
+
+    <ResponseField name="campaign_uuid" type="string">
+      Campaign UUID used for phone number assignment
+    </ResponseField>
+
+    <ResponseField name="brand_id" type="string">
+      Associated brand ID
+    </ResponseField>
+
+    <ResponseField name="use_case" type="string">
+      Campaign use case (e.g., `MIXED`, `MARKETING`, `CUSTOMER_CARE`)
+    </ResponseField>
+
+    <ResponseField name="description" type="string">
+      Campaign description
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Campaign status: `ACTIVE`, `PENDING`, `EXPIRED`
+    </ResponseField>
+
+    <ResponseField name="organization_id" type="string">
+      Organization this campaign belongs to
+    </ResponseField>
+
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+
+    <ResponseField name="created_at" type="timestamp">
+      Creation timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of campaigns
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/campaigns?tenant_id=telitest" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+### Filter by Organization
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/campaigns?tenant_id=telitest&organization_id=org_abc123" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "campaigns": [
+    {
+      "id": "d1e2f3a4-b5c6-7890-abcd-ef1234567890",
+      "campaign_id": "C9ABCDE",
+      "campaign_uuid": "uuid-1234-5678-9012",
+      "brand_id": "B4KRR4F",
+      "use_case": "MIXED",
+      "description": "Customer outreach and appointment scheduling",
+      "status": "ACTIVE",
+      "organization_id": "org_abc123",
+      "tenant_id": "telitest",
+      "created_at": "2026-01-20T14:00:00Z"
+    }
+  ],
+  "count": 1,
+  "powered_by": "Teli"
+}
+```
+
+## Campaign Status Values
+
+| Status | Description |
+|--------|-------------|
+| `ACTIVE` | Campaign is approved by carriers - can send SMS |
+| `PENDING` | Campaign submitted, awaiting carrier approval (1-2 business days) |
+| `EXPIRED` | Campaign has been deactivated |
+
+## Related
+
+- [Create Campaign](/partner-api/10dlc/campaign-create)
+- [List Brands](/partner-api/10dlc/brand-list)
+- [Purchase Phone Number](/partner-api/10dlc/phone-purchase)

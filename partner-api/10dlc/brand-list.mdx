@@ -1,0 +1,110 @@
+---
+title: 'List Brands'
+api: 'GET /v1/10dlc/brands'
+description: 'List all registered brands for your tenant'
+---
+
+Retrieve all 10DLC brands registered for your tenant.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="tenant_id" type="string">
+  Your tenant identifier. Must match the tenant associated with your API key. If provided with a mismatched value, the request will be rejected with a 403 error.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="brands" type="array">
+  Array of brand objects
+
+  <Expandable title="Brand Object">
+    <ResponseField name="id" type="uuid">
+      Internal brand record UUID
+    </ResponseField>
+
+    <ResponseField name="brand_id" type="string">
+      Brand registration ID (e.g., `B4KRR4F`)
+    </ResponseField>
+
+    <ResponseField name="company_name" type="string">
+      Legal company name
+    </ResponseField>
+
+    <ResponseField name="display_name" type="string">
+      Brand display name
+    </ResponseField>
+
+    <ResponseField name="entity_type" type="string">
+      Business type (e.g., `PRIVATE_PROFIT`)
+    </ResponseField>
+
+    <ResponseField name="vertical" type="string">
+      Industry vertical (e.g., `REAL_ESTATE`)
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Brand status: `ACTIVE`, `PENDING`, `REJECTED`
+    </ResponseField>
+
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+
+    <ResponseField name="created_at" type="timestamp">
+      Creation timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of brands
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/brands?tenant_id=telitest" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "brands": [
+    {
+      "id": "f1e2d3c4-b5a6-7890-abcd-ef1234567890",
+      "brand_id": "B4KRR4F",
+      "company_name": "My Company LLC",
+      "display_name": "My Company",
+      "entity_type": "PRIVATE_PROFIT",
+      "vertical": "REAL_ESTATE",
+      "ein": "123456789",
+      "phone": "+13135551234",
+      "email": "admin@mycompany.com",
+      "status": "ACTIVE",
+      "tenant_id": "telitest",
+      "created_at": "2026-01-15T10:30:00Z"
+    }
+  ],
+  "count": 1,
+  "powered_by": "Teli"
+}
+```
+
+## Related
+
+- [Register Brand](/partner-api/10dlc/brand-create)
+- [Get Brand Details](/partner-api/10dlc/brand-get)
+- [Create Campaign](/partner-api/10dlc/campaign-create)

@@ -1,0 +1,64 @@
+---
+title: 'Get Brand Details'
+api: 'GET /v1/10dlc/brand/{brand_id}'
+description: 'Get detailed information about a registered brand'
+---
+
+Retrieve full details for a specific 10DLC brand, including current status and registration information.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="brand_id" type="string" required>
+  Brand registration ID (e.g., `B4KRR4F`)
+</ParamField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/brand/B4KRR4F" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "brandId": "B4KRR4F",
+  "entityType": "PRIVATE_PROFIT",
+  "companyName": "My Company LLC",
+  "displayName": "My Company",
+  "ein": "123456789",
+  "vertical": "REAL_ESTATE",
+  "phone": "+13135551234",
+  "email": "admin@mycompany.com",
+  "street": "123 Main St",
+  "city": "Detroit",
+  "state": "MI",
+  "postalCode": "48201",
+  "country": "US",
+  "website": "https://mycompany.com",
+  "brandRelationship": "BASIC_ACCOUNT",
+  "identityStatus": "VERIFIED",
+  "status": "ACTIVE",
+  "powered_by": "Teli"
+}
+```
+
+## Brand Status Values
+
+| Status | Description |
+|--------|-------------|
+| `ACTIVE` | Brand is approved and can be used for campaigns |
+| `PENDING` | Brand is under review |
+| `REJECTED` | Brand registration was rejected |
+
+## Related
+
+- [List Brands](/partner-api/10dlc/brand-list)
+- [Register Brand](/partner-api/10dlc/brand-create)

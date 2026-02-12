@@ -1,0 +1,64 @@
+---
+title: 'List SubGroups'
+api: 'GET /v1/10dlc/subgroups'
+description: 'List all subgroups for your tenant'
+---
+
+Retrieve all subgroups created for your tenant.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="tenant_id" type="string">
+  Your tenant identifier. Must match the tenant associated with your API key. If provided with a mismatched value, the request will be rejected with a 403 error.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="subgroups" type="array">
+  Array of subgroup objects
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of subgroups
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/subgroups?tenant_id=telitest" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "subgroups": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "subgroup_id": "SQ8YFT",
+      "subgroup_name": "West Coast Division",
+      "tenant_id": "telitest",
+      "created_at": "2026-01-15T10:30:00Z"
+    }
+  ],
+  "count": 1,
+  "powered_by": "Teli"
+}
+```
+
+## Related
+
+- [Create SubGroup](/partner-api/10dlc/subgroup-create)
+- [Register Brand](/partner-api/10dlc/brand-create)
