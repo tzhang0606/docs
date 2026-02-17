@@ -1,0 +1,140 @@
+---
+title: 'Send Single SMS'
+api: 'POST /v1/sms/send'
+description: 'Send a manual SMS message to a contact (live agent/human takeover)'
+---
+
+# Send Single SMS
+
+Send a manual SMS message to a contact within a campaign. This enables live agents to take over conversations from AI and communicate directly with contacts.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="campaign_id" type="string" required>
+  The campaign ID containing the contact
+</ParamField>
+
+<ParamField body="phone_number" type="string" required>
+  The contact's phone number (E.164 format recommended: +15551234567)
+</ParamField>
+
+<ParamField body="message" type="string" required>
+  The SMS message text to send (cannot be empty)
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the message was sent successfully
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Status message
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The normalized phone number the message was sent to
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  The campaign ID
+</ResponseField>
+
+<ResponseField name="thread_qualified" type="boolean">
+  Whether the conversation thread was marked as qualified (always true for manual messages)
+</ResponseField>
+
+<ResponseField name="ai_disabled" type="boolean">
+  Whether AI follow-ups have been disabled for this contact (always true after manual message)
+</ResponseField>
+
+<ResponseField name="human_takeover" type="boolean">
+  Indicates this was a human takeover action (always true)
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/sms/send" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "campaign_abc123",
+    "phone_number": "+15551234567",
+    "message": "Hi! This is John following up on your inquiry. How can I help you today?"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "SMS sent successfully",
+  "phone_number": "+15551234567",
+  "campaign_id": "campaign_abc123",
+  "thread_qualified": true,
+  "ai_disabled": true,
+  "human_takeover": true,
+  "powered_by": "Teli"
+}
+```
+
+## Behavior
+
+When a manual SMS is sent:
+
+1. **Message Delivered** - The SMS is sent immediately to the contact
+2. **Thread Qualified** - The conversation is marked as "human_takeover"
+3. **AI Disabled** - All scheduled AI follow-ups and drip messages are cancelled
+4. **Conversation Saved** - The message is added to conversation history
+5. **Data Extracted** - Any extraction fields are processed from the full conversation
+
+## Use Cases
+
+- **Live Agent Support** - Customer service representatives responding to inquiries
+- **Sales Follow-up** - Sales reps taking over promising leads
+- **Complex Issues** - Handling situations AI cannot resolve
+- **VIP Customers** - Personal touch for high-value contacts
+
+## Error Responses
+
+```json
+{
+  "success": false,
+  "error": "Missing required fields: campaign_id, phone_number, message"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Message text cannot be empty"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Client +15551234567 not found in campaign campaign_abc123"
+}
+```
+
+## Notes
+
+- The contact must already exist in the specified campaign
+- DNC and timezone checks are bypassed for human-sent messages
+- After sending, the AI will not send any more automated messages to this contact
+- Message history remains accessible for review
+
+## Related Endpoints
+
+- [Send MMS](/partner-api/messages/send-mms) - Send message with media attachment
+- [Get Campaign Messages](/partner-api/campaigns/messages) - View conversation history
+- [List Contacts](/partner-api/contacts/list) - Get contacts in a campaign

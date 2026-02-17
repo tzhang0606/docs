@@ -1,0 +1,138 @@
+---
+title: 'Purchase SMS Number'
+api: 'POST /v1/sms/phone-numbers/purchase'
+description: 'Purchase a new SMS phone number for an organization'
+---
+
+# Purchase SMS Number
+
+Purchase a new SMS phone number for an organization. The number is provisioned under the organization's existing 10DLC campaign registration.
+
+## Prerequisites
+
+- Organization must have 10DLC approval (`sms_active: true`)
+- Tenant must have `enable_multi_sms_numbers` enabled
+- Organization must not exceed `max_sms_numbers_per_org` limit
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="organization_id" type="string" required>
+  The organization's unique_id that will own this number
+</ParamField>
+
+<ParamField body="area_code" type="string" required>
+  Desired area code for the phone number (e.g., "415", "212")
+</ParamField>
+
+<ParamField body="user_id" type="string">
+  Optional user_id to assign the number to immediately upon purchase
+</ParamField>
+
+<ParamField body="nickname" type="string">
+  Optional friendly name for the number (e.g., "Sales Line", "Support")
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the purchase was successful
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The purchased phone number in E.164 format (+15551234567)
+</ResponseField>
+
+<ResponseField name="phone_id" type="string">
+  UUID of the phone number record
+</ResponseField>
+
+<ResponseField name="pretty_phone_number" type="string">
+  Formatted phone number for display (+1 555-123-4567)
+</ResponseField>
+
+<ResponseField name="assigned_to" type="string">
+  user_id if number was assigned immediately, null otherwise
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/sms/phone-numbers/purchase" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "org_abc123",
+    "area_code": "415",
+    "user_id": "user_xyz789",
+    "nickname": "Sales Line"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "phone_id": "6d7f8580-2c18-4ca9-8917-c9ca121a2c49",
+  "pretty_phone_number": "+1 415-555-1234",
+  "assigned_to": "user_xyz789",
+  "stored": true,
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+```json
+{
+  "success": false,
+  "error": "Multi-SMS numbers not enabled for this tenant. Contact support to enable."
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Organization already has 10/10 SMS numbers"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Organization SMS not active (10DLC approval required)"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "No numbers available in area code 999"
+}
+```
+
+## Billing
+
+When a number is purchased:
+1. **One-time purchase fee** is charged immediately (if configured)
+2. **Weekly recurring fee** starts from purchase date
+3. Charges appear in `usage_logs` with appropriate event types
+
+## Notes
+
+- Numbers are purchased from the carrier inventory
+- The number is automatically linked to the org's 10DLC campaign
+- If `user_id` is provided, the number is assigned immediately
+- Numbers without `user_id` go into the org's "available pool"
+
+## Related
+
+- [List SMS Numbers](/partner-api/sms-phone-numbers/list)
+- [Assign to User](/partner-api/sms-phone-numbers/assign)

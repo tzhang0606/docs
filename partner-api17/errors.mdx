@@ -1,0 +1,638 @@
+---
+title: 'Error Handling'
+description: 'Understanding API errors and status codes'
+---
+
+## Error Response Format
+
+All error responses follow this structure:
+
+```json
+{
+  "error": "Brief error description",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## HTTP Status Codes
+
+| Code | Meaning | When It Occurs |
+|------|---------|----------------|
+| `200` | Success | Request completed successfully |
+| `201` | Created | Resource created successfully |
+| `202` | Accepted | Request accepted for processing |
+| `204` | No Content | Success with no response body |
+| `400` | Bad Request | Invalid request data or missing required fields |
+| `401` | Unauthorized | Missing or invalid API key |
+| `403` | Forbidden | API key valid but lacks permissions |
+| `404` | Not Found | Resource doesn't exist |
+| `500` | Internal Server Error | Server-side error occurred |
+
+---
+
+## Common Errors by Endpoint
+
+### Authentication Errors (401, 403)
+
+**Missing API Key**
+```json
+{
+  "error": "API key is required",
+  "success": false
+}
+```
+
+**Invalid API Key**
+```json
+{
+  "error": "Invalid API key",
+  "success": false
+}
+```
+
+---
+
+### Agents API Errors
+
+**POST /v1/agents**
+
+`400` - Missing Required Fields:
+```json
+{
+  "error": "agent_name, organization_id, and user_id are required",
+  "success": false
+}
+```
+
+`400` - Invalid Agent Type:
+```json
+{
+  "error": "agent_type must be 'sms' or 'voice'",
+  "success": false
+}
+```
+
+`400` - Missing Voice ID:
+```json
+{
+  "error": "voice_id is required for voice agents",
+  "success": false
+}
+```
+
+`500` - Voice Configuration Failed:
+```json
+{
+  "error": "Failed to create voice AI configuration",
+  "success": false
+}
+```
+
+`500` - Agent Storage Failed:
+```json
+{
+  "error": "Failed to store voice agent",
+  "success": false
+}
+```
+
+**GET /v1/agents**
+
+`400` - Missing Organization ID:
+```json
+{
+  "error": "organization_id required",
+  "success": false
+}
+```
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list agents",
+  "success": false
+}
+```
+
+**GET /v1/agents/{id}**
+
+`404` - Agent Not Found:
+```json
+{
+  "error": "Agent not found",
+  "success": false
+}
+```
+
+`500` - Get Failed:
+```json
+{
+  "error": "Failed to get agent - agent may not exist",
+  "success": false
+}
+```
+
+**PATCH /v1/agents/{id}**
+
+`404` - Agent Not Found:
+```json
+{
+  "error": "Agent not found",
+  "success": false
+}
+```
+
+`500` - Update Failed:
+```json
+{
+  "error": "Failed to update agent - please check your data",
+  "success": false
+}
+```
+
+**DELETE /v1/agents/{id}**
+
+`500` - Delete Failed:
+```json
+{
+  "error": "Failed to delete agent - agent may not exist",
+  "success": false
+}
+```
+
+---
+
+### Voice Campaigns API Errors
+
+**POST /v1/voice/campaigns**
+
+`400` - Missing Leads:
+```json
+{
+  "error": "leads array required",
+  "success": false
+}
+```
+
+`400` - Missing Agent ID:
+```json
+{
+  "error": "voice_agent_id required",
+  "success": false
+}
+```
+
+`400` - Missing Phone Number:
+```json
+{
+  "error": "agent_outbound_number required",
+  "success": false
+}
+```
+
+`500` - Campaign Start Failed:
+```json
+{
+  "error": "Failed to start voice campaign",
+  "success": false
+}
+```
+
+**GET /v1/voice/campaigns**
+
+`400` - Missing Organization ID:
+```json
+{
+  "error": "organization_id required",
+  "success": false
+}
+```
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list voice campaigns",
+  "success": false
+}
+```
+
+**DELETE /v1/voice/campaigns/{id}**
+
+`500` - Delete Failed:
+```json
+{
+  "error": "Failed to delete voice campaign",
+  "success": false
+}
+```
+
+---
+
+### SMS Campaigns API Errors
+
+**POST /v1/campaigns**
+
+`400` - Missing Required Fields:
+```json
+{
+  "error": "campaign_name and sms_agent_id required",
+  "success": false
+}
+```
+
+`400` - SMS Not Enabled:
+```json
+{
+  "error": "SMS not enabled for organization",
+  "success": false
+}
+```
+
+`500` - Campaign Creation Failed:
+```json
+{
+  "error": "Failed to create campaign",
+  "success": false
+}
+```
+
+**GET /v1/organizations/{org_id}/campaigns**
+
+`400` - Missing User ID:
+```json
+{
+  "error": "user_id required",
+  "success": false
+}
+```
+
+**DELETE /v1/campaigns/{id}**
+
+`500` - Delete Failed:
+```json
+{
+  "error": "Failed to delete campaign",
+  "success": false
+}
+```
+
+---
+
+### Phone Numbers API Errors
+
+**POST /v1/voice/phone-numbers/create**
+
+`400` - Missing Area Code:
+```json
+{
+  "error": "area_code and user_id required",
+  "success": false
+}
+```
+
+`500` - Provisioning Failed:
+```json
+{
+  "error": "Failed to provision phone number",
+  "success": false
+}
+```
+
+`500` - No Numbers Available:
+```json
+{
+  "error": "Invalid area code or no numbers available in this area",
+  "success": false
+}
+```
+
+**POST /v1/voice/phone-numbers/{phone}/update-agent**
+
+`400` - Missing Agent ID:
+```json
+{
+  "error": "agent_id or outbound_agent_id required",
+  "success": false
+}
+```
+
+`500` - Update Failed:
+```json
+{
+  "error": "Failed to update phone number agent",
+  "success": false
+}
+```
+
+`500` - Agent Not Found:
+```json
+{
+  "error": "Agent not found or invalid agent ID",
+  "success": false
+}
+```
+
+**GET /v1/voice/phone-numbers**
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list phone numbers",
+  "success": false
+}
+```
+
+---
+
+### Call History API Errors
+
+**GET /v1/voice/calls**
+
+`400` - Missing Organization ID:
+```json
+{
+  "error": "organization_id required",
+  "success": false
+}
+```
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list calls",
+  "success": false
+}
+```
+
+**GET /v1/voice/calls/{call_id}**
+
+`404` - Call Not Found:
+```json
+{
+  "error": "Call not found",
+  "success": false
+}
+```
+
+`500` - Get Failed:
+```json
+{
+  "error": "Failed to get call details",
+  "success": false
+}
+```
+
+---
+
+### Organizations API Errors
+
+**POST /v1/organizations**
+
+`400` - Missing Name:
+```json
+{
+  "error": "organization_name required",
+  "success": false
+}
+```
+
+`500` - Creation Failed:
+```json
+{
+  "error": "Failed to create organization",
+  "success": false
+}
+```
+
+**GET /v1/organizations**
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list organizations",
+  "success": false
+}
+```
+
+**GET /v1/organizations/{id}**
+
+`404` - Not Found:
+```json
+{
+  "error": "Organization not found",
+  "success": false
+}
+```
+
+---
+
+### Users API Errors
+
+**POST /v1/organizations/{org_id}/users**
+
+`400` - Missing Required Fields:
+```json
+{
+  "error": "email and name required",
+  "success": false
+}
+```
+
+`500` - Creation Failed:
+```json
+{
+  "error": "Failed to create user",
+  "success": false
+}
+```
+
+**GET /v1/organizations/{org_id}/users**
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list users",
+  "success": false
+}
+```
+
+---
+
+### Contacts API Errors
+
+**POST /v1/contacts/lists**
+
+`400` - Missing Required Fields:
+```json
+{
+  "error": "organization_id and leads required",
+  "success": false
+}
+```
+
+`500` - Upload Failed:
+```json
+{
+  "error": "Failed to create contact list",
+  "success": false
+}
+```
+
+**GET /v1/organizations/{org_id}/leads**
+
+`500` - List Failed:
+```json
+{
+  "error": "Failed to list contacts",
+  "success": false
+}
+```
+
+---
+
+### 10DLC Registration API Errors
+
+**POST /v1/10dlc/brand**
+
+`400` - Missing Brand Info:
+```json
+{
+  "error": "brandName and organization_id required",
+  "success": false
+}
+```
+
+`500` - Registration Failed:
+```json
+{
+  "error": "Failed to register brand",
+  "success": false
+}
+```
+
+**POST /v1/10dlc/campaign**
+
+`400` - Missing Campaign Info:
+```json
+{
+  "error": "brandId and campaign details required",
+  "success": false
+}
+```
+
+`500` - Registration Failed:
+```json
+{
+  "error": "Failed to register campaign",
+  "success": false
+}
+```
+
+---
+
+### Do Not Call (DNC) API Errors
+
+**POST /v1/dnc/add**
+
+`400` - Missing Phone Number:
+```json
+{
+  "error": "phone_number required",
+  "success": false
+}
+```
+
+`500` - Add Failed:
+```json
+{
+  "error": "Failed to add to DNC list",
+  "success": false
+}
+```
+
+**POST /v1/dnc/remove**
+
+`400` - Missing Phone Number:
+```json
+{
+  "error": "phone_number required",
+  "success": false
+}
+```
+
+`500` - Remove Failed:
+```json
+{
+  "error": "Failed to remove from DNC list",
+  "success": false
+}
+```
+
+---
+
+## Error Handling Best Practices
+
+### 1. Check Success Field
+```javascript
+if (response.success) {
+  // Handle success
+} else {
+  // Handle error
+  console.error(response.error)
+}
+```
+
+### 2. Implement Retry Logic
+For `500` errors, retry with exponential backoff:
+```javascript
+async function apiCallWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options)
+      const data = await response.json()
+      if (data.success) return data
+      if (response.status < 500) throw new Error(data.error)
+      // Retry on 500 errors
+      await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000))
+    } catch (e) {
+      if (i === maxRetries - 1) throw e
+    }
+  }
+}
+```
+
+### 3. Log Errors
+```javascript
+if (!response.success) {
+  console.error('API Error:', {
+    endpoint: '/v1/agents',
+    error: response.error,
+    timestamp: new Date().toISOString()
+  })
+}
+```
+
+### 4. Display User-Friendly Messages
+```javascript
+const errorMessages = {
+  'Failed to create agent': 'Could not create agent. Please check your configuration.',
+  'organization_id required': 'Please select an organization first.',
+  'Invalid API key': 'Your session has expired. Please log in again.'
+}
+
+const userMessage = errorMessages[response.error] || response.error
+```
+
+---
+
+## Rate Limiting
+
+Currently no rate limits enforced. Contact support if you need higher throughput.
+
+---
+
+## Error Logging
+
+All errors are logged server-side with full details. Only sanitized messages are returned to clients for security.
+

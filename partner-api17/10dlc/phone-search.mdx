@@ -1,0 +1,139 @@
+---
+title: 'Search Phone Numbers'
+api: 'GET /v1/10dlc/phone-numbers/search'
+description: 'Search available phone numbers for purchase'
+---
+
+Search for available 10DLC phone numbers by area code. Use this before purchasing to find numbers in your desired area.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="areaCode" type="string">
+  Area code to search (e.g., `313`, `248`). Required unless searching toll-free.
+</ParamField>
+
+<ParamField query="contains" type="string">
+  Search for numbers containing this pattern (e.g., `555`)
+</ParamField>
+
+<ParamField query="tollFree" type="boolean" default="false">
+  Search for toll-free numbers instead of local numbers
+</ParamField>
+
+<ParamField query="page" type="string" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="limit" type="string" default="20">
+  Number of results per page
+</ParamField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/phone-numbers/search?areaCode=313&limit=5" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="phone_numbers" type="array">
+  Array of available phone number objects
+
+  <Expandable title="Phone Number Object">
+    <ResponseField name="phone_number" type="string">
+      Phone number in E.164 format (e.g., `+13135551234`)
+    </ResponseField>
+
+    <ResponseField name="friendly_name" type="string">
+      Human-readable formatted number (e.g., `+1 313-555-1234`)
+    </ResponseField>
+
+    <ResponseField name="city" type="string">
+      City where the number is registered
+    </ResponseField>
+
+    <ResponseField name="state" type="string">
+      State where the number is registered
+    </ResponseField>
+
+    <ResponseField name="postal_code" type="string">
+      Postal code for the number
+    </ResponseField>
+
+    <ResponseField name="capabilities" type="object">
+      Number capabilities (`sms`, `mms`, `voice` - each boolean)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of results returned
+</ResponseField>
+
+<ResponseField name="total_records" type="integer">
+  Total available numbers matching the search
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Current page number
+</ResponseField>
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "phone_numbers": [
+    {
+      "phone_number": "+13135551234",
+      "friendly_name": "+1 313-555-1234",
+      "city": "Detroit",
+      "state": "MI",
+      "postal_code": "48201",
+      "capabilities": {
+        "sms": true,
+        "mms": true,
+        "voice": true
+      }
+    },
+    {
+      "phone_number": "+13135555678",
+      "friendly_name": "+1 313-555-5678",
+      "city": "Detroit",
+      "state": "MI",
+      "postal_code": "48201",
+      "capabilities": {
+        "sms": true,
+        "mms": true,
+        "voice": true
+      }
+    }
+  ],
+  "count": 2,
+  "total_records": 50,
+  "page": 1,
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Phone numbers shown are available but not reserved. Purchase quickly to secure your number.
+- Use the `phone_number` value from the search results when calling the purchase endpoint.
+- All numbers returned are SMS-enabled.
+
+## Related
+
+- [Search Area Codes](/partner-api/10dlc/phone-area-codes)
+- [Purchase Phone Number](/partner-api/10dlc/phone-purchase)

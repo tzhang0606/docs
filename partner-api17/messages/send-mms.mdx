@@ -1,0 +1,173 @@
+---
+title: 'Send Single MMS'
+api: 'POST /v1/mms/send'
+description: 'Send a manual MMS message with media to a contact (live agent/human takeover)'
+---
+
+# Send Single MMS
+
+Send a manual MMS message with a media attachment to a contact within a campaign. This enables live agents to share images, documents, or other media with contacts.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="campaign_id" type="string" required>
+  The campaign ID containing the contact
+</ParamField>
+
+<ParamField body="phone_number" type="string" required>
+  The contact's phone number (E.164 format recommended: +15551234567)
+</ParamField>
+
+<ParamField body="media_url" type="string" required>
+  URL to the media file. **Must be a publicly accessible HTTP/HTTPS URL** - the carrier will fetch this URL directly to deliver the media.
+</ParamField>
+
+<ParamField body="message" type="string">
+  Optional text message to accompany the media
+</ParamField>
+
+## Media URL Requirements
+
+<Warning>
+The `media_url` must be **publicly accessible** without authentication. The carrier fetches this URL directly to deliver the media to the recipient.
+</Warning>
+
+**Recommended Storage Options:**
+- **Amazon S3** - Use public buckets or pre-signed URLs with long expiration
+- **Google Cloud Storage** - Use public objects or signed URLs
+- **Azure Blob Storage** - Use public containers or SAS tokens
+- **Cloudinary** - Provides direct public URLs
+- **Any CDN** - As long as the URL is publicly accessible
+
+**Requirements:**
+- URL must start with `http://` or `https://`
+- URL must not require authentication headers or cookies
+- URL should remain accessible for at least 24 hours (carriers may retry)
+- File must be within size limits (see table below)
+
+**Example Valid URLs:**
+```
+https://your-bucket.s3.amazonaws.com/images/product.jpg
+https://storage.googleapis.com/your-bucket/brochure.pdf
+https://res.cloudinary.com/your-cloud/image/upload/photo.png
+```
+
+## Supported Media Types
+
+| Type | Extensions | Max Size |
+|------|------------|----------|
+| Images | jpg, jpeg, png, gif | 5 MB |
+| Video | mp4, 3gp | 10 MB |
+| Audio | mp3, wav, ogg | 5 MB |
+| Documents | pdf | 5 MB |
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the MMS was sent successfully
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Status message
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The normalized phone number the message was sent to
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  The campaign ID
+</ResponseField>
+
+<ResponseField name="media_url" type="string">
+  The media URL that was sent
+</ResponseField>
+
+<ResponseField name="thread_qualified" type="boolean">
+  Whether the conversation thread was marked as qualified
+</ResponseField>
+
+<ResponseField name="ai_disabled" type="boolean">
+  Whether AI follow-ups have been disabled for this contact
+</ResponseField>
+
+<ResponseField name="human_takeover" type="boolean">
+  Indicates this was a human takeover action
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/mms/send" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "campaign_abc123",
+    "phone_number": "+15551234567",
+    "media_url": "https://example.com/product-brochure.pdf",
+    "message": "Here is the brochure you requested!"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "MMS sent successfully",
+  "phone_number": "+15551234567",
+  "campaign_id": "campaign_abc123",
+  "media_url": "https://example.com/product-brochure.pdf",
+  "thread_qualified": true,
+  "ai_disabled": true,
+  "human_takeover": true,
+  "powered_by": "Teli"
+}
+```
+
+## Use Cases
+
+- **Product Images** - Share product photos with interested leads
+- **Brochures/PDFs** - Send informational documents
+- **Location Maps** - Share directions or maps
+- **Promotional Content** - Send special offers with images
+
+## Error Responses
+
+```json
+{
+  "success": false,
+  "error": "Missing required field: media_url"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "media_url must be a valid HTTP/HTTPS URL"
+}
+```
+
+## Notes
+
+<Info>
+**Important:** You are responsible for hosting and serving the media files. Store your media in cloud storage (S3, GCS, Azure, Cloudinary, etc.) and provide the public URL.
+</Info>
+
+- **Media URL must be publicly accessible** - No authentication, API keys, or session cookies
+- The media file is fetched directly by the carrier network to deliver to the recipient
+- URLs should remain valid for at least 24 hours (carriers may retry failed deliveries)
+- Some carriers may have additional size or format restrictions
+- Like SMS, sending MMS disables AI follow-ups for the contact
+- The contact must already exist in the specified campaign
+
+## Related Endpoints
+
+- [Send SMS](/partner-api/messages/send-sms) - Send text-only message
+- [Get Campaign Messages](/partner-api/campaigns/messages) - View conversation history

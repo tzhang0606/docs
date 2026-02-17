@@ -1,0 +1,168 @@
+---
+title: 'Assign SMS Number'
+api: 'POST /v1/sms/phone-numbers/{phone_number}/assign'
+description: 'Assign an SMS phone number to a user (admin only)'
+---
+
+<Note>
+**Multi-SMS Feature**: This endpoint is only available for tenants with multiple SMS numbers per organization enabled. The standard configuration is one SMS number per organization.
+</Note>
+
+# Assign SMS Number to User
+
+Assign an available SMS phone number to a specific user within the organization. Once assigned, the user's campaigns will automatically use this number.
+
+<Warning>
+**Admin Only**: This endpoint requires admin permissions. Only organization admins can assign phone numbers.
+</Warning>
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with `admin` role
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="phone_number" type="string" required>
+  The phone number to assign (E.164 format, URL encoded if needed)
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string">
+  Organization unique_id. Required when a user exists in multiple organizations to ensure correct permission scoping.
+</ParamField>
+
+## Request Body
+
+<ParamField body="user_id" type="string" required>
+  The user's unique_id to assign the number to
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the assignment was successful
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The assigned phone number
+</ResponseField>
+
+<ResponseField name="user_id" type="string">
+  The user who now owns the number
+</ResponseField>
+
+<ResponseField name="assigned_at" type="string">
+  ISO timestamp of assignment
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/sms/phone-numbers/+14155551234/assign" \
+  -H "X-API-Key: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user_xyz789"
+  }'
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "user_id": "user_xyz789",
+  "assigned_at": "2024-01-15T10:30:00Z",
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+### 403 Forbidden - Admin Required
+
+```json
+{
+  "success": false,
+  "error": "Admin permission required",
+  "detail": "This action requires admin privileges"
+}
+```
+
+### 400 Bad Request
+
+```json
+{
+  "success": false,
+  "error": "Phone number not found"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "Phone number already assigned to a user"
+}
+```
+
+```json
+{
+  "success": false,
+  "error": "User not found"
+}
+```
+
+## Notes
+
+- Only unassigned numbers can be assigned
+- To reassign, first unassign from current user
+- Assignment is immediate and affects all future campaigns
+
+---
+
+# Unassign SMS Number
+
+## DELETE /v1/sms/phone-numbers/{phone_number}/assign
+
+Remove a user's assignment from an SMS number, returning it to the organization's available pool.
+
+<Warning>
+**Admin Only**: This endpoint requires admin permissions.
+</Warning>
+
+## Example Request
+
+```bash
+curl -X DELETE "https://api.teli.ai/v1/sms/phone-numbers/+14155551234/assign" \
+  -H "X-API-Key: your-api-key" \
+  -H "Authorization: Bearer your-jwt-token"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Does not delete the phone number, only removes user assignment
+- Number becomes available for assignment to another user
+- Active campaigns using this number continue to work
+
+## Related
+
+- [List SMS Numbers](/partner-api/sms-phone-numbers/list)
+- [Get My Number](/partner-api/sms-phone-numbers/my-number)

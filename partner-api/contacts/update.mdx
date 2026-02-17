@@ -1,0 +1,202 @@
+---
+title: 'Update Contact'
+api: 'PATCH /v1/contacts/leads/{lead_id}'
+description: 'Update fields on an individual contact'
+---
+
+Update one or more fields on an existing contact. Only provided fields are updated; all other fields remain unchanged.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="lead_id" type="string" required>
+  The contact's unique_id
+</ParamField>
+
+## Body
+
+Send a JSON object with the fields you want to update. Only include fields that need to change.
+
+### Personal Fields
+
+<ParamField body="first_name" type="string">
+  First name
+</ParamField>
+
+<ParamField body="last_name" type="string">
+  Last name
+</ParamField>
+
+<ParamField body="middle_name" type="string">
+  Middle name
+</ParamField>
+
+<ParamField body="email" type="string">
+  Email address
+</ParamField>
+
+<ParamField body="phone_number" type="string">
+  Phone number
+</ParamField>
+
+<ParamField body="birthday" type="string">
+  Birthday (date format)
+</ParamField>
+
+### Address Fields
+
+<ParamField body="address_line_1" type="string">
+  Street address
+</ParamField>
+
+<ParamField body="address_line_2" type="string">
+  Apartment, suite, unit, etc.
+</ParamField>
+
+<ParamField body="city" type="string">
+  City
+</ParamField>
+
+<ParamField body="state" type="string">
+  State
+</ParamField>
+
+<ParamField body="zip_code" type="string">
+  Zip / Postal code
+</ParamField>
+
+<ParamField body="country" type="string">
+  Country
+</ParamField>
+
+### Company Fields
+
+<ParamField body="company_name" type="string">
+  Company name
+</ParamField>
+
+<ParamField body="company_position" type="string">
+  Job title or position
+</ParamField>
+
+<ParamField body="company_industry" type="string">
+  Industry
+</ParamField>
+
+### CRM Fields
+
+<ParamField body="lead_source" type="string">
+  Lead source identifier
+</ParamField>
+
+<ParamField body="lead_status" type="string">
+  Lead status
+</ParamField>
+
+<ParamField body="lead_priority" type="string">
+  Lead priority level
+</ParamField>
+
+<ParamField body="external_id" type="string">
+  Your system's ID for this contact
+</ParamField>
+
+<ParamField body="notes" type="string">
+  Free-text notes about this contact
+</ParamField>
+
+### Financial Fields
+
+<ParamField body="fico_score" type="string">
+  Credit score
+</ParamField>
+
+<ParamField body="loan_balance" type="string">
+  Loan balance
+</ParamField>
+
+<ParamField body="interest_rate" type="string">
+  Interest rate
+</ParamField>
+
+<ParamField body="lender_name" type="string">
+  Lender name
+</ParamField>
+
+<Note>
+All financial, sales, and industry-specific fields (`loan_type`, `debt_balance`, `opportunity_value`, `client_goal`, `npn`, `crd`, etc.) are also supported. See the full leads schema for all available fields.
+</Note>
+
+## Example Request
+
+```bash
+curl -X PATCH "https://api.teli.ai/v1/contacts/leads/1771008017933x138393378469989770" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Jonathan",
+    "company_name": "Acme Corp",
+    "lead_status": "qualified",
+    "notes": "Interested in premium plan"
+  }'
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="lead" type="object">
+  The updated contact record with all fields
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable result message
+</ResponseField>
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "lead": {
+    "unique_id": "1771008017933x138393378469989770",
+    "first_name": "Jonathan",
+    "last_name": "Campbell",
+    "email": "elliot.campbell.13@example.com",
+    "phone_number": "555-0113",
+    "company_name": "Acme Corp",
+    "lead_status": "qualified",
+    "notes": "Interested in premium plan",
+    "city": "Testville",
+    "state": "MI"
+  },
+  "message": "Contact updated successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "Contact not found",
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Only provided fields are updated; omitted fields remain unchanged
+- The contact must belong to the authenticated tenant
+- All updated fields are available for message variable substitution in campaigns: `{{first_name}}`, `{{company_name}}`, etc.
+
+## Related
+
+- [Get Contacts in Group](/partner-api/contacts/get)
+- [Delete Contacts](/partner-api/contacts/delete-leads)
+- [Upload Contacts](/partner-api/contacts/create)

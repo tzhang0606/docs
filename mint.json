@@ -1,5 +1,4 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
   "name": "Teli AI",
   "logo": {
     "dark": "/images/light_logo.png",
@@ -132,6 +131,8 @@
         "partner-api/contacts/list",
         "partner-api/contacts/list-leads",
         "partner-api/contacts/get",
+        "partner-api/contacts/update",
+        "partner-api/contacts/delete-leads",
         "partner-api/contacts/delete"
       ]
     },
@@ -139,6 +140,7 @@
       "group": "SMS Campaigns",
       "pages": [
         "partner-api/campaigns/create",
+        "partner-api/campaigns/add-leads",
         "partner-api/campaigns/list-sms",
         "partner-api/campaigns/get",
         "partner-api/campaigns/messages",

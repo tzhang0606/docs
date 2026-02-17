@@ -1,0 +1,150 @@
+---
+title: "List Extractions by Phone"
+description: "Get all extraction data for a phone number"
+---
+
+# List Extractions by Phone
+
+Retrieve all AI-extracted data across campaigns for a specific phone number.
+
+## Endpoint
+
+```
+GET /v1/sms/extractions/phone/{phone_number}
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="phone_number" type="string" required>
+  The contact's phone number in E.164 format (URL encoded).
+  
+  Example: `%2B15551234567` (URL-encoded +15551234567)
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="extractions" type="array">
+  List of extraction records for this phone number, sorted by most recent first.
+  
+  <Expandable title="extraction properties">
+    <ResponseField name="thread_id" type="string">
+      Conversation thread identifier
+    </ResponseField>
+    
+    <ResponseField name="phone_number" type="string">
+      Contact's phone number
+    </ResponseField>
+    
+    <ResponseField name="campaign_id" type="string">
+      Campaign identifier
+    </ResponseField>
+    
+    <ResponseField name="extracted_fields" type="object">
+      Key-value pairs of extracted data
+    </ResponseField>
+    
+    <ResponseField name="lead_outcome" type="string">
+      Lead classification (qualified, not_interested, dnc, transferred, pending)
+    </ResponseField>
+    
+    <ResponseField name="objective_met" type="boolean">
+      Whether campaign objective was achieved
+    </ResponseField>
+    
+    <ResponseField name="extracted_at" type="string">
+      ISO 8601 timestamp of extraction
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of extractions found
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://partner.teli.ai/api/proxy/v1/sms/extractions/phone/%2B15551234567" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "extractions": [
+    {
+      "thread_id": "+15551234567_camp_abc123",
+      "phone_number": "+15551234567",
+      "campaign_id": "camp_abc123",
+      "extracted_fields": {
+        "credit_score": "730",
+        "interested": "yes"
+      },
+      "lead_outcome": "qualified",
+      "objective_met": true,
+      "extracted_at": "2026-01-23T19:30:00Z"
+    },
+    {
+      "thread_id": "+15551234567_camp_xyz789",
+      "phone_number": "+15551234567",
+      "campaign_id": "camp_xyz789",
+      "extracted_fields": {
+        "interested": "maybe",
+        "timeline": "6 months"
+      },
+      "lead_outcome": "pending",
+      "objective_met": false,
+      "extracted_at": "2026-01-20T15:45:00Z"
+    }
+  ],
+  "count": 2,
+  "powered_by": "Teli"
+}
+```
+
+## Use Cases
+
+### Build Lead History
+
+Track a contact's interactions across multiple campaigns to build a complete picture:
+
+```javascript
+const response = await fetch(
+  `https://partner.teli.ai/api/proxy/v1/sms/extractions/phone/${encodeURIComponent(phoneNumber)}`,
+  { headers: { 'X-API-Key': apiKey } }
+);
+const data = await response.json();
+
+// Aggregate all extracted fields across campaigns
+const allFields = {};
+data.extractions.forEach(ext => {
+  Object.assign(allFields, ext.extracted_fields);
+});
+
+console.log('Combined lead data:', allFields);
+```
+
+### Find Qualified Leads
+
+```javascript
+const qualifiedLeads = data.extractions.filter(
+  ext => ext.lead_outcome === 'qualified'
+);
+```
+
+## Related Endpoints
+
+- [Get SMS Extraction](/partner-api/sms-extractions/get) - Get extraction for specific thread
+- [Create SMS Agent](/partner-api/agents/create-sms) - Configure extraction fields

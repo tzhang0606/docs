@@ -1,0 +1,286 @@
+---
+title: 'Create Single Contact'
+api: 'POST /v1/contacts'
+description: 'Create a new contact and add it to a group'
+---
+
+## Description
+
+Create a single contact with detailed information including personal, company, and industry-specific fields. 
+
+**Important:** Contacts must belong to a group. Create a group first using `POST /v1/contacts/groups`, then add contacts to it.
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header
+</ParamField>
+
+## Required Fields
+
+<ParamField body="organization_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+<ParamField body="user_id" type="string" required>
+  User unique_id (who is creating the contact)
+</ParamField>
+
+<ParamField body="list_id" type="string" required>
+  Group unique_id to add the contact to. Create a group first using `POST /v1/contacts/groups`.
+</ParamField>
+
+<ParamField body="phone_number" type="string" required>
+  Contact phone number (E.164 format recommended, e.g., `+15551234567`)
+</ParamField>
+
+## Personal Information
+
+<ParamField body="first_name" type="string">
+  First name
+</ParamField>
+
+<ParamField body="middle_name" type="string">
+  Middle name
+</ParamField>
+
+<ParamField body="last_name" type="string">
+  Last name
+</ParamField>
+
+<ParamField body="email" type="string">
+  Email address
+</ParamField>
+
+<ParamField body="birthday" type="string">
+  Birthday (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField body="address_line_1" type="string">
+  Street address line 1
+</ParamField>
+
+<ParamField body="address_line_2" type="string">
+  Street address line 2 (apt, suite, etc.)
+</ParamField>
+
+<ParamField body="city" type="string">
+  City
+</ParamField>
+
+<ParamField body="state" type="string">
+  State
+</ParamField>
+
+<ParamField body="zip_code" type="string">
+  Zip/postal code
+</ParamField>
+
+<ParamField body="country" type="string">
+  Country
+</ParamField>
+
+<ParamField body="opportunity_value" type="string">
+  Lead opportunity value (e.g., "$500")
+</ParamField>
+
+<ParamField body="lead_source" type="string">
+  Where the lead came from (e.g., "Facebook", "Referral")
+</ParamField>
+
+<ParamField body="external_id" type="string">
+  Your CRM's ID for this contact
+</ParamField>
+
+## Company Information
+
+<ParamField body="company_name" type="string">
+  Company name
+</ParamField>
+
+<ParamField body="company_industry" type="string">
+  Industry (e.g., "Real Estate", "Finance")
+</ParamField>
+
+<ParamField body="position" type="string">
+  Job title/position
+</ParamField>
+
+<ParamField body="years_worked" type="string">
+  Years at company
+</ParamField>
+
+<ParamField body="npn" type="string">
+  National Producer Number (for insurance professionals)
+</ParamField>
+
+<ParamField body="crd" type="string">
+  Central Registration Depository number (for financial advisors)
+</ParamField>
+
+<ParamField body="company_address_line_1" type="string">
+  Company street address
+</ParamField>
+
+<ParamField body="company_address_line_2" type="string">
+  Company address line 2
+</ParamField>
+
+<ParamField body="company_city" type="string">
+  Company city
+</ParamField>
+
+<ParamField body="company_state" type="string">
+  Company state
+</ParamField>
+
+<ParamField body="company_zip_code" type="string">
+  Company zip code
+</ParamField>
+
+<ParamField body="company_country" type="string">
+  Company country
+</ParamField>
+
+## Industry-Specific Fields (Finance & Real Estate)
+
+<ParamField body="ssn_last_4" type="string">
+  Last 4 digits of SSN (for verification purposes)
+</ParamField>
+
+<ParamField body="fico_score" type="string">
+  Credit score (300-850)
+</ParamField>
+
+<ParamField body="debt_type" type="string">
+  Type of debt (e.g., "VA Loan", "FHA", "Conventional")
+</ParamField>
+
+<ParamField body="current_loan_balance" type="string">
+  Current loan balance
+</ParamField>
+
+<ParamField body="monthly_payment" type="string">
+  Current monthly payment
+</ParamField>
+
+<ParamField body="lender_name" type="string">
+  Current lender name
+</ParamField>
+
+<ParamField body="months_since_mortgage_open" type="string">
+  Months since mortgage account opened
+</ParamField>
+
+<ParamField body="client_goal" type="string">
+  Client's financial goal
+</ParamField>
+
+## Notes
+
+<ParamField body="notes" type="string">
+  Free-text notes about the contact
+</ParamField>
+
+<RequestExample>
+
+```bash Basic
+curl -X POST https://api.teli.ai/v1/contacts \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "list_id": "{group_id}",
+    "phone_number": "+15551234567",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com"
+  }'
+```
+
+```bash With Company Info
+curl -X POST https://api.teli.ai/v1/contacts \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "list_id": "{group_id}",
+    "phone_number": "+15551234567",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane@acme.com",
+    "company_name": "Acme Inc.",
+    "position": "Sales Director",
+    "company_industry": "Real Estate",
+    "opportunity_value": "$50,000",
+    "lead_source": "LinkedIn"
+  }'
+```
+
+```bash Full Finance Lead
+curl -X POST https://api.teli.ai/v1/contacts \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "organization_id": "{org_id}",
+    "user_id": "{user_id}",
+    "list_id": "{group_id}",
+    "phone_number": "+15551234567",
+    "first_name": "Robert",
+    "last_name": "Johnson",
+    "email": "robert.j@email.com",
+    "address_line_1": "123 Main St",
+    "city": "Beverly Hills",
+    "state": "California",
+    "zip_code": "90210",
+    "fico_score": "725",
+    "debt_type": "VA Loan",
+    "current_loan_balance": "$350,000",
+    "monthly_payment": "$2,100",
+    "lender_name": "Bank of America",
+    "months_since_mortgage_open": "18",
+    "client_goal": "Lower monthly payment",
+    "notes": "Interested in cash-out refinance"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201
+{
+  "success": true,
+  "contact_id": "contact_1767123456789x123456789012345",
+  "list_id": "1763072372500x777103986713560785",
+  "group_name": "November Leads",
+  "message": "Contact created successfully",
+  "powered_by": "Teli"
+}
+```
+
+```json 400 (Validation Error)
+{
+  "error": "organization_id, user_id, phone_number, and list_id are required. Create a group first using POST /v1/contacts/groups",
+  "received": {
+    "organization_id": true,
+    "user_id": true,
+    "phone_number": true,
+    "list_id": false
+  },
+  "hint": "Contacts must belong to a group. Create a group first, then add contacts to it.",
+  "powered_by": "Teli"
+}
+```
+
+```json 404 (Group Not Found)
+{
+  "error": "Contact group 'invalid_id' not found",
+  "hint": "Create a group first using POST /v1/contacts/groups",
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,106 @@
+---
+title: 'Delete Agent'
+api: 'DELETE /v1/agents/{id}'
+description: 'Delete an SMS or Voice agent'
+---
+
+## Description
+
+Deletes an agent from your organization. This endpoint works for both SMS and Voice agents.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  The agent's unique identifier (agent_id)
+  
+  Example: `"1767376530308x263645226803702167"`
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the deletion was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+</ResponseField>
+
+<ResponseField name="agent_id" type="string">
+  The deleted agent's ID
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X DELETE "https://api.teli.ai/v1/agents/1767376530308x263645226803702167" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.teli.ai/v1/agents/1767376530308x263645226803702167', {
+  method: 'DELETE',
+  headers: {
+    'X-API-Key': 'YOUR_API_KEY'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+response = requests.delete(
+    'https://api.teli.ai/v1/agents/1767376530308x263645226803702167',
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+
+print(response.json())
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "message": "Agent deleted successfully",
+  "agent_id": "1767376530308x263645226803702167",
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": "Agent not found",
+  "powered_by": "Teli"
+}
+```
+
+```json 500
+{
+  "success": false,
+  "error": "Failed to delete agent",
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Deleted agents will no longer appear in the list agents response
+- For voice agents, the agent is also removed from the Teli Voice platform
+- This action cannot be undone
+- Any campaigns using this agent will need to be updated with a new agent
+

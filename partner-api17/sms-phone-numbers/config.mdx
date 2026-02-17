@@ -1,0 +1,81 @@
+---
+title: 'SMS Phone Config'
+api: 'GET /v1/sms/phone-numbers/config'
+description: "Get the tenant's SMS phone number configuration"
+---
+
+# SMS Phone Number Configuration
+
+Retrieve the tenant's multi-SMS phone number configuration, including whether the feature is enabled, the maximum number of SMS numbers allowed per organization, and pricing.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="enabled" type="boolean">
+  Whether multi-SMS numbers per organization is enabled for this tenant. If `false`, the standard single SMS number per organization applies.
+</ResponseField>
+
+<ResponseField name="max_per_org" type="integer">
+  Maximum number of SMS phone numbers allowed per organization
+</ResponseField>
+
+<ResponseField name="weekly_price" type="number">
+  Weekly price per phone number (in USD)
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/sms/phone-numbers/config" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response (Feature Enabled)
+
+```json
+{
+  "success": true,
+  "enabled": true,
+  "max_per_org": 10,
+  "weekly_price": 1.50,
+  "powered_by": "Teli"
+}
+```
+
+## Example Response (Feature Not Enabled)
+
+```json
+{
+  "success": true,
+  "enabled": false,
+  "max_per_org": 0,
+  "weekly_price": 0,
+  "powered_by": "Teli"
+}
+```
+
+## Use Cases
+
+- Check if multi-SMS is available before showing the SMS Phones UI
+- Display pricing information to users
+- Validate whether an organization can purchase more numbers
+
+## Notes
+
+- This is a **tenant-level** configuration, not per-organization
+- Contact support to enable multi-SMS for your tenant
+- The standard configuration (when not enabled) is one SMS number per organization, managed through 10DLC registration
+
+## Related
+
+- [SMS Phone Numbers Overview](/partner-api/sms-phone-numbers/overview)
+- [Purchase SMS Number](/partner-api/sms-phone-numbers/purchase)

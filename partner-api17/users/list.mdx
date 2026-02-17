@@ -1,0 +1,234 @@
+---
+title: 'List Users'
+api: 'GET /v1/organizations/{org_id}/users'
+description: 'Get all users in an organization'
+---
+
+## Description
+
+Returns all users belonging to an organization with their permissions, usage statistics, and account details.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of users
+</ResponseField>
+
+<ResponseField name="users" type="array">
+  Array of user objects
+  
+  <Expandable title="User Object">
+    <ResponseField name="unique_id" type="string">
+      User unique identifier (used in API calls)
+    </ResponseField>
+    
+    <ResponseField name="id" type="uuid">
+      Internal user UUID
+    </ResponseField>
+    
+    <ResponseField name="name" type="string">
+      User's full name
+    </ResponseField>
+    
+    <ResponseField name="email" type="string">
+      User's email address
+    </ResponseField>
+    
+    <ResponseField name="permission" type="string">
+      User permission level: `admin` or `user`
+      - `admin`: Can see all organization resources
+      - `user`: Can only see their own resources
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="uuid">
+      Organization UUID this user belongs to
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant identifier
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      User account status: `active`, `inactive`, `suspended`
+    </ResponseField>
+    
+    <ResponseField name="is_teli_admin" type="boolean">
+      Whether user has Teli platform admin privileges
+    </ResponseField>
+    
+    <ResponseField name="mobile_app_enabled" type="boolean">
+      Whether mobile app access is enabled
+    </ResponseField>
+    
+    <ResponseField name="phone" type="string">
+      User's phone number (optional)
+    </ResponseField>
+    
+    <ResponseField name="profile_image" type="string">
+      URL to user's profile image (optional)
+    </ResponseField>
+    
+    <ResponseField name="total_agents" type="integer">
+      Number of AI agents created by this user
+    </ResponseField>
+    
+    <ResponseField name="total_campaigns" type="integer">
+      Number of campaigns created by this user
+    </ResponseField>
+    
+    <ResponseField name="total_leads" type="integer">
+      Number of contact lists uploaded by this user
+    </ResponseField>
+    
+    <ResponseField name="total_sms_outbound" type="integer">
+      Total outbound SMS sent by this user
+    </ResponseField>
+    
+    <ResponseField name="total_sms_inbound" type="integer">
+      Total inbound SMS received by this user
+    </ResponseField>
+    
+    <ResponseField name="total_mms_outbound" type="integer">
+      Total outbound MMS sent by this user
+    </ResponseField>
+    
+    <ResponseField name="total_mms_inbound" type="integer">
+      Total inbound MMS received by this user
+    </ResponseField>
+    
+    <ResponseField name="total_voice_seconds" type="integer">
+      Total voice call duration in seconds for this user
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="timestamp">
+      User creation timestamp
+    </ResponseField>
+    
+    <ResponseField name="modified_at" type="timestamp">
+      Last modification timestamp
+    </ResponseField>
+    
+    <ResponseField name="updated_at" type="timestamp">
+      Last update timestamp
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Request
+
+```bash cURL
+curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x389173798861431550/users" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "count": 2,
+  "users": [
+    {
+      "unique_id": "1763661807373x532913854895880007",
+      "id": "e4de5844-5b7b-45bb-8717-2c6f1f3f52ca",
+      "name": "John Smith",
+      "email": "pnb@msu.edu",
+      "permission": "user",
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "tenant_id": "your_tenant",
+      "status": "active",
+      "is_teli_admin": false,
+      "mobile_app_enabled": false,
+      "phone": null,
+      "profile_image": null,
+      "total_agents": 0,
+      "total_campaigns": 0,
+      "total_leads": 0,
+      "total_sms_outbound": 0,
+      "total_sms_inbound": 0,
+      "total_mms_outbound": 0,
+      "total_mms_inbound": 0,
+      "total_voice_seconds": 0,
+      "created_at": "2025-11-20T18:03:27.506251",
+      "modified_at": "2025-11-20T18:03:27.506251",
+      "updated_at": "2025-11-20T18:03:27.506251+00:00"
+    },
+    {
+      "unique_id": "1762896366429x599348279945132448",
+      "id": "0cf76f73-a751-4f65-b7bf-37f6cd5fdced",
+      "name": "Admin User",
+      "email": "admin@msu.edu",
+      "permission": "admin",
+      "organization_id": "4d051118-c116-4923-8ff4-1a9761115fec",
+      "tenant_id": "your_tenant",
+      "status": "active",
+      "is_teli_admin": false,
+      "mobile_app_enabled": false,
+      "phone": null,
+      "profile_image": null,
+      "total_agents": 8,
+      "total_campaigns": 14,
+      "total_leads": 1,
+      "total_sms_outbound": 45,
+      "total_sms_inbound": 38,
+      "total_mms_outbound": 0,
+      "total_mms_inbound": 2,
+      "total_voice_seconds": 942,
+      "created_at": "2025-11-11T21:26:06.511984",
+      "modified_at": "2025-11-11T21:26:06.511984",
+      "updated_at": "2025-11-20T19:45:25.079258+00:00"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+```json 500 (Server Error)
+{
+  "error": "Failed to list users",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Permission Levels
+
+### Admin
+- Can view all organization resources
+- Can create/modify all campaigns and agents
+- Can see all users' data
+- Can manage organization settings
+
+### User
+- Can only view their own resources
+- Can create campaigns and agents (visible only to them)
+- Cannot see other users' data
+- Cannot manage organization settings
+
+## Notes
+
+- Each user record is scoped to a single organization
+- The same email can exist across multiple organizations, each with its own `unique_id` and permissions
+- Usage metrics are tracked per user for billing
+- Admin permission grants organization-wide visibility
+- When referencing a user in API calls, always use the `unique_id`, not the email address

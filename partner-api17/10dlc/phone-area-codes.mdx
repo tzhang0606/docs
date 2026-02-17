@@ -1,0 +1,77 @@
+---
+title: 'Search Area Codes'
+api: 'GET /v1/10dlc/phone-numbers/area-codes'
+description: 'Search available area codes by state or city'
+---
+
+Search for available area codes to find phone numbers in specific regions. Use this to help users pick an area code before searching for specific numbers.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="state" type="string">
+  Filter by state (2-letter code, e.g., `MI`, `CA`)
+</ParamField>
+
+<ParamField query="city" type="string">
+  Filter by city name (e.g., `Detroit`)
+</ParamField>
+
+<ParamField query="areaCode" type="string">
+  Search for a specific area code
+</ParamField>
+
+<ParamField query="page" type="string" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="limit" type="string" default="50">
+  Number of results per page
+</ParamField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/10dlc/phone-numbers/area-codes?state=MI" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "area_codes": [
+    {
+      "areaCode": "248",
+      "city": "Troy",
+      "state": "MI",
+      "country": "US"
+    },
+    {
+      "areaCode": "313",
+      "city": "Detroit",
+      "state": "MI",
+      "country": "US"
+    },
+    {
+      "areaCode": "517",
+      "city": "Lansing",
+      "state": "MI",
+      "country": "US"
+    }
+  ],
+  "count": 3,
+  "powered_by": "Teli"
+}
+```
+
+## Related
+
+- [Search Phone Numbers](/partner-api/10dlc/phone-search)
+- [Purchase Phone Number](/partner-api/10dlc/phone-purchase)

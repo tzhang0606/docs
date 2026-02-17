@@ -1,0 +1,89 @@
+---
+title: 'Delete Contacts'
+api: 'POST /v1/contacts/leads/delete'
+description: 'Delete one or more contacts from a group'
+---
+
+Delete individual contacts by their unique IDs. Contacts are removed from their group and will no longer appear in the contacts list.
+
+<Note>
+Uses POST instead of DELETE to support a JSON body with an array of contact IDs.
+</Note>
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Body
+
+<ParamField body="lead_ids" type="array" required>
+  Array of contact unique_ids to delete. Maximum 1,000 per request.
+
+  ```json
+  ["1771008017933x138393378469989770", "1771008017933x159634755314753624"]
+  ```
+</ParamField>
+
+<ParamField body="group_id" type="string">
+  Group unique_id. If provided, the group's contact count is automatically updated.
+</ParamField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/contacts/leads/delete" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "lead_ids": [
+      "1771008017933x138393378469989770",
+      "1771008017933x159634755314753624"
+    ],
+    "group_id": "1771006759003x369396216299543784"
+  }'
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="deleted_count" type="integer">
+  Number of contacts successfully deleted
+</ResponseField>
+
+<ResponseField name="requested_count" type="integer">
+  Number of contacts requested for deletion
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable result message
+</ResponseField>
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "deleted_count": 2,
+  "requested_count": 2,
+  "message": "2 contacts deleted",
+  "powered_by": "Teli"
+}
+```
+
+## Notes
+
+- Maximum 1,000 contacts can be deleted per request
+- Contacts not found or already deleted are silently skipped
+- If `group_id` is provided, the group's `total_leads` count is automatically decremented
+- Contacts are removed from all group memberships
+
+## Related
+
+- [Get Contacts in Group](/partner-api/contacts/get)
+- [Upload Contacts](/partner-api/contacts/create)
+- [Delete Contact Group](/partner-api/contacts/delete)

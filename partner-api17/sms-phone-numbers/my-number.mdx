@@ -1,0 +1,92 @@
+---
+title: 'Get My SMS Number'
+api: 'GET /v1/sms/phone-numbers/my-number'
+description: "Get the current user's assigned SMS phone number"
+---
+
+<Note>
+**Multi-SMS Feature**: This endpoint is only applicable for tenants with multiple SMS numbers per organization enabled.
+</Note>
+
+# Get My SMS Number
+
+Retrieve the SMS phone number assigned to a specific user. Returns the number if one is assigned, or indicates that no number is currently assigned.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="user_id" type="string" required>
+  The user's unique_id
+</ParamField>
+
+<ParamField query="organization_id" type="string" required>
+  The organization's unique_id
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The user's assigned SMS phone number in E.164 format, or `null` if none assigned
+</ResponseField>
+
+<ResponseField name="has_number" type="boolean">
+  `true` if the user has an assigned number, `false` otherwise
+</ResponseField>
+
+## Example Request
+
+```bash
+curl -X GET "https://api.teli.ai/v1/sms/phone-numbers/my-number?user_id=user_xyz789&organization_id=org_abc123" \
+  -H "X-API-Key: your-api-key"
+```
+
+## Example Response (Number Assigned)
+
+```json
+{
+  "success": true,
+  "phone_number": "+14155551234",
+  "has_number": true,
+  "powered_by": "Teli"
+}
+```
+
+## Example Response (No Number Assigned)
+
+```json
+{
+  "success": true,
+  "phone_number": null,
+  "has_number": false,
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": "user_id and organization_id query parameters required"
+}
+```
+
+## Use Cases
+
+- Check if a user has an SMS number before creating a campaign
+- Display the user's assigned number in the dashboard
+- Determine if a user needs to be assigned a number by an admin
+
+## Related
+
+- [List SMS Numbers](/partner-api/sms-phone-numbers/list)
+- [Assign SMS Number](/partner-api/sms-phone-numbers/assign)

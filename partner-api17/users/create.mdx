@@ -1,0 +1,112 @@
+---
+title: 'Create User'
+api: 'POST /v1/organizations/{org_id}/users'
+description: 'Add a user to an organization'
+---
+
+Create a new user with specific permissions in an organization.
+
+<Note>
+  The same email address can exist in multiple organizations. Each organization gets its own user record with its own permissions.
+  However, the same email **cannot** be added twice to the **same** organization.
+</Note>
+
+## Authorizations
+
+<ParamField header="X-API-Key" type="string" required>
+  Authentication header containing your API key.
+</ParamField>
+
+## Path
+
+<ParamField path="org_id" type="string" required>
+  Organization unique_id
+</ParamField>
+
+## Body
+
+<ParamField body="name" type="string" required>
+  User's full name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  User's email address. Must be unique within the organization. The same email can be used across different organizations.
+</ParamField>
+
+<ParamField body="phone" type="string">
+  User's phone number in E.164 format (e.g., `+15551234567`). Optional.
+</ParamField>
+
+<ParamField body="permission" type="string">
+  Permission level: `admin` or `user`. Default: `user`
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST https://api.teli.ai/v1/organizations/{org_id}/users \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Smith",
+    "email": "john@example.com",
+    "permission": "admin"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "success": true,
+  "user": {
+    "unique_id": "1763072368418x263803518630956376",
+    "name": "John Smith",
+    "email": "john@example.com",
+    "permission": "admin",
+    "total_campaigns": 0,
+    "total_agents": 0
+  },
+  "powered_by": "Teli"
+}
+```
+
+</ResponseExample>
+
+## Response
+
+<ResponseField name="unique_id" type="string">
+  User identifier. Each user record gets a unique ID, even if the same email exists in another organization.
+</ResponseField>
+
+<ResponseField name="total_campaigns" type="number">
+  Campaigns created by this user
+</ResponseField>
+
+## Error Responses
+
+```json 400
+{
+  "error": "email is required"
+}
+```
+
+```json 404
+{
+  "error": "Organization not found"
+}
+```
+
+```json 500
+{
+  "error": "A user with email john@example.com already exists in this organization"
+}
+```
+
+<Note>
+  If a user with the same email already exists in the **same organization**, the request will be rejected.
+  To add the same person to a different organization, simply create a new user with the same email in the other organization — a new `unique_id` will be generated.
+</Note>
+

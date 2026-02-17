@@ -1,0 +1,160 @@
+---
+title: 'Add Leads to Campaign'
+api: 'POST /v1/campaigns/{campaign_id}/leads'
+description: 'Add new leads to an existing active campaign'
+---
+
+Add additional leads to a campaign that is already running. Duplicate phone numbers (leads already in the campaign) are automatically skipped.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign ID to add leads to.
+</ParamField>
+
+## Body
+
+<ParamField body="clients" type="array" required>
+  Array of lead objects to add. Each lead must have at least a `phone_number`.
+
+  <Expandable title="Lead Object">
+    <ResponseField name="phone_number" type="string" required>
+      Phone number in E.164 format (e.g., `+15551234567`)
+    </ResponseField>
+
+    <ResponseField name="first_name" type="string">
+      Contact first name. Used in message variables like `{{first_name}}`
+    </ResponseField>
+
+    <ResponseField name="last_name" type="string">
+      Contact last name
+    </ResponseField>
+
+    <ResponseField name="email" type="string">
+      Contact email address
+    </ResponseField>
+
+    <ResponseField name="city" type="string">
+      Contact city
+    </ResponseField>
+
+    <ResponseField name="state" type="string">
+      Contact state
+    </ResponseField>
+
+    <ResponseField name="company_name" type="string">
+      Contact company name
+    </ResponseField>
+
+    <ResponseField name="lead_source" type="string">
+      Lead source identifier
+    </ResponseField>
+
+    <ResponseField name="external_id" type="string">
+      Your system's ID for this contact (for reference)
+    </ResponseField>
+
+    <ResponseField name="notes" type="string">
+      Notes about this contact
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+## Example Request
+
+```bash
+curl -X POST "https://api.teli.ai/v1/campaigns/1770754445650x132473371211333630/leads" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "clients": [
+      {
+        "phone_number": "+15551234567",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john@example.com"
+      },
+      {
+        "phone_number": "+15559876543",
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "company_name": "Acme Corp"
+      }
+    ]
+  }'
+```
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable result message
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Campaign ID the leads were added to
+</ResponseField>
+
+<ResponseField name="details" type="object">
+  Processing details
+
+  <Expandable title="Details Object">
+    <ResponseField name="leads_added" type="integer">
+      Number of new leads successfully added
+    </ResponseField>
+
+    <ResponseField name="leads_skipped" type="integer">
+      Number of leads skipped (already in campaign or missing phone number)
+    </ResponseField>
+
+    <ResponseField name="drips_scheduled" type="integer">
+      Number of drip messages scheduled for the new leads (if campaign has drip enabled)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Response
+
+```json 200
+{
+  "success": true,
+  "message": "15 leads added successfully",
+  "campaign_id": "1770754445650x132473371211333630",
+  "details": {
+    "leads_added": 15,
+    "leads_skipped": 2,
+    "drips_scheduled": 15
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Behavior
+
+- **Duplicate detection**: If a phone number already exists in the campaign, it is silently skipped (not an error).
+- **Phone normalization**: Phone numbers are automatically normalized to E.164 format.
+- **Immediate processing**: New leads are added to the active campaign and will receive the starting message according to the campaign's schedule.
+- **Drip scheduling**: If the campaign has drip messaging enabled, drip sequences are automatically scheduled for the new leads.
+- **All lead fields supported**: Any field from the contact object (address, company, custom fields) is stored and available for message variable substitution.
+
+## Notes
+
+- The campaign must exist and not be deleted
+- Leads with missing `phone_number` are silently skipped
+- There is no limit on how many times you can add leads to a campaign
+- Variable substitution works with all lead fields: `{{first_name}}`, `{{company_name}}`, `{{city}}`, etc.
+
+## Related
+
+- [Create SMS Campaign](/partner-api/campaigns/create)
+- [Get Campaign](/partner-api/campaigns/get)
+- [Campaign Messages](/partner-api/campaigns/messages)
