@@ -1,4 +1,5 @@
 {
+  "$schema": "https://mintlify.com/schema.json",
   "name": "Teli AI",
   "logo": {
     "dark": "/images/light_logo.png",
@@ -150,9 +151,9 @@
     {
       "group": "Thread Assignment",
       "pages": [
-        "partner-api/threads/assign",
-        "partner-api/threads/unassign",
-        "partner-api/threads/contacts"
+        "partner-api1/threads/assign",
+        "partner-api1/threads/unassign",
+        "partner-api1/threads/contacts"
       ]
     },
     {
