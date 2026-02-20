@@ -9,6 +9,15 @@
   },
   "favicon": "/images/telifavicon.png",
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Community",
+          "icon": "telegram",
+          "href": "https://t.me/+v5wRD0hAUpc5MzA5"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Documentation",
@@ -128,7 +137,7 @@
             ]
           },
           {
-            "group": "Thread Assignment",
+            "group": "threads",
             "pages": [
               "partner-api/threads/assign",
               "partner-api/threads/unassign",
@@ -239,16 +248,7 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Community",
-          "href": "https://t.me/+v5wRD0hAUpc5MzA5",
-          "icon": "telegram"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/images/dark logo.png",
