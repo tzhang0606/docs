@@ -128,6 +128,14 @@
             ]
           },
           {
+            "group": "Thread Assignment",
+            "pages": [
+              "partner-api/threads/assign",
+              "partner-api/threads/unassign",
+              "partner-api/threads/contacts"
+            ]
+          },
+          {
             "group": "Messages",
             "pages": [
               "partner-api/messages/send-sms",
