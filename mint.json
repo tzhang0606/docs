@@ -145,6 +145,7 @@
         "partner-api/campaigns/list-sms",
         "partner-api/campaigns/get",
         "partner-api/campaigns/messages",
+        "partner-api/campaigns/toggle-ai",
         "partner-api/campaigns/delete"
       ]
     },

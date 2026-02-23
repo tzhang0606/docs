@@ -5,7 +5,7 @@ description: "Send the same SMS message to multiple contacts in a campaign"
 
 # Bulk Send SMS
 
-Send the same message to multiple selected contacts in a campaign. Each message is sent as a live-agent message, which disables AI auto-responses for each contacted thread.
+Send the same message to multiple selected contacts in a campaign. The AI agent remains active — any replies from contacts will still be handled by the AI as normal.
 
 ## Endpoint
 
@@ -162,7 +162,7 @@ data = response.json()
 
 ## Important Notes
 
-- Each message is sent as a **live-agent message** (human takeover), which disables AI auto-responses for each thread
+- **AI stays active** — the AI agent will continue handling replies from contacts
 - Contacts must already exist in the specified campaign
 - The endpoint processes messages sequentially; failed sends do not stop remaining messages
 - The response includes per-contact results so you can identify and retry failures
