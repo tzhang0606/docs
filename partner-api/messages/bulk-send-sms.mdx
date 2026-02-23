@@ -1,0 +1,173 @@
+---
+title: "Bulk Send SMS"
+description: "Send the same SMS message to multiple contacts in a campaign"
+---
+
+# Bulk Send SMS
+
+Send the same message to multiple selected contacts in a campaign. Each message is sent as a live-agent message, which disables AI auto-responses for each contacted thread.
+
+## Endpoint
+
+```
+POST /v1/sms/bulk-send
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="campaign_id" type="string" required>
+  The campaign ID containing the contacts
+</ParamField>
+
+<ParamField body="phone_numbers" type="string[]" required>
+  Array of phone numbers to send to (E.164 format recommended, e.g. `+15551234567`)
+</ParamField>
+
+<ParamField body="message" type="string" required>
+  The message text to send to all selected contacts
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the bulk operation completed (individual messages may still fail)
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Summary of the bulk send results
+</ResponseField>
+
+<ResponseField name="total" type="number">
+  Total number of contacts targeted
+</ResponseField>
+
+<ResponseField name="sent" type="number">
+  Number of messages sent successfully
+</ResponseField>
+
+<ResponseField name="failed" type="number">
+  Number of messages that failed
+</ResponseField>
+
+<ResponseField name="results" type="array">
+  Per-contact send results
+
+  <Expandable title="result properties">
+    <ResponseField name="phone_number" type="string">
+      The contact's phone number
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      `"sent"` or `"failed"`
+    </ResponseField>
+
+    <ResponseField name="error" type="string">
+      Error message (only present when status is `"failed"`)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://partner.teli.ai/api/proxy/v1/sms/bulk-send" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_id": "camp_abc123",
+    "phone_numbers": ["+15551234567", "+15559876543", "+15558765432"],
+    "message": "Hi! We have a special offer for you. Reply YES to learn more."
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://partner.teli.ai/api/proxy/v1/sms/bulk-send',
+  {
+    method: 'POST',
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      campaign_id: 'camp_abc123',
+      phone_numbers: ['+15551234567', '+15559876543', '+15558765432'],
+      message: 'Hi! We have a special offer for you. Reply YES to learn more.'
+    })
+  }
+);
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://partner.teli.ai/api/proxy/v1/sms/bulk-send',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'campaign_id': 'camp_abc123',
+        'phone_numbers': ['+15551234567', '+15559876543', '+15558765432'],
+        'message': 'Hi! We have a special offer for you. Reply YES to learn more.'
+    }
+)
+data = response.json()
+```
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "Bulk SMS complete: 2 sent, 1 failed",
+  "total": 3,
+  "sent": 2,
+  "failed": 1,
+  "results": [
+    {
+      "phone_number": "+15551234567",
+      "status": "sent"
+    },
+    {
+      "phone_number": "+15559876543",
+      "status": "sent"
+    },
+    {
+      "phone_number": "+15558765432",
+      "status": "failed",
+      "error": "Client +15558765432 not found in campaign camp_abc123"
+    }
+  ],
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": "phone_numbers must be a non-empty array",
+  "powered_by": "Teli"
+}
+```
+
+## Important Notes
+
+- Each message is sent as a **live-agent message** (human takeover), which disables AI auto-responses for each thread
+- Contacts must already exist in the specified campaign
+- The endpoint processes messages sequentially; failed sends do not stop remaining messages
+- The response includes per-contact results so you can identify and retry failures
+
+## Related Endpoints
+
+- [Send SMS](/partner-api/messages/send-sms) - Send a single SMS message
+- [Send MMS](/partner-api/messages/send-mms) - Send a single MMS message

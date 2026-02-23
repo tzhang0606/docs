@@ -160,7 +160,8 @@
       "group": "Messages",
       "pages": [
         "partner-api/messages/send-sms",
-        "partner-api/messages/send-mms"
+        "partner-api/messages/send-mms",
+        "partner-api/messages/bulk-send-sms"
       ]
     },
     {
