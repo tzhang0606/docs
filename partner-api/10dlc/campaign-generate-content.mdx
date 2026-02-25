@@ -1,0 +1,190 @@
+---
+title: "Generate Campaign Content"
+description: "Auto-generate 10DLC campaign registration content from a brand"
+---
+
+# Generate Campaign Content
+
+Auto-generate all the required content for a 10DLC campaign registration based on a registered brand and selected use cases. Returns the campaign description, message flow (consent text), sample messages, opt-in/opt-out messages, and HELP message — ready to submit.
+
+## Endpoint
+
+```
+POST /v1/10dlc/campaign/generate-content
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Request Body
+
+<ParamField body="brand_id" type="string" required>
+  The brand ID to generate content for (e.g., `B4KRR4F`)
+</ParamField>
+
+<ParamField body="use_cases" type="string[]" required>
+  Array of use case identifiers. Available values:
+  
+  `2FA`, `ACCOUNT_NOTIFICATION`, `CUSTOMER_CARE`, `DELIVERY_NOTIFICATION`, `FRAUD_ALERT`, `HIGHER_EDUCATION`, `MARKETING`, `POLLING_VOTING`, `PUBLIC_SERVICE`, `SECURITY_ALERT`
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the generation was successful
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Auto-generated campaign description for the registration form
+</ResponseField>
+
+<ResponseField name="message_flow" type="string">
+  Complete opt-in consent text with checkboxes. Includes a separate marketing checkbox if `MARKETING` is in the use cases.
+</ResponseField>
+
+<ResponseField name="sample_messages" type="string[]">
+  Up to 5 sample messages based on the selected use cases (2 per use case)
+</ResponseField>
+
+<ResponseField name="optin_message" type="string">
+  The message sent to users when they opt in
+</ResponseField>
+
+<ResponseField name="optout_message" type="string">
+  The message sent to users when they opt out (reply STOP)
+</ResponseField>
+
+<ResponseField name="help_message" type="string">
+  The message sent to users when they reply HELP
+</ResponseField>
+
+<ResponseField name="optin_keywords" type="string">
+  Keywords that trigger opt-in (e.g., `START, YES, SUBSCRIBE`)
+</ResponseField>
+
+<ResponseField name="optout_keywords" type="string">
+  Keywords that trigger opt-out (e.g., `STOP, UNSUBSCRIBE, CANCEL, END, QUIT`)
+</ResponseField>
+
+<ResponseField name="help_keywords" type="string">
+  Keywords that trigger the help message (e.g., `HELP, INFO`)
+</ResponseField>
+
+<ResponseField name="brand" type="object">
+  Brand details used for content generation
+
+  <Expandable title="brand properties">
+    <ResponseField name="company_name" type="string">Company display name</ResponseField>
+    <ResponseField name="vertical" type="string">Industry vertical code</ResponseField>
+    <ResponseField name="industry" type="string">Human-readable industry name</ResponseField>
+    <ResponseField name="optin_link" type="string">Opt-in page URL</ResponseField>
+    <ResponseField name="website" type="string">Company website</ResponseField>
+    <ResponseField name="privacy_policy_link" type="string">Privacy policy URL</ResponseField>
+    <ResponseField name="terms_and_conditions_link" type="string">Terms and conditions URL</ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/10dlc/campaign/generate-content" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "brand_id": "B4KRR4F",
+    "use_cases": ["CUSTOMER_CARE", "ACCOUNT_NOTIFICATION", "MARKETING"]
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.teli.ai/v1/10dlc/campaign/generate-content',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'brand_id': 'B4KRR4F',
+        'use_cases': ['CUSTOMER_CARE', 'ACCOUNT_NOTIFICATION', 'MARKETING']
+    }
+)
+data = response.json()
+```
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "description": "Send first-party customer care, account notification, and marketing messages offered directly by the messaging party. My Company is a real estate company that provides products and services to customers in the Real Estate industry.",
+  "message_flow": "Clients will be able to sign up to receive SMS notifications by checking their preference (use case(s)) by clicking on https://mycompany.com/optin at https://mycompany.com where they'll see a form to fill out information, and can click a specific box for Customer Care, Account Notification and/or Marketing. The text reads:\n\n[ ] By providing a telephone number, clicking this button, and submitting the form, you are consenting to be contacted by SMS text message from My Company, regarding customer care, account notification messages, (our message frequency may vary). Message & data rates apply. Reply STOP to unsubscribe from further messaging from My Company. Reply HELP for more information. See our Privacy Policy (containing our SMS Terms) at the bottom of the page for more information.\n\n[ ] By providing a telephone number, clicking this button, and submitting the form, you are consenting to be contacted by SMS text message from My Company, regarding new offers (marketing), (our message frequency may vary). Message & data rates apply. Reply STOP to unsubscribe from further messaging from My Company. Reply HELP for more information. See our Privacy Policy (containing our SMS Terms) at the bottom of the page for more information.\n\nConsent is provided exclusively for My Company to contact the user based on the selection, not any other third parties mentioned on the site. SMS opt-in data is not shared/sold to third parties for promotional/marketing purposes.\nPrivacy Policy URL: https://mycompany.com/privacy",
+  "sample_messages": [
+    "Our team has looked into your issue, and should have a resolution soon. We'll reach out for more information as soon as possible. Reply STOP to opt out from My Company.",
+    "Thanks for reaching out concerning your account. Please describe the issue and we will respond as soon as we are able. Reply STOP to opt out from My Company.",
+    "Your 10DLC campaign is now fully approved, congratulations! Reply STOP to opt out from My Company.",
+    "Your payment has been successfully received. Reply STOP to opt out from My Company.",
+    "We think you'll love our new release, let's book a call and discuss soon! Reply STOP to opt out from My Company."
+  ],
+  "optin_message": "Welcome! You've now opted-in to messaging from My Company. Message Frequency may vary. Message and data rates may apply. Reply STOP to opt-out, and HELP for support.",
+  "optout_message": "You have successfully unsubscribed from My Company, no further messages will be sent. Reply START to opt-back into communication.",
+  "help_message": "My Company, you can get more assistance from our website at https://mycompany.com and +13135551234. Reply STOP to Opt-out. Msg & Data rate may apply. You can also text START to restart getting messages from My Company again.",
+  "optin_keywords": "START, YES, SUBSCRIBE",
+  "optout_keywords": "STOP, UNSUBSCRIBE, CANCEL, END, QUIT",
+  "help_keywords": "HELP, INFO",
+  "brand": {
+    "company_name": "My Company",
+    "vertical": "REAL_ESTATE",
+    "industry": "Real Estate",
+    "optin_link": "https://mycompany.com/optin",
+    "website": "https://mycompany.com",
+    "privacy_policy_link": "https://mycompany.com/privacy",
+    "terms_and_conditions_link": "https://mycompany.com/terms"
+  },
+  "powered_by": "Teli"
+}
+```
+
+## How to Use the Generated Content
+
+The generated fields map directly to the [Create Campaign](/partner-api/10dlc/campaign-create) endpoint:
+
+| Generated Field | Campaign Create Field |
+|---|---|
+| `description` | `description` |
+| `message_flow` | `messageFlow` |
+| `sample_messages[0]` | `sample1` |
+| `sample_messages[1]` | `sample2` |
+| `sample_messages[2]` | `sample3` |
+| `sample_messages[3]` | `sample4` |
+| `sample_messages[4]` | `sample5` |
+| `optin_message` | `optinMessage` |
+| `optout_message` | `optoutMessage` |
+| `help_message` | `helpMessage` |
+| `optin_keywords` | `optin_keywords` |
+| `optout_keywords` | `optout_keywords` |
+| `help_keywords` | `help_keywords` |
+
+## Available Use Cases
+
+| Value | Description |
+|---|---|
+| `2FA` | Two-factor authentication codes |
+| `ACCOUNT_NOTIFICATION` | Account status updates and alerts |
+| `CUSTOMER_CARE` | Customer support and service messages |
+| `DELIVERY_NOTIFICATION` | Shipping and delivery updates |
+| `FRAUD_ALERT` | Fraud detection and prevention alerts |
+| `HIGHER_EDUCATION` | University and college notifications |
+| `MARKETING` | Promotional offers and marketing messages |
+| `POLLING_VOTING` | Polling, voting, and survey messages |
+| `PUBLIC_SERVICE` | Public service announcements |
+| `SECURITY_ALERT` | Security breach and password reset alerts |
+
+## Related
+
+- [Create Campaign](/partner-api/10dlc/campaign-create) - Submit the generated content for registration
+- [Get Brand](/partner-api/10dlc/brand-get) - Get brand details
+- [List Brands](/partner-api/10dlc/brand-list) - List available brands
