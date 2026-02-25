@@ -1,0 +1,108 @@
+---
+title: "Upload Campaign MMS"
+description: "Upload MMS media (logo/image) for a 10DLC campaign registration"
+---
+
+# Upload Campaign MMS
+
+Upload an MMS media file (logo, image, etc.) for a 10DLC campaign. The returned `uuid` should be included as `mms_media_uuid` when creating the campaign.
+
+## Two-Step Flow
+
+1. **Upload MMS** — `POST /v1/10dlc/campaign/{campaign_id}/mms` → returns a media `uuid`
+2. **Create Campaign** — include `mms_media_uuid: [uuid]` in the [Create Campaign](/partner-api/10dlc/campaign-create) request
+
+## Endpoint
+
+```
+POST /v1/10dlc/campaign/{campaign_id}/mms
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign ID to upload MMS for
+</ParamField>
+
+## Request Body
+
+Content-Type: `multipart/form-data`
+
+<ParamField body="file" type="file" required>
+  The image file to upload (JPEG, PNG, GIF). Max size varies by carrier.
+</ParamField>
+
+## Response
+
+<ResponseField name="uuid" type="string">
+  The media UUID to use in campaign creation (`mms_media_uuid`)
+</ResponseField>
+
+<ResponseField name="fileName" type="string">
+  Original file name
+</ResponseField>
+
+<ResponseField name="mimeType" type="string">
+  File MIME type (e.g., `image/jpeg`)
+</ResponseField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.teli.ai/v1/10dlc/campaign/CEFIHJ5/mms" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -F "file=@logo.jpeg"
+```
+
+```python Python
+import requests
+
+with open('logo.jpeg', 'rb') as f:
+    response = requests.post(
+        'https://api.teli.ai/v1/10dlc/campaign/CEFIHJ5/mms',
+        headers={'X-API-Key': 'YOUR_API_KEY'},
+        files={'file': ('logo.jpeg', f, 'image/jpeg')}
+    )
+data = response.json()
+```
+</CodeGroup>
+
+## Example Response
+
+```json 200
+{
+  "uuid": "UPLOAD/SOLDVCR/074851B595FA40EABEE0248B82A2CA5D",
+  "fileName": "logo.jpeg",
+  "mimeType": "image/jpeg",
+  "powered_by": "Teli"
+}
+```
+
+## Using the UUID in Campaign Creation
+
+After uploading, include the returned `uuid` in your campaign create request:
+
+```json
+{
+  "brand_id": "B4KRR4F",
+  "usecase": "MARKETING",
+  "description": "...",
+  "mms_media_uuid": ["UPLOAD/SOLDVCR/074851B595FA40EABEE0248B82A2CA5D"],
+  "sample1": "...",
+  ...
+}
+```
+
+Multiple MMS files can be uploaded and included as an array.
+
+## Related
+
+- [Create Campaign](/partner-api/10dlc/campaign-create) - Submit campaign with MMS media
+- [Generate Campaign Content](/partner-api/10dlc/campaign-generate-content) - Auto-generate campaign text
