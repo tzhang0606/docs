@@ -49,6 +49,26 @@ POST /v1/10dlc/campaign/generate-content
   Up to 5 sample messages based on the selected use cases (2 per use case)
 </ResponseField>
 
+<ResponseField name="sample1" type="string">
+  First sample message (ready for campaign create)
+</ResponseField>
+
+<ResponseField name="sample2" type="string">
+  Second sample message
+</ResponseField>
+
+<ResponseField name="sample3" type="string">
+  Third sample message
+</ResponseField>
+
+<ResponseField name="sample4" type="string">
+  Fourth sample message
+</ResponseField>
+
+<ResponseField name="sample5" type="string">
+  Fifth sample message
+</ResponseField>
+
 <ResponseField name="optin_message" type="string">
   The message sent to users when they opt in
 </ResponseField>
@@ -129,6 +149,11 @@ data = response.json()
     "Your payment has been successfully received. Reply STOP to opt out from My Company.",
     "We think you'll love our new release, let's book a call and discuss soon! Reply STOP to opt out from My Company."
   ],
+  "sample1": "Our team has looked into your issue, and should have a resolution soon. We'll reach out for more information as soon as possible. Reply STOP to opt out from My Company.",
+  "sample2": "Thanks for reaching out concerning your account. Please describe the issue and we will respond as soon as we are able. Reply STOP to opt out from My Company.",
+  "sample3": "Your 10DLC campaign is now fully approved, congratulations! Reply STOP to opt out from My Company.",
+  "sample4": "Your payment has been successfully received. Reply STOP to opt out from My Company.",
+  "sample5": "We think you'll love our new release, let's book a call and discuss soon! Reply STOP to opt out from My Company.",
   "optin_message": "Welcome! You've now opted-in to messaging from My Company. Message Frequency may vary. Message and data rates may apply. Reply STOP to opt-out, and HELP for support.",
   "optout_message": "You have successfully unsubscribed from My Company, no further messages will be sent. Reply START to opt-back into communication.",
   "help_message": "My Company, you can get more assistance from our website at https://mycompany.com and +13135551234. Reply STOP to Opt-out. Msg & Data rate may apply. You can also text START to restart getting messages from My Company again.",
