@@ -221,6 +221,7 @@
               "partner-api/10dlc/overview",
               "partner-api/10dlc/subgroup-create",
               "partner-api/10dlc/subgroup-list",
+              "partner-api/10dlc/subgroup-get",
               "partner-api/10dlc/brand-create",
               "partner-api/10dlc/brand-list",
               "partner-api/10dlc/brand-get",

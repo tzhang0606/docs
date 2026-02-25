@@ -113,6 +113,14 @@ data = response.json()
 - The contact is marked as **responded** (drip messages stop)
 - A human can send manual replies via the [Send SMS](/partner-api/messages/send-sms) or [Bulk Send SMS](/partner-api/messages/bulk-send-sms) endpoints
 
+## Re-enabling AI
+
+You can re-enable AI at any time by setting `disable_ai_response` to `false`. However, note that contacts who **already replied while AI was off** will not receive AI responses even after re-enabling. Those threads were marked as `human_takeover` when the reply came in, so they are considered completed.
+
+Re-enabling AI only affects **contacts who have not yet replied**. Their future inbound messages will be handled by the AI as normal.
+
+If you need to restart AI on a specific thread that was already marked as completed, you would need to create a new campaign with those contacts.
+
 ## Campaign Creation
 
 You can also set `disable_ai_response` when creating a campaign:
