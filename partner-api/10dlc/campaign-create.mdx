@@ -88,6 +88,12 @@ Campaign must include at least 5 sample messages and clear opt-in/opt-out messag
   Sample message 5. Must include opt-out language.
 </ParamField>
 
+### MMS Media (Optional)
+
+<ParamField body="mms_media_uuid" type="string[]">
+  Array of MMS media UUIDs from the [Upload Campaign MMS](/partner-api/10dlc/campaign-mms-upload) endpoint. Include if your campaign sends MMS messages with images or logos.
+</ParamField>
+
 ### Compliance Options
 
 <ParamField body="direct_lending" type="boolean">
@@ -140,6 +146,10 @@ Campaign must include at least 5 sample messages and clear opt-in/opt-out messag
   Message sent when user requests help (20-320 characters)
 </ParamField>
 
+<ParamField body="optin_message" type="string">
+  Message sent when user opts in (e.g., "Welcome! You've now opted-in...")
+</ParamField>
+
 <ParamField body="optout_message" type="string">
   Message sent when user opts out
 </ParamField>
@@ -165,6 +175,7 @@ curl -X POST https://api.teli.ai/v1/10dlc/campaign \
     "sample3": "Your request has been received. We will respond within 24 hours. Reply STOP to opt out.",
     "sample4": "Reminder: Your appointment is in 1 hour. Reply STOP to opt out.",
     "sample5": "Thank you for choosing us! Let us know if you have any questions. Reply STOP to opt out.",
+    "mms_media_uuid": ["UPLOAD/SOLDVCR/074851B595FA40EABEE0248B82A2CA5D"],
     "direct_lending": false,
     "age_gated": false,
     "subscriber_optin": true,

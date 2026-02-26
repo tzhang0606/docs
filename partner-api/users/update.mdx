@@ -1,0 +1,123 @@
+---
+title: "Update User"
+description: "Update a user's name, email, or permission level"
+---
+
+# Update User
+
+Update user details within an organization. Only the fields you include in the request will be changed.
+
+## Endpoint
+
+```
+PATCH /v1/organizations/{org_id}/users/{user_id}
+```
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="org_id" type="string" required>
+  The organization's `unique_id`
+</ParamField>
+
+<ParamField path="user_id" type="string" required>
+  The user's `unique_id`
+</ParamField>
+
+## Request Body (all fields optional)
+
+<ParamField body="name" type="string">
+  Updated display name
+</ParamField>
+
+<ParamField body="email" type="string">
+  Updated email address
+</ParamField>
+
+<ParamField body="permission" type="string">
+  Permission level: `"admin"` or `"user"`
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Updated phone number
+</ParamField>
+
+<ParamField body="status" type="string">
+  Account status (e.g., `"active"`, `"inactive"`)
+</ParamField>
+
+## Example Request
+
+<CodeGroup>
+```bash cURL
+curl -X PATCH "https://api.teli.ai/v1/organizations/org_123/users/user_456" \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Jane Smith",
+    "email": "jane@company.com",
+    "permission": "admin"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.patch(
+    'https://api.teli.ai/v1/organizations/org_123/users/user_456',
+    headers={'X-API-Key': 'YOUR_API_KEY'},
+    json={
+        'name': 'Jane Smith',
+        'email': 'jane@company.com',
+        'permission': 'admin'
+    }
+)
+data = response.json()
+```
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "User updated successfully",
+  "user": {
+    "unique_id": "user_456",
+    "name": "Jane Smith",
+    "email": "jane@company.com",
+    "permission": "admin",
+    "phone": "+15551234567",
+    "status": "active"
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+```json 400
+{
+  "error": "No valid fields to update. Allowed: name, email, permission, phone, status",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+```json 404
+{
+  "error": "User not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
+## Related
+
+- [Create User](/partner-api/users/create) - Create a new user
+- [List Users](/partner-api/users/list) - List users in an organization

@@ -96,7 +96,8 @@
       "group": "Users",
       "pages": [
         "partner-api/users/create",
-        "partner-api/users/list"
+        "partner-api/users/list",
+        "partner-api/users/update"
       ]
     },
     {
