@@ -1,0 +1,247 @@
+---
+title: 'Get Message Counts'
+api: 'GET /v1/analytics/message-count'
+description: 'Retrieve actual message and call counts (not segments) from usage logs'
+---
+
+## Endpoint
+
+```
+GET /v1/analytics/message-count
+```
+
+## Authentication
+
+Requires `X-API-Key` header with your API key.
+
+## Query Parameters
+
+<ParamField query="tenant_id" type="string">
+  Tenant ID to get message counts for. One of `tenant_id`, `organization_id`, or `user_id` is required.
+</ParamField>
+
+<ParamField query="organization_id" type="string">
+  Organization unique ID to get message counts for. One of `tenant_id`, `organization_id`, or `user_id` is required.
+</ParamField>
+
+<ParamField query="user_id" type="string">
+  User unique ID to get message counts for. One of `tenant_id`, `organization_id`, or `user_id` is required.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="message_count" type="object">
+  Message count metrics object
+  
+  <Expandable title="message_count properties">
+    <ResponseField name="sms" type="object">
+      SMS message and segment counts
+      
+      <Expandable title="sms properties">
+        <ResponseField name="outbound" type="object">
+          <Expandable title="outbound properties">
+            <ResponseField name="messages" type="integer">
+              Number of outbound SMS messages sent (each message is counted once, regardless of length)
+            </ResponseField>
+            
+            <ResponseField name="segments" type="integer">
+              Total outbound SMS segments (long messages count as multiple segments)
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        
+        <ResponseField name="inbound" type="object">
+          <Expandable title="inbound properties">
+            <ResponseField name="messages" type="integer">
+              Number of inbound SMS messages received
+            </ResponseField>
+            
+            <ResponseField name="segments" type="integer">
+              Total inbound SMS segments
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        
+        <ResponseField name="total_messages" type="integer">
+          Total SMS messages (outbound + inbound)
+        </ResponseField>
+        
+        <ResponseField name="total_segments" type="integer">
+          Total SMS segments (outbound + inbound)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="mms" type="object">
+      MMS message and segment counts (same structure as SMS)
+    </ResponseField>
+    
+    <ResponseField name="voice" type="object">
+      Voice call counts and duration
+      
+      <Expandable title="voice properties">
+        <ResponseField name="regular_calls" type="integer">
+          Number of regular voice calls (without knowledge base)
+        </ResponseField>
+        
+        <ResponseField name="regular_seconds" type="integer">
+          Total seconds for regular voice calls
+        </ResponseField>
+        
+        <ResponseField name="kb_calls" type="integer">
+          Number of knowledge base-enhanced voice calls
+        </ResponseField>
+        
+        <ResponseField name="kb_seconds" type="integer">
+          Total seconds for KB-enhanced voice calls
+        </ResponseField>
+        
+        <ResponseField name="total_calls" type="integer">
+          Total voice calls (regular + KB)
+        </ResponseField>
+        
+        <ResponseField name="total_seconds" type="integer">
+          Total voice seconds (regular + KB)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="tenant_id" type="string">
+      Tenant ID (when querying by tenant)
+    </ResponseField>
+    
+    <ResponseField name="organization_id" type="string">
+      Organization unique ID (when querying by org)
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="string">
+      User unique ID (when querying by user)
+    </ResponseField>
+    
+    <ResponseField name="period" type="string">
+      Time period for metrics (currently always "all_time")
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Requests
+
+<CodeGroup>
+
+```bash cURL (Organization)
+curl "https://partner.teli.ai/api/proxy/v1/analytics/message-count?organization_id=1767623610019x414651971228139500" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```bash cURL (User)
+curl "https://partner.teli.ai/api/proxy/v1/analytics/message-count?user_id=1768236789852x707565875153419434" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```bash cURL (Tenant)
+curl "https://partner.teli.ai/api/proxy/v1/analytics/message-count?tenant_id=nine9" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://partner.teli.ai/api/proxy/v1/analytics/message-count?organization_id=1767623610019x414651971228139500',
+  {
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY'
+    }
+  }
+);
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://partner.teli.ai/api/proxy/v1/analytics/message-count',
+    params={'organization_id': '1767623610019x414651971228139500'},
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+data = response.json()
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message_count": {
+    "organization_id": "1767623610019x414651971228139500",
+    "sms": {
+      "outbound": {
+        "messages": 1234,
+        "segments": 5678
+      },
+      "inbound": {
+        "messages": 567,
+        "segments": 890
+      },
+      "total_messages": 1801,
+      "total_segments": 6568
+    },
+    "mms": {
+      "outbound": {
+        "messages": 89,
+        "segments": 267
+      },
+      "inbound": {
+        "messages": 12,
+        "segments": 36
+      },
+      "total_messages": 101,
+      "total_segments": 303
+    },
+    "voice": {
+      "regular_calls": 45,
+      "regular_seconds": 3456,
+      "kb_calls": 12,
+      "kb_seconds": 890,
+      "total_calls": 57,
+      "total_seconds": 4346
+    },
+    "period": "all_time"
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Difference from `/usage` Endpoint
+
+| Endpoint | Data Source | Speed | Use Case |
+|---|---|---|---|
+| `/analytics/usage` | Supabase counters | Fast | Quick overview of total segments/seconds |
+| `/analytics/message-count` | Usage logs (queries all records) | Slower | Detailed breakdown of actual message/call counts |
+
+**Key difference:**
+- `/usage` shows **segments** (what you're billed on)
+- `/message-count` shows **messages** (how many actual messages were sent)
+
+Example: A 200-character SMS counts as:
+- 2 segments (in `/usage`)
+- 1 message (in `/message-count`)
+
+## Notes
+
+- Counts are based on `usage_logs` table entries (one row per message/call)
+- SMS/MMS: Each log entry = 1 message, `quantity` field = segments
+- Voice: Each log entry = 1 call, `quantity` field = duration in seconds
+- This endpoint may be slower for high-volume accounts (queries all usage logs)
+- For real-time counters, use `/analytics/usage` instead
+
+## Related Endpoints
+
+- [Get Usage Metrics](/partner-api/analytics/usage) - Fast counter-based metrics
+- [Analytics Overview](/partner-api/analytics/overview) - Dashboard summary
+- [List Organizations](/partner-api/organizations/list) - Organization management

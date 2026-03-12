@@ -198,7 +198,9 @@
             "pages": [
               "partner-api/analytics/overview",
               "partner-api/analytics/organizations",
-              "partner-api/analytics/users"
+              "partner-api/analytics/users",
+              "partner-api/analytics/usage",
+              "partner-api/analytics/message-count"
             ]
           },
           {

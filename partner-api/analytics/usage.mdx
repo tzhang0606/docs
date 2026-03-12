@@ -1,0 +1,245 @@
+---
+title: 'Get Usage Metrics'
+api: 'GET /v1/analytics/usage'
+description: 'Retrieve SMS/MMS segment counts and voice call seconds for an organization or user'
+---
+
+## Endpoint
+
+```
+GET /v1/analytics/usage
+```
+
+## Authentication
+
+Requires `X-API-Key` header with your API key.
+
+## Query Parameters
+
+<ParamField query="organization_id" type="string">
+  Organization unique ID to get usage for. Either `organization_id` or `user_id` is required.
+</ParamField>
+
+<ParamField query="user_id" type="string">
+  User unique ID to get usage for. Either `organization_id` or `user_id` is required.
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Whether the request was successful
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Usage metrics object
+  
+  <Expandable title="usage properties">
+    <ResponseField name="organization_id" type="string">
+      Organization unique ID (when querying by org)
+    </ResponseField>
+    
+    <ResponseField name="organization_name" type="string">
+      Organization name (when querying by org)
+    </ResponseField>
+    
+    <ResponseField name="user_id" type="string">
+      User unique ID (when querying by user)
+    </ResponseField>
+    
+    <ResponseField name="user_name" type="string">
+      User name (when querying by user)
+    </ResponseField>
+    
+    <ResponseField name="user_email" type="string">
+      User email (when querying by user)
+    </ResponseField>
+    
+    <ResponseField name="sms" type="object">
+      SMS segment counts
+      
+      <Expandable title="sms properties">
+        <ResponseField name="outbound" type="integer">
+          Total outbound SMS segments sent
+        </ResponseField>
+        
+        <ResponseField name="inbound" type="integer">
+          Total inbound SMS segments received
+        </ResponseField>
+        
+        <ResponseField name="total" type="integer">
+          Total SMS segments (outbound + inbound)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="mms" type="object">
+      MMS segment counts
+      
+      <Expandable title="mms properties">
+        <ResponseField name="outbound" type="integer">
+          Total outbound MMS segments sent
+        </ResponseField>
+        
+        <ResponseField name="inbound" type="integer">
+          Total inbound MMS segments received
+        </ResponseField>
+        
+        <ResponseField name="total" type="integer">
+          Total MMS segments (outbound + inbound)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="voice" type="object">
+      Voice call seconds
+      
+      <Expandable title="voice properties">
+        <ResponseField name="seconds" type="integer">
+          Total regular voice call seconds
+        </ResponseField>
+        
+        <ResponseField name="kb_seconds" type="integer">
+          Total knowledge base-enhanced voice call seconds
+        </ResponseField>
+        
+        <ResponseField name="total_seconds" type="integer">
+          Total voice seconds (seconds + kb_seconds)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="period" type="string">
+      Time period for metrics (currently always "all_time")
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Requests
+
+<CodeGroup>
+
+```bash cURL (Organization)
+curl "https://partner.teli.ai/api/proxy/v1/analytics/usage?organization_id=1767623610019x414651971228139500" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```bash cURL (User)
+curl "https://partner.teli.ai/api/proxy/v1/analytics/usage?user_id=1768236789852x707565875153419434" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://partner.teli.ai/api/proxy/v1/analytics/usage?organization_id=1767623610019x414651971228139500',
+  {
+    headers: {
+      'X-API-Key': 'YOUR_API_KEY'
+    }
+  }
+);
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://partner.teli.ai/api/proxy/v1/analytics/usage',
+    params={'organization_id': '1767623610019x414651971228139500'},
+    headers={'X-API-Key': 'YOUR_API_KEY'}
+)
+data = response.json()
+```
+
+</CodeGroup>
+
+## Example Response (Organization)
+
+```json
+{
+  "success": true,
+  "usage": {
+    "organization_id": "1767623610019x414651971228139500",
+    "organization_name": "Acme Corp",
+    "sms": {
+      "outbound": 12450,
+      "inbound": 3821,
+      "total": 16271
+    },
+    "mms": {
+      "outbound": 245,
+      "inbound": 67,
+      "total": 312
+    },
+    "voice": {
+      "seconds": 45678,
+      "kb_seconds": 12345,
+      "total_seconds": 58023
+    },
+    "period": "all_time"
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Example Response (User)
+
+```json
+{
+  "success": true,
+  "usage": {
+    "user_id": "1768236789852x707565875153419434",
+    "user_name": "John Smith",
+    "user_email": "john@example.com",
+    "sms": {
+      "outbound": 1234,
+      "inbound": 567,
+      "total": 1801
+    },
+    "mms": {
+      "outbound": 89,
+      "inbound": 12,
+      "total": 101
+    },
+    "voice": {
+      "seconds": 5678,
+      "kb_seconds": 1234,
+      "total_seconds": 6912
+    },
+    "period": "all_time"
+  },
+  "powered_by": "Teli"
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+```json 400 Bad Request
+{
+  "success": false,
+  "error": "organization_id or user_id is required"
+}
+```
+
+```json 404 Not Found
+{
+  "success": false,
+  "error": "Organization not found"
+}
+```
+</ResponseExample>
+
+## Notes
+
+- All counters represent **all-time totals** since account creation
+- SMS/MMS counts are in **segments** (not messages) — a long message may count as multiple segments
+- Voice seconds include both regular calls and knowledge base-enhanced calls
+- `kb_seconds` tracks calls that used knowledge base retrieval (premium feature)
+- Counters are updated in real-time as usage occurs
+
+## Related Endpoints
+
+- [Get Organization Details](/partner-api/organizations/get)
+- [List Users](/partner-api/organizations/list-users)
+- [Analytics Overview](/partner-api/analytics/overview)
