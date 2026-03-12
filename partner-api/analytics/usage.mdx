@@ -24,6 +24,14 @@ Requires `X-API-Key` header with your API key.
   User unique ID to get usage for. Either `organization_id` or `user_id` is required.
 </ParamField>
 
+<ParamField query="start_date" type="string">
+  Optional. Start date for filtering (ISO 8601 format, e.g., `2026-02-10T00:00:00Z`). If provided, queries usage logs instead of counters (slower but filtered).
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  Optional. End date for filtering (ISO 8601 format, e.g., `2026-03-12T23:59:59Z`). If provided, queries usage logs instead of counters (slower but filtered).
+</ParamField>
+
 ## Response
 
 <ResponseField name="success" type="boolean">

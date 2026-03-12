@@ -28,6 +28,14 @@ Requires `X-API-Key` header with your API key.
   User unique ID to get message counts for. One of `tenant_id`, `organization_id`, or `user_id` is required.
 </ParamField>
 
+<ParamField query="start_date" type="string">
+  Optional. Start date for filtering (ISO 8601 format, e.g., `2026-02-10T00:00:00Z`).
+</ParamField>
+
+<ParamField query="end_date" type="string">
+  Optional. End date for filtering (ISO 8601 format, e.g., `2026-03-12T23:59:59Z`).
+</ParamField>
+
 ## Response
 
 <ResponseField name="success" type="boolean">
