@@ -6,7 +6,9 @@ description: 'Get all contact leads for an organization'
 
 ## Description
 
-Returns all contact leads (individuals) uploaded to an organization. Includes detailed contact information and custom fields.
+Returns contact leads (individuals) uploaded to an organization. Includes detailed contact information and custom fields.
+
+Supports optional pagination and filtering by user, contact group, or phone number. Deleted contacts are automatically excluded.
 
 ## Authentication
 
@@ -20,6 +22,32 @@ Returns all contact leads (individuals) uploaded to an organization. Includes de
   Organization unique_id
 </ParamField>
 
+## Query Parameters
+
+<ParamField query="user_id" type="string">
+  Filter leads by user unique_id. Returns only leads uploaded by this user. Returns `404` if user_id does not exist.
+</ParamField>
+
+<ParamField query="is_admin" type="string" default="false">
+  Set to `true` to return all organization leads regardless of user. When `false`, requires `user_id` to filter by user.
+</ParamField>
+
+<ParamField query="group_id" type="string">
+  Filter leads by contact group unique_id. Only returns leads that belong to this group.
+</ParamField>
+
+<ParamField query="phone_number" type="string">
+  Filter leads by exact phone number match.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number for pagination (starts at 1). When omitted, all results are returned without pagination.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default="50">
+  Number of results per page (max 200). Only used when `page` is provided.
+</ParamField>
+
 ## Response Fields
 
 <ResponseField name="success" type="boolean">
@@ -27,125 +55,141 @@ Returns all contact leads (individuals) uploaded to an organization. Includes de
 </ResponseField>
 
 <ResponseField name="count" type="integer">
-  Total number of leads
+  Number of leads returned in this response
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of matching leads across all pages
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Current page number (only present when `page` query param is used)
+</ResponseField>
+
+<ResponseField name="page_size" type="integer">
+  Results per page (only present when `page` query param is used)
+</ResponseField>
+
+<ResponseField name="total_pages" type="integer">
+  Total number of pages (only present when `page` query param is used)
 </ResponseField>
 
 <ResponseField name="leads" type="array">
   Array of lead/contact objects
-  
+
   <Expandable title="Lead Object">
     <ResponseField name="unique_id" type="string">
       Lead unique identifier
     </ResponseField>
-    
+
     <ResponseField name="id" type="uuid">
       Internal lead UUID
     </ResponseField>
-    
+
     <ResponseField name="phone_number" type="string">
       Contact phone number (E.164 format)
     </ResponseField>
-    
+
     <ResponseField name="first_name" type="string">
       Contact's first name
     </ResponseField>
-    
+
     <ResponseField name="last_name" type="string">
       Contact's last name
     </ResponseField>
-    
+
     <ResponseField name="email" type="string">
       Contact's email address
     </ResponseField>
-    
+
     <ResponseField name="name" type="string">
       Full name (alternative field)
     </ResponseField>
-    
+
     <ResponseField name="organization_id" type="uuid">
       Organization UUID
     </ResponseField>
-    
+
     <ResponseField name="user_id" type="uuid">
       User UUID who uploaded this lead
     </ResponseField>
-    
+
     <ResponseField name="tenant_id" type="string">
       Tenant identifier
     </ResponseField>
-    
+
     <ResponseField name="do_not_call" type="boolean">
       Whether contact is on do-not-call list
     </ResponseField>
-    
+
     <ResponseField name="lead_status" type="string">
       Lead status (custom field)
     </ResponseField>
-    
+
     <ResponseField name="lead_priority" type="string">
       Lead priority (custom field)
     </ResponseField>
-    
+
     <ResponseField name="lead_source" type="string">
       Where lead came from (custom field)
     </ResponseField>
-    
+
     <ResponseField name="external_id" type="string">
       External system identifier (for integrations)
     </ResponseField>
-    
+
     <ResponseField name="notes" type="string">
       Custom notes about this lead
     </ResponseField>
-    
+
     <ResponseField name="address_line_1" type="string">
       Street address line 1
     </ResponseField>
-    
+
     <ResponseField name="address_line_2" type="string">
       Street address line 2
     </ResponseField>
-    
+
     <ResponseField name="city" type="string">
       City
     </ResponseField>
-    
+
     <ResponseField name="state" type="string">
       State/province
     </ResponseField>
-    
+
     <ResponseField name="zip_code" type="string">
       ZIP/postal code
     </ResponseField>
-    
+
     <ResponseField name="country" type="string">
       Country
     </ResponseField>
-    
+
     <ResponseField name="company_name" type="string">
       Company name (B2B leads)
     </ResponseField>
-    
+
     <ResponseField name="company_position" type="string">
       Job title/position
     </ResponseField>
-    
+
     <ResponseField name="company_industry" type="string">
       Company industry
     </ResponseField>
-    
+
     <ResponseField name="created_at" type="timestamp">
       Lead creation timestamp
     </ResponseField>
-    
+
     <ResponseField name="modified_at" type="timestamp">
       Last modification timestamp
     </ResponseField>
-    
+
     <ResponseField name="updated_at" type="timestamp">
       Last update timestamp
     </ResponseField>
-    
+
     <ResponseField name="Custom Fields" type="various">
       Additional fields: `fico_score`, `loan_balance`, `interest_rate`, `debt_balance`, `savings`, `value`, etc. (industry-specific)
     </ResponseField>
@@ -156,19 +200,30 @@ Returns all contact leads (individuals) uploaded to an organization. Includes de
   Always returns "Teli"
 </ResponseField>
 
-## Example Request
+## Example Requests
 
-```bash cURL
-curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x389173798861431550/leads" \
+```bash Basic
+curl -X GET "https://api.teli.ai/v1/organizations/{org_id}/leads" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
-## Example Response
+```bash With Filters
+curl -X GET "https://api.teli.ai/v1/organizations/{org_id}/leads?user_id={user_id}&group_id={group_id}&phone_number=+15551234567" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
 
-```json 200
+```bash With Pagination
+curl -X GET "https://api.teli.ai/v1/organizations/{org_id}/leads?page=1&page_size=50&is_admin=true" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+## Example Responses
+
+```json 200 (Without Pagination)
 {
   "success": true,
   "count": 1,
+  "total": 1,
   "leads": [
     {
       "unique_id": "1762896414634x733468691531460383",
@@ -200,6 +255,27 @@ curl -X GET "https://api.teli.ai/v1/organizations/1762896364768x3891737988614315
 }
 ```
 
+```json 200 (With Pagination)
+{
+  "success": true,
+  "count": 50,
+  "total": 1250,
+  "page": 1,
+  "page_size": 50,
+  "total_pages": 25,
+  "leads": ["..."],
+  "powered_by": "Teli"
+}
+```
+
+```json 404 (Invalid User)
+{
+  "error": "User 'invalid_user_id' not found",
+  "success": false,
+  "powered_by": "Teli"
+}
+```
+
 ## Custom Fields
 
 The API supports extensive custom fields for different industries:
@@ -224,4 +300,6 @@ The API supports extensive custom fields for different industries:
 - Do-not-call list is automatically enforced
 - Leads can be grouped into contact lists for campaigns
 - Custom fields support various industry verticals
-
+- Deleted contacts are automatically excluded from results
+- Pagination is opt-in: omit the `page` parameter to get all results (existing behavior)
+- When using `user_id` with `is_admin=false`, the user must exist or a `404` is returned

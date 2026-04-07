@@ -106,7 +106,28 @@ curl -X POST https://api.teli.ai/v1/contacts/lists \
   "list_id": "1763072372500x777103986713560785",
   "group_name": "November Leads",
   "contacts_imported": 25,
+  "contact_ids": [
+    "1763072372500x111222333444555666",
+    "1763072372500x222333444555666777"
+  ],
   "message": "25 contacts added to group 'November Leads'",
+  "powered_by": "Teli"
+}
+```
+
+```json 201 (Partial Failure)
+{
+  "success": true,
+  "list_id": "1763072372500x777103986713560785",
+  "group_name": "November Leads",
+  "contacts_imported": 23,
+  "contact_ids": ["..."],
+  "contacts_failed": 2,
+  "failed_contacts": [
+    {"phone_number": "+15550000000", "reason": "duplicate key value"},
+    {"phone_number": "invalid", "reason": "invalid phone number format"}
+  ],
+  "message": "23 contacts added to group 'November Leads'",
   "powered_by": "Teli"
 }
 ```

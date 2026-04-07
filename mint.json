@@ -110,7 +110,8 @@
         "partner-api/agents/update-sms",
         "partner-api/agents/update-voice",
         "partner-api/agents/update-tools",
-        "partner-api/agents/delete"
+        "partner-api/agents/delete",
+        "partner-api1/agents/extraction-fields"
       ]
     },
     {

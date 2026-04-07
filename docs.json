@@ -50,6 +50,12 @@
             ]
           },
           {
+            "group": "AI Agents",
+            "pages": [
+              "partner-api1/agents/extraction-fields"
+            ]
+          },
+          {
             "group": "Thread Assignment",
             "pages": [
               "partner-api1/threads/assign",

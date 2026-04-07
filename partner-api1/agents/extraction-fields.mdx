@@ -1,0 +1,190 @@
+---
+title: 'Extraction Fields with Descriptions'
+description: 'Configure data extraction from conversations with custom descriptions for better accuracy'
+---
+
+## Overview
+
+Extraction fields allow you to automatically extract structured data from SMS and voice conversations. You can now provide custom descriptions to improve extraction accuracy, or rely on smart defaults for common fields.
+
+## Formats Supported
+
+### Simple Format (Smart Defaults)
+
+Pass a simple array of field names. The system automatically generates intelligent descriptions for common fields:
+
+```json
+{
+  "extraction_fields": ["credit_score", "interest_rate", "loan_balance"]
+}
+```
+
+**Smart defaults for common fields:**
+- `credit_score` → "Extract ONLY the numeric credit score (e.g., 750). Do not include phrases like 'my score is'. Just the number."
+- `interest_rate` → "Extract the interest rate as a percentage (e.g., 6.5%, 5.25). Include the % symbol if mentioned."
+- `loan_balance` → "Extract the loan balance or amount as a number (e.g., 250000, $250k)."
+- `scheduled_time` / `appointment_date` → "Extract the date and/or time mentioned (e.g., 'tomorrow at 3pm')."
+- `phone_number` → "Extract the phone number in format XXX-XXX-XXXX."
+- `email` → "Extract the email address exactly as provided."
+
+For fields without smart defaults, a generic description is generated.
+
+### Advanced Format (Custom Descriptions)
+
+For custom extraction logic, provide objects with name, description, and type:
+
+```json
+{
+  "extraction_fields": [
+    {
+      "name": "credit_score",
+      "description": "Extract ONLY the numeric credit score. Do not include phrases like 'my score is' or 'around'. Just the number.",
+      "type": "string"
+    },
+    {
+      "name": "is_interested",
+      "description": "Return true if the customer shows interest, false otherwise.",
+      "type": "boolean"
+    },
+    {
+      "name": "budget",
+      "description": "Extract the customer's budget as a number without currency symbols.",
+      "type": "number"
+    }
+  ]
+}
+```
+
+### Mixed Format
+
+You can mix both formats in the same array:
+
+```json
+{
+  "extraction_fields": [
+    "credit_score",
+    {
+      "name": "custom_field",
+      "description": "Extract the customer's specific requirement...",
+      "type": "string"
+    },
+    "interest_rate"
+  ]
+}
+```
+
+## Field Types
+
+<ParamField body="type" type="string">
+  The data type for extraction. Options:
+  - `string` (default) - Text values
+  - `number` - Numeric values only
+  - `boolean` - true/false values
+</ParamField>
+
+## Best Practices for Descriptions
+
+### Be Specific
+❌ Bad: "Extract the credit score"
+✅ Good: "Extract ONLY the numeric credit score (e.g., 750, 680). Do not include phrases like 'my score is' or 'around'. Just the number."
+
+### Provide Examples
+❌ Bad: "Extract the date"
+✅ Good: "Extract the appointment date in MM/DD/YYYY format (e.g., 03/15/2026)"
+
+### Specify Format
+❌ Bad: "Extract the phone number"
+✅ Good: "Extract the phone number in format XXX-XXX-XXXX or (XXX) XXX-XXXX"
+
+### Handle Edge Cases
+❌ Bad: "Extract if interested"
+✅ Good: "Return true if the customer shows interest or curiosity. Return false if they say 'not interested', 'no thanks', or similar negative responses."
+
+## Example: Creating Agent with Extractions
+
+```json
+POST /v1/agents
+{
+  "agent_type": "voice",
+  "agent_name": "Mortgage Qualifier",
+  "starting_message": "Hi! I'm calling about your mortgage inquiry.",
+  "prompt": "You are a mortgage qualification agent...",
+  "voice_id": "11labs-Adrian",
+  "organization_id": "org_xxx",
+  "user_id": "user_xxx",
+  "extraction_fields": [
+    {
+      "name": "credit_score",
+      "description": "Extract ONLY the numeric credit score. Just the number, no phrases.",
+      "type": "string"
+    },
+    {
+      "name": "loan_amount",
+      "description": "Extract the desired loan amount as a number (e.g., 250000, 350k).",
+      "type": "string"
+    },
+    "interest_rate",
+    "scheduled_callback_time"
+  ]
+}
+```
+
+## Retrieving Extracted Data
+
+### SMS Extractions
+```
+GET /v1/sms/extractions/{thread_id}
+```
+
+### Voice Extractions
+```
+GET /v1/voice/calls/{call_id}/extractions
+```
+
+Both return extracted data in the same format:
+
+```json
+{
+  "success": true,
+  "extracted_fields": {
+    "credit_score": "750",
+    "interest_rate": "6.5%",
+    "loan_amount": "$250,000",
+    "scheduled_callback_time": "tomorrow at 3pm"
+  }
+}
+```
+
+## Migration from Old Format
+
+Existing agents with simple string arrays continue to work:
+
+**Before:**
+```json
+{
+  "extraction_fields": ["credit_score", "interest_rate"]
+}
+```
+
+**After (optional upgrade):**
+```json
+{
+  "extraction_fields": [
+    {
+      "name": "credit_score",
+      "description": "Extract ONLY the numeric credit score...",
+      "type": "string"
+    },
+    "interest_rate"
+  ]
+}
+```
+
+No migration required — smart defaults are applied automatically to simple strings.
+
+## Related Endpoints
+
+- [Create Agent](/partner-api/agents/create)
+- [Update Agent](/partner-api/agents/update)
+- [Get SMS Extractions](/partner-api/sms-extractions/get)
+- [Get Voice Call Extractions](/partner-api/voice/call-extractions)
