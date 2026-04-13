@@ -1,0 +1,56 @@
+---
+title: "Tools"
+description: "Complete reference for all tools available in the Teli MCP Server."
+---
+
+## Agents
+
+| Tool | Description | Type |
+|------|-------------|------|
+| `get_agents` | List all SMS and/or voice agents | Read |
+| `get_agent_details` | Fetch full configuration for a specific agent | Read |
+| `get_voices` | List available voice IDs for voice agents | Read |
+| `create_sms_agent` | Create a new reusable SMS conversation agent | Write |
+| `update_sms_agent` | Update an existing SMS agent's configuration | Write |
+| `create_voice_agent` | Create a new reusable voice call AI agent | Write |
+| `update_voice_agent` | Update an existing voice agent's configuration | Write |
+| `update_voice_agent_tools` | Configure function-calling tools on a voice agent | Write |
+| `delete_agent` | Permanently delete an SMS or voice agent | Destructive |
+
+## SMS Campaigns
+
+| Tool | Description | Type |
+|------|-------------|------|
+| `get_sms_campaigns` | List all SMS campaigns | Read |
+| `create_sms_campaign` | Launch a new outbound SMS campaign | Destructive |
+| `add_leads_to_campaign` | Add additional leads to an existing campaign | Destructive |
+
+## Voice Campaigns
+
+| Tool | Description | Type |
+|------|-------------|------|
+| `get_voice_campaigns` | List all voice campaigns | Read |
+| `get_voice_campaign_status` | Get progress of a specific voice campaign | Read |
+| `get_voice_campaign_analytics` | Get detailed analytics: outcomes, rates, sentiment | Read |
+| `create_voice_campaign` | Launch a bulk outbound voice campaign | Destructive |
+| `pause_voice_campaign` | Pause an active voice campaign | Write |
+| `resume_voice_campaign` | Resume a paused voice campaign | Write |
+| `end_voice_campaign` | Permanently end a voice campaign | Destructive |
+| `delete_voice_campaign` | Delete a voice campaign and its contacts | Destructive |
+
+## Contacts
+
+| Tool | Description | Type |
+|------|-------------|------|
+| `get_contact_groups` | List all contact groups | Read |
+| `create_contact_group` | Create a new named contact group | Write |
+| `create_contact` | Add a single contact to a group | Write |
+| `upload_contacts_to_group` | Bulk upload contacts to a group (up to 50k) | Write |
+| `delete_contact_list` | Delete a contact list and all its contacts | Destructive |
+
+## Voice Numbers
+
+| Tool | Description | Type |
+|------|-------------|------|
+| `get_phone_numbers` | List all voice phone numbers | Read |
+| `create_phone_number` | Provision a new voice phone number by area code | Write |

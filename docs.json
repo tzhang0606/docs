@@ -9,10 +9,19 @@
   },
   "favicon": "/images/telifavicon.png",
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Community",
+          "icon": "telegram",
+          "href": "https://t.me/+v5wRD0hAUpc5MzA5"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Documentation",
-        "groups": [
+        "pages": [
           {
             "group": "Introduction",
             "pages": [
@@ -61,6 +70,14 @@
               "partner-api1/threads/assign",
               "partner-api1/threads/unassign",
               "partner-api1/threads/contacts"
+            ]
+          },
+          {
+            "group": "MCP Server",
+            "pages": [
+              "overview",
+              "untitled-page",
+              "examples"
             ]
           }
         ]
@@ -253,16 +270,7 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Community",
-          "href": "https://t.me/+v5wRD0hAUpc5MzA5",
-          "icon": "telegram"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/images/dark logo.png",
