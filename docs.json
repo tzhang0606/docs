@@ -75,9 +75,9 @@
           {
             "group": "MCP Server",
             "pages": [
-              "overview",
-              "untitled-page",
-              "examples"
+              "mcp-overview",
+              "mcp-tools",
+              "mcp-examples"
             ]
           }
         ]
