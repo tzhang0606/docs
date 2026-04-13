@@ -1,5 +1,5 @@
 ---
-title: "MCP Overview"
+title: "Overview"
 description: "Manage AI SMS and voice agents, campaigns, and contacts through Claude."
 ---
 
@@ -13,23 +13,18 @@ No dashboard switching. Just tell Claude what you want to do.
   <Card title="Agent Management" icon="robot">
     Create and configure SMS and voice AI agents with custom prompts, extraction fields, and drip schedules.
   </Card>
-
   <Card title="SMS Campaigns" icon="message-sms">
     Launch outbound AI-driven SMS campaigns with contact lists, MMS support, and optional voice escalation.
   </Card>
-
   <Card title="Voice Campaigns" icon="phone">
     Run bulk outbound AI voice call campaigns with scheduling, number pools, and redial logic.
   </Card>
-
   <Card title="Contact Management" icon="users">
     Create contact groups, upload bulk lists, and add individual contacts with rich profile fields.
   </Card>
-
   <Card title="Campaign Analytics" icon="chart-bar">
     Check campaign progress, completion rates, and voice call outcomes.
   </Card>
-
   <Card title="Phone Numbers" icon="phone-plus">
     Provision new voice phone numbers by area code directly from Claude.
   </Card>
@@ -39,29 +34,26 @@ No dashboard switching. Just tell Claude what you want to do.
 
 ## Requirements
 
-<Check>
-  Active Teli account on the **Scale or Enterprise plan**
-</Check>
- <Check>
-  SMS and voice features activated on your organization
-</Check>
- <Check>
-  At least one provisioned phone number for voice campaigns
-</Check>
- <Check>
-  Available in the **United States and Canada**
-</Check>
+<Check>Active Teli account on the **Scale or Enterprise plan**</Check>
+<Check>SMS and voice features activated on your organization</Check>
+<Check>At least one provisioned phone number for voice campaigns</Check>
+<Check>Available in the **United States and Canada**</Check>
 
 ---
 
 ## Setup
 
+<Note>Teli is currently pending review for listing in the Anthropic Connectors Directory. In the meantime, you can connect manually by adding the MCP server URL as a custom connector in Claude.</Note>
+
 <Steps>
-  <Step title="Open the Anthropic Connectors Directory">
-    Visit [claude.com/connectors](https://claude.com/connectors)
+  <Step title="Open Claude and go to Connectors">
+    Visit [claude.com/connectors](https://claude.com/connectors) or open Connectors in your Claude settings.
   </Step>
-  <Step title="Find and connect Teli">
-    Search for Teli and click Connect.
+  <Step title="Add a custom connector">
+    Click **Add custom connector** and enter the following MCP server URL:
+    ```
+    https://teli--mcp-server-fastapi-app.modal.run/mcp
+    ```
   </Step>
   <Step title="Authenticate">
     Complete OAuth authentication with your Teli account credentials.
@@ -70,3 +62,13 @@ No dashboard switching. Just tell Claude what you want to do.
     Ask Claude to manage your agents, campaigns, or contacts.
   </Step>
 </Steps>
+
+
+---
+
+## Support
+
+- **Website:** [app.teli.ai](https://app.teli.ai)
+- **Email:** info@teli.ai
+- **Privacy Policy:** [home.teli.ai/company/privacy-policy](https://home.teli.ai/company/privacy-policy)
+- **Terms of Service:** [home.teli.ai/company/terms-conditions](https://home.teli.ai/company/terms-conditions)
