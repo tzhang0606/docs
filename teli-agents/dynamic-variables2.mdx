@@ -131,14 +131,13 @@ Dynamic variables provides a way for you to reference individual contact informa
   <ResponseField name="{{months_since_mtg_open}}" type="number" default="30">
     References how many months since the contact has had an open mortgage.
   </ResponseField>
-  ### 
 </Expandable>
 
 ---
 
 ### **Others**
 
-<Expandable title="Employment & Company Information">
+<Expandable title="Others">
   <ResponseField name="{{sso}}" type="text" default="000-00-0000">
     References the contact's social security number.
   </ResponseField>
@@ -147,5 +146,15 @@ Dynamic variables provides a way for you to reference individual contact informa
   </ResponseField>
   <ResponseField name="{{notes}}" type="text" default="custom notes">
     References additional notes associated with the contact.
+  </ResponseField>
+</Expandable>
+
+---
+
+### **Call Context**
+
+<Expandable title="Call Context">
+  <ResponseField name="{{recent_call_context}}" type="text" default="">
+    Automatically populated on inbound callback calls. Contains a summary of the most recent outbound and inbound call history for the contact, allowing the agent to pick up the conversation where it left off. Only available when the inbound callback webhook is enabled on the phone number.
   </ResponseField>
 </Expandable>
