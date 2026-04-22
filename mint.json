@@ -198,7 +198,8 @@
       "pages": [
         "partner-api/phone-numbers/create",
         "partner-api/phone-numbers/update-agent",
-        "partner-api/phone-numbers/list"
+        "partner-api/phone-numbers/list",
+        "partner-api/phone-numbers/release"
       ]
     },
     {
@@ -211,6 +212,7 @@
       "group": "Call History",
       "pages": [
         "partner-api/call-history/list",
+        "partner-api/call-history/export",
         "partner-api/call-history/get",
         "partner-api/call-history/extractions"
       ]
