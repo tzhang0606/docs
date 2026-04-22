@@ -35,6 +35,16 @@ GET /v1/campaigns/{campaign_id}/contacts
   If `true`, returns all contacts in the campaign. If `false`, only returns contacts assigned to the specified `user_id`.
 </ParamField>
 
+<ParamField query="limit" type="integer" default="1000">
+  Maximum number of contacts to return in this response. Values greater
+  than `10000` are silently capped at `10000`.
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of contacts to skip before the response window. Combine with
+  `limit` to page through a large campaign.
+</ParamField>
+
 ## Response
 
 <ResponseField name="success" type="boolean">
@@ -100,7 +110,25 @@ GET /v1/campaigns/{campaign_id}/contacts
 </ResponseField>
 
 <ResponseField name="total" type="number">
-  Total number of contacts returned
+  Total number of contacts in the campaign that match the scope filter
+  (before `limit`/`offset` are applied)
+</ResponseField>
+
+<ResponseField name="returned" type="number">
+  Number of contacts included in this response (after `limit`/`offset`)
+</ResponseField>
+
+<ResponseField name="limit" type="number">
+  The effective `limit` used for this response (capped at `10000`)
+</ResponseField>
+
+<ResponseField name="offset" type="number">
+  The `offset` used for this response
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  `true` when there are more contacts beyond `offset + returned`. Paginate
+  by calling again with `offset = offset + returned`.
 </ResponseField>
 
 ## Example Request
@@ -163,6 +191,10 @@ data = response.json()
     }
   ],
   "total": 1,
+  "returned": 1,
+  "limit": 1000,
+  "offset": 0,
+  "has_more": false,
   "powered_by": "Teli"
 }
 ```
@@ -180,4 +212,5 @@ data = response.json()
 - [Assign Thread](/partner-api/threads/assign) - Assign a thread to a user
 - [Unassign Thread](/partner-api/threads/unassign) - Remove a thread assignment
 - [Get Campaign Messages](/partner-api/campaigns/messages) - Get conversation messages
+- [Get Thread Messages](/partner-api/threads/thread-messages) - Paginated messages for a single thread
 - [List Users](/partner-api/users/list) - List users available for assignment

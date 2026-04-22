@@ -1,0 +1,287 @@
+---
+title: "Get Thread Messages"
+api: "GET /v1/campaigns/{campaign_id}/threads/{thread_id}/messages"
+description: "Fetch paginated messages for a single conversation thread"
+---
+
+## Description
+
+Returns messages for a single thread scoped to a campaign. This endpoint is
+the fast, per-thread counterpart to [Get Campaign Messages](/partner-api/campaigns/messages) —
+it queries one thread directly instead of fanning out across every contact
+in the campaign.
+
+Use it for two patterns:
+
+- **Polling for new messages** — pass `since` with the timestamp of the
+  latest message you already have.
+- **Loading older messages (back-pagination)** — pass `before` with the
+  timestamp of the oldest message currently displayed.
+
+Results are returned in reverse-chronological order (newest first).
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your Teli API key
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="campaign_id" type="string" required>
+  The campaign ID
+</ParamField>
+
+<ParamField path="thread_id" type="string" required>
+  Thread identifier (format: `{phone_number}_{campaign_id}`)
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="since" type="string">
+  ISO-8601 timestamp. Returns only messages with a `timestamp` strictly
+  **greater than** this value. Use this for polling.
+</ParamField>
+
+<ParamField query="before" type="string">
+  ISO-8601 timestamp. Returns only messages with a `timestamp` strictly
+  **less than** this value. Use this to load older messages when paginating
+  backward through a long conversation.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of messages to return in this response.
+</ParamField>
+
+<Note>
+  `since` and `before` are mutually exclusive. If both are provided, `since`
+  takes precedence and `before` is ignored.
+</Note>
+
+## Response Fields
+
+<ResponseField name="success" type="boolean">
+  `true` when the request succeeded
+</ResponseField>
+
+<ResponseField name="messages" type="array">
+  Array of message objects, ordered newest-first
+
+  <Expandable title="message properties">
+    <ResponseField name="message_id" type="string">
+      Unique message identifier
+    </ResponseField>
+
+    <ResponseField name="thread_id" type="string">
+      The thread this message belongs to
+    </ResponseField>
+
+    <ResponseField name="phone_number" type="string">
+      Contact phone number for this thread
+    </ResponseField>
+
+    <ResponseField name="sender" type="string">
+      Who sent the message. One of: `agent`, `human`, `drip`, `broadcast`,
+      `contact`
+    </ResponseField>
+
+    <ResponseField name="message" type="string">
+      Message body (text content)
+    </ResponseField>
+
+    <ResponseField name="timestamp" type="string">
+      ISO-8601 timestamp when the message was recorded
+    </ResponseField>
+
+    <ResponseField name="media_url" type="string">
+      Signed media URL if this message is an MMS; `null` for text-only SMS
+    </ResponseField>
+
+    <ResponseField name="sent_by_user_id" type="string">
+      Only present on outbound messages sent by a human operator. The
+      `unique_id` of the user who sent the message.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="thread_id" type="string">
+  Echoes the requested thread id
+</ResponseField>
+
+<ResponseField name="campaign_id" type="string">
+  Echoes the requested campaign id
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of messages in this response
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  `true` when `count` equals `limit` — there may be additional older messages.
+  Paginate by calling again with `before` set to the `timestamp` of the
+  oldest message returned. `false` when fewer than `limit` rows were
+  returned (end of thread).
+</ResponseField>
+
+<ResponseField name="powered_by" type="string">
+  Always returns "Teli"
+</ResponseField>
+
+## Example Requests
+
+### Initial load (newest messages)
+
+```bash cURL
+curl "https://api.teli.ai/v1/campaigns/camp_abc123/threads/+15551234567_camp_abc123/messages?limit=50" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+### Poll for new messages since last seen
+
+```bash cURL
+curl "https://api.teli.ai/v1/campaigns/camp_abc123/threads/+15551234567_camp_abc123/messages?since=2026-04-22T18:11:27.014Z" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+### Load older messages (back-pagination)
+
+```bash cURL
+curl "https://api.teli.ai/v1/campaigns/camp_abc123/threads/+15551234567_camp_abc123/messages?before=2026-04-22T14:02:00.000Z&limit=50" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```javascript JavaScript
+// Initial load
+const initial = await fetch(
+  `https://api.teli.ai/v1/campaigns/${campaignId}/threads/${encodeURIComponent(threadId)}/messages?limit=50`,
+  { headers: { 'X-API-Key': 'YOUR_API_KEY' } }
+).then(r => r.json());
+
+// Poll for newer messages
+const latestTs = initial.messages[0]?.timestamp;
+const newer = await fetch(
+  `https://api.teli.ai/v1/campaigns/${campaignId}/threads/${encodeURIComponent(threadId)}/messages?since=${encodeURIComponent(latestTs)}`,
+  { headers: { 'X-API-Key': 'YOUR_API_KEY' } }
+).then(r => r.json());
+
+// Load older page
+const oldestTs = initial.messages[initial.messages.length - 1]?.timestamp;
+const older = await fetch(
+  `https://api.teli.ai/v1/campaigns/${campaignId}/threads/${encodeURIComponent(threadId)}/messages?before=${encodeURIComponent(oldestTs)}&limit=50`,
+  { headers: { 'X-API-Key': 'YOUR_API_KEY' } }
+).then(r => r.json());
+```
+
+```python Python
+import requests
+from urllib.parse import quote
+
+BASE = "https://api.teli.ai"
+HEADERS = {"X-API-Key": "YOUR_API_KEY"}
+
+campaign_id = "camp_abc123"
+thread_id = "+15551234567_camp_abc123"
+
+# Initial load
+r = requests.get(
+    f"{BASE}/v1/campaigns/{campaign_id}/threads/{quote(thread_id)}/messages",
+    params={"limit": 50},
+    headers=HEADERS,
+)
+page = r.json()
+
+# Back-paginate while has_more
+while page.get("has_more"):
+    oldest = page["messages"][-1]["timestamp"]
+    r = requests.get(
+        f"{BASE}/v1/campaigns/{campaign_id}/threads/{quote(thread_id)}/messages",
+        params={"before": oldest, "limit": 50},
+        headers=HEADERS,
+    )
+    page = r.json()
+```
+
+## Example Responses
+
+### Success
+
+```json 200
+{
+  "success": true,
+  "messages": [
+    {
+      "message_id": "conv_9f1b2e7a",
+      "thread_id": "+15551234567_camp_abc123",
+      "phone_number": "+15551234567",
+      "sender": "contact",
+      "message": "Yeah, send me the details.",
+      "timestamp": "2026-04-22T18:12:03.221Z",
+      "media_url": null
+    },
+    {
+      "message_id": "conv_7cda8102",
+      "thread_id": "+15551234567_camp_abc123",
+      "phone_number": "+15551234567",
+      "sender": "human",
+      "message": "Hi Jane — are you still looking at the Maple Ave listing?",
+      "timestamp": "2026-04-22T18:11:27.014Z",
+      "media_url": null,
+      "sent_by_user_id": "user_xyz789"
+    }
+  ],
+  "thread_id": "+15551234567_camp_abc123",
+  "campaign_id": "camp_abc123",
+  "count": 2,
+  "has_more": false,
+  "powered_by": "Teli"
+}
+```
+
+### No new messages (polling with `since`)
+
+```json 200
+{
+  "success": true,
+  "messages": [],
+  "thread_id": "+15551234567_camp_abc123",
+  "campaign_id": "camp_abc123",
+  "count": 0,
+  "has_more": false,
+  "powered_by": "Teli"
+}
+```
+
+### Server error
+
+```json 500
+{
+  "error": "Failed to get thread messages",
+  "powered_by": "Teli"
+}
+```
+
+## Behavior
+
+- **Single-thread scope** — only messages whose `thread_id` exactly matches
+  the path parameter are returned. Much faster than the campaign-wide
+  [messages endpoint](/partner-api/campaigns/messages) for UI rendering of
+  a single conversation.
+- **Reverse-chronological** — messages are returned newest first. When
+  back-paginating with `before`, each page is also newest-first within that
+  page.
+- **`has_more` semantics** — `has_more` is `true` whenever `count == limit`.
+  It is a hint, not a guarantee: the next page may return zero rows if the
+  thread ended exactly at the page boundary.
+- **Sender field** — distinguishes between automated sends (`agent`,
+  `drip`, `broadcast`), human operator sends (`human`), and inbound
+  messages from the contact (`contact`). Use this to style outbound vs
+  inbound bubbles in a UI.
+- **`sent_by_user_id`** — only present on `human` sends. Use it to
+  attribute outbound messages to the specific operator who sent them.
+
+## Related Endpoints
+
+- [Get Campaign Messages](/partner-api/campaigns/messages) — all messages across every thread in a campaign
+- [Get Campaign Contacts](/partner-api/threads/contacts) — list threads in a campaign
+- [Assign Thread](/partner-api/threads/assign) — assign a thread to a user
+- [Send SMS](/partner-api/messages/send-sms) — send an outbound message into a thread

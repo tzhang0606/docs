@@ -69,7 +69,8 @@
             "pages": [
               "partner-api1/threads/assign",
               "partner-api1/threads/unassign",
-              "partner-api1/threads/contacts"
+              "partner-api1/threads/contacts",
+              "partner-api1/threads/thread-messages"
             ]
           },
           {
