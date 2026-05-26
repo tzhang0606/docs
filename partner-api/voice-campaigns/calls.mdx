@@ -6,7 +6,9 @@ description: 'Get all call records for a voice campaign'
 
 ## Description
 
-Returns all individual call records for a campaign with full details including transcripts, sentiment, and extracted data.
+Returns individual call records for a campaign with full details including transcripts, sentiment, and extracted data.
+
+Cursor-paginated — for campaigns with more than `limit` calls, follow the `next_pagination_key` cursor returned in the response to walk through every page. The pagination contract mirrors [`GET /v1/voice/calls`](/partner-api/call-history/list) so a single client implementation works for both endpoints.
 
 ## Authentication
 
@@ -31,7 +33,11 @@ Returns all individual call records for a campaign with full details including t
 </ParamField>
 
 <ParamField query="limit" type="integer" default="100">
-  Maximum results to return (max: 500)
+  Page size — maximum results to return per request (max: 500)
+</ParamField>
+
+<ParamField query="pagination_key" type="string">
+  Cursor for fetching the next page. Pass the `next_pagination_key` value from the previous response. Omit on the first request.
 </ParamField>
 
 ## Response Fields
@@ -45,7 +51,15 @@ Returns all individual call records for a campaign with full details including t
 </ResponseField>
 
 <ResponseField name="count" type="integer">
-  Number of calls returned
+  Number of calls in this page (after any `status`/`sentiment` filters were applied). May be less than `limit` when filtering — keep paging on `has_more`, not page size.
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  `true` when more calls exist beyond this page. Continue requesting pages until this is `false`.
+</ResponseField>
+
+<ResponseField name="next_pagination_key" type="string | null">
+  Cursor to fetch the next page. Pass this value as the `pagination_key` query param on the next request. `null` when there are no more pages.
 </ResponseField>
 
 <ResponseField name="calls" type="array">
@@ -108,8 +122,13 @@ Returns all individual call records for a campaign with full details including t
 
 ## Example Request
 
-```bash cURL
-curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?status=connected&limit=50" \
+```bash First page
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?limit=500" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+```bash Next page (using cursor from previous response)
+curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?limit=500&pagination_key=1738080000000" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
@@ -139,7 +158,52 @@ curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?
     }
   ],
   "count": 1,
+  "has_more": true,
+  "next_pagination_key": "1738080000000",
   "powered_by": "Teli"
+}
+```
+
+## Paginating Through All Calls
+
+For campaigns with more calls than `limit`, loop on `has_more` until the server signals exhaustion:
+
+```python Python
+def list_all_calls(campaign_id, api_key, page_size=500):
+    calls = []
+    cursor = None
+    while True:
+        params = {"limit": page_size}
+        if cursor:
+            params["pagination_key"] = cursor
+        r = requests.get(
+            f"https://api.teli.ai/v1/voice/campaigns/{campaign_id}/calls",
+            headers={"X-API-Key": api_key},
+            params=params,
+        ).json()
+        calls.extend(r["calls"])
+        if not r.get("has_more"):
+            break
+        cursor = r["next_pagination_key"]
+    return calls
+```
+
+```javascript JavaScript
+async function listAllCalls(campaignId, apiKey, pageSize = 500) {
+  const calls = [];
+  let cursor = null;
+  while (true) {
+    const params = new URLSearchParams({ limit: String(pageSize) });
+    if (cursor) params.set("pagination_key", cursor);
+    const r = await fetch(
+      `https://api.teli.ai/v1/voice/campaigns/${campaignId}/calls?${params}`,
+      { headers: { "X-API-Key": apiKey } }
+    ).then(r => r.json());
+    calls.push(...r.calls);
+    if (!r.has_more) break;
+    cursor = r.next_pagination_key;
+  }
+  return calls;
 }
 ```
 
@@ -161,7 +225,11 @@ curl -X GET "https://api.teli.ai/v1/voice/campaigns/voice_campaign_abc123/calls?
 ## Notes
 
 - Calls are ordered by `start_timestamp` (newest first)
-- Transcripts may be large - use pagination for large campaigns
+- The cursor (`next_pagination_key`) is the `start_timestamp` of the last call in the current page, used as a `<` bound on the next request
+- Server-side `status` / `sentiment` filters are applied AFTER pagination slicing. This means a page may contain fewer than `limit` items even when `has_more=true` — always loop on `has_more`, never on the returned page size
+- A `null` or missing `next_pagination_key` means you've reached the end (combined with `has_more: false`)
+- Calling with the same `pagination_key` twice is idempotent — returns the same page
+- Transcripts may be large; lower `limit` if you hit response size limits
 - `extracted_fields` depends on your agent's extraction configuration
 
 ## Related Endpoints
