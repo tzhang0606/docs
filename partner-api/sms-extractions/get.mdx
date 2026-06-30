@@ -105,7 +105,7 @@ GET /v1/sms/extractions/{thread_id}
 ## Example Request
 
 ```bash
-curl -X GET "https://partner.teli.ai/api/proxy/v1/sms/extractions/%2B15551234567_camp_abc123" \
+curl -X GET "https://api.teli.ai/v1/sms/extractions/%2B15551234567_camp_abc123" \
   -H "X-API-Key: your-api-key"
 ```
 
@@ -154,7 +154,7 @@ curl -X GET "https://partner.teli.ai/api/proxy/v1/sms/extractions/%2B15551234567
 Extraction fields are configured on your SMS Agent. When creating or updating an SMS agent, specify the fields you want to extract:
 
 ```bash
-curl -X POST "https://partner.teli.ai/api/proxy/v1/agents" \
+curl -X POST "https://api.teli.ai/v1/agents" \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{
