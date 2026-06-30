@@ -67,7 +67,7 @@ GET /v1/sms/extractions/phone/{phone_number}
   </Expandable>
 </ResponseField>
 
-<ResponseField name="count" type="integer">
+<ResponseField name="total" type="integer">
   Total number of extractions found
 </ResponseField>
 
@@ -109,7 +109,7 @@ curl -X GET "https://partner.teli.ai/api/proxy/v1/sms/extractions/phone/%2B15551
       "extracted_at": "2026-01-20T15:45:00Z"
     }
   ],
-  "count": 2,
+  "total": 2,
   "powered_by": "Teli"
 }
 ```
