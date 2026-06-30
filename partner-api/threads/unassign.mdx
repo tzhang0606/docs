@@ -47,7 +47,7 @@ POST /v1/threads/unassign
 
 <CodeGroup>
 ```bash cURL
-curl -X POST "https://partner.teli.ai/api/proxy/v1/threads/unassign" \
+curl -X POST "https://api.teli.ai/v1/threads/unassign" \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -58,7 +58,7 @@ curl -X POST "https://partner.teli.ai/api/proxy/v1/threads/unassign" \
 
 ```javascript JavaScript
 const response = await fetch(
-  'https://partner.teli.ai/api/proxy/v1/threads/unassign',
+  'https://api.teli.ai/v1/threads/unassign',
   {
     method: 'POST',
     headers: {
@@ -78,7 +78,7 @@ const data = await response.json();
 import requests
 
 response = requests.post(
-    'https://partner.teli.ai/api/proxy/v1/threads/unassign',
+    'https://api.teli.ai/v1/threads/unassign',
     headers={'X-API-Key': 'YOUR_API_KEY'},
     json={
         'campaign_id': 'camp_abc123',

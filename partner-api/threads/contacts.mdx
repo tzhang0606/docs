@@ -135,18 +135,18 @@ GET /v1/campaigns/{campaign_id}/contacts
 
 <CodeGroup>
 ```bash cURL (admin - all contacts)
-curl "https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/contacts?user_id=admin_001&is_admin=true" \
+curl "https://api.teli.ai/v1/campaigns/camp_abc123/contacts?user_id=admin_001&is_admin=true" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
 ```bash cURL (user - assigned only)
-curl "https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/contacts?user_id=user_xyz789&is_admin=false" \
+curl "https://api.teli.ai/v1/campaigns/camp_abc123/contacts?user_id=user_xyz789&is_admin=false" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
 ```javascript JavaScript
 const response = await fetch(
-  'https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/contacts?user_id=user_xyz789&is_admin=false',
+  'https://api.teli.ai/v1/campaigns/camp_abc123/contacts?user_id=user_xyz789&is_admin=false',
   {
     headers: {
       'X-API-Key': 'YOUR_API_KEY'
@@ -160,7 +160,7 @@ const data = await response.json();
 import requests
 
 response = requests.get(
-    'https://partner.teli.ai/api/proxy/v1/campaigns/camp_abc123/contacts',
+    'https://api.teli.ai/v1/campaigns/camp_abc123/contacts',
     params={'user_id': 'user_xyz789', 'is_admin': 'false'},
     headers={'X-API-Key': 'YOUR_API_KEY'}
 )
