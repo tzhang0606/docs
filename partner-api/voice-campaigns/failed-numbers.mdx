@@ -22,12 +22,20 @@ Returns phone numbers where calls failed, went unanswered, or hit voicemail. Use
 
 ## Query Parameters
 
-<ParamField query="format" type="string" default="simple">
+<ParamField query="format" type="string" default="detailed">
   Response format: `simple` (phone list only) or `detailed` (includes failure reasons)
 </ParamField>
 
 <ParamField query="include_voicemail" type="boolean" default="true">
   Include voicemail as failed
+</ParamField>
+
+<ParamField query="include_no_answer" type="boolean" default="true">
+  Include unanswered calls as failed
+</ParamField>
+
+<ParamField query="include_busy" type="boolean" default="true">
+  Include busy calls as failed
 </ParamField>
 
 <ParamField query="include_not_called" type="boolean" default="false">
