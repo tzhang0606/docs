@@ -30,10 +30,6 @@ Provisions a new voice-enabled phone number for your organization. Phone numbers
   Organization unique_id
 </ParamField>
 
-<ParamField body="tenant_id" type="string">
-  Optional. The tenant is determined automatically from your API key; any value sent here is ignored.
-</ParamField>
-
 <ParamField body="nickname" type="string">
   Optional friendly name for the phone number
   
@@ -75,8 +71,7 @@ curl -X POST "https://api.teli.ai/v1/voice/phone-numbers/create" \
   -d '{
     "area_code": "313",
     "user_id": "1762896366429x599348279945132448",
-    "organization_id": "1762896364768x389173798861431550",
-    "tenant_id": "your_tenant"
+    "organization_id": "1762896364768x389173798861431550"
   }'
 ```
 
@@ -90,8 +85,7 @@ const response = await fetch('https://api.teli.ai/v1/voice/phone-numbers/create'
   body: JSON.stringify({
     area_code: '313',
     user_id: userId,
-    organization_id: orgId,
-    tenant_id: tenantId
+    organization_id: orgId
   })
 });
 
@@ -108,8 +102,7 @@ response = requests.post(
     json={
         'area_code': '313',
         'user_id': user_id,
-        'organization_id': org_id,
-        'tenant_id': tenant_id
+        'organization_id': org_id
     }
 )
 

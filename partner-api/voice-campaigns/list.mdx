@@ -20,10 +20,6 @@ Returns all voice campaigns (bulk calling campaigns) for an organization filtere
   Organization unique_id
 </ParamField>
 
-<ParamField query="tenant_id" type="string">
-  Optional. The tenant is determined automatically from your API key; any value sent here is ignored.
-</ParamField>
-
 <ParamField query="is_admin" type="boolean" default="false">
   If true, returns all org campaigns. If false, returns only user's campaigns.
 </ParamField>
@@ -91,7 +87,7 @@ Returns all voice campaigns (bulk calling campaigns) for an organization filtere
 ## Example Request
 
 ```bash cURL
-curl -X GET "https://api.teli.ai/v1/voice/campaigns?organization_id=1762896364768x389173798861431550&tenant_id=your_tenant&is_admin=false" \
+curl -X GET "https://api.teli.ai/v1/voice/campaigns?organization_id=1762896364768x389173798861431550&is_admin=false" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 

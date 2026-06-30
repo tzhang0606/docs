@@ -12,12 +12,6 @@ Retrieve all 10DLC brands registered for your tenant.
   Your API key
 </ParamField>
 
-## Query Parameters
-
-<ParamField query="tenant_id" type="string">
-  Optional. The tenant is determined automatically from your API key; any value sent here is ignored.
-</ParamField>
-
 ## Response
 
 <ResponseField name="success" type="boolean">
@@ -73,7 +67,7 @@ Retrieve all 10DLC brands registered for your tenant.
 ## Example Request
 
 ```bash
-curl -X GET "https://api.teli.ai/v1/10dlc/brands?tenant_id=telitest" \
+curl -X GET "https://api.teli.ai/v1/10dlc/brands" \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
