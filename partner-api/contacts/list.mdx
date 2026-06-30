@@ -43,7 +43,9 @@ curl -X GET "https://api.teli.ai/v1/contacts/lists?organization_id={org_id}&user
     {
       "unique_id": "1763072372500x...",
       "group_name": "November Leads",
-      "total_leads": 25
+      "total_leads": 25,
+      "started_with_count": 2,
+      "added_to_count": 1
     }
   ],
   "powered_by": "Teli"
@@ -51,4 +53,11 @@ curl -X GET "https://api.teli.ai/v1/contacts/lists?organization_id={org_id}&user
 ```
 
 </ResponseExample>
+
+## List Object Fields
+
+Each item in `lists` includes campaign-linkage counts:
+
+- `started_with_count` — number of campaigns that were **started from** this contact group
+- `added_to_count` — number of distinct campaigns this group has been **added to**
 

@@ -37,6 +37,14 @@ GET /v1/campaigns/{campaign_id}/messages
   Maximum number of messages to return
 </ParamField>
 
+<ParamField query="user_id" type="string">
+  Optional. When supplied together with `is_admin=false`, only messages from threads assigned to this user are returned.
+</ParamField>
+
+<ParamField query="is_admin" type="boolean" default="false">
+  When `false` (default) and a `user_id` is provided, results are filtered to that user's assigned threads. When `true`, all campaign messages are returned.
+</ParamField>
+
 ## Response
 
 <ResponseField name="success" type="boolean">

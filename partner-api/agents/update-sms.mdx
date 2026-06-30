@@ -224,6 +224,7 @@ Send an empty array to disable automated follow-ups:
 {
   "success": true,
   "agent_id": "agent_abc123",
+  "synced_campaigns": 2,
   "message": "Agent updated successfully"
 }
 ```
@@ -236,6 +237,10 @@ Send an empty array to disable automated follow-ups:
 
 <ResponseField name="agent_id" type="string">
   The updated agent's unique identifier
+</ResponseField>
+
+<ResponseField name="synced_campaigns" type="number">
+  Number of active campaigns using this agent that were re-synced with the updated settings
 </ResponseField>
 
 <ResponseField name="message" type="string">

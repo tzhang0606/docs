@@ -26,6 +26,14 @@ description: 'Get contacts from a list'
   If true, admin can view any list in the org. If false/missing, user can only view their own lists.
 </ParamField>
 
+<ParamField query="limit" type="integer" default="25000">
+  Maximum number of contacts to return. Capped at 25000.
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of contacts to skip before returning results. Combine with `limit` to page through large lists.
+</ParamField>
+
 <RequestExample>
 
 ```bash
@@ -41,6 +49,10 @@ curl -X GET "https://api.teli.ai/v1/contacts/lists/{list_id}/contacts?user_id={u
 {
   "success": true,
   "total": 25,
+  "returned": 1,
+  "limit": 25000,
+  "offset": 0,
+  "has_more": false,
   "contacts": [
     {
       "lead_id": "1763072372569x...",
@@ -56,4 +68,13 @@ curl -X GET "https://api.teli.ai/v1/contacts/lists/{list_id}/contacts?user_id={u
 ```
 
 </ResponseExample>
+
+## Pagination
+
+The response includes pagination metadata alongside the `contacts` array:
+
+- `total` — total contacts in the list (not just this page)
+- `returned` — number of contacts in this response
+- `limit` / `offset` — the values applied to this request
+- `has_more` — `true` when more contacts remain beyond this page (i.e. `offset + returned < total`)
 

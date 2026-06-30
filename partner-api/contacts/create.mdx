@@ -12,6 +12,10 @@ Upload contacts to an existing group. Supports two formats:
 
 **Important:** Create a group first using `POST /v1/contacts/groups`, then upload contacts to it.
 
+<Note>
+Small uploads complete synchronously and return `201`. Large uploads are processed in the background and return `202 Accepted` immediately — the contacts are queued and inserted asynchronously. In both cases the response includes the generated `contact_ids`.
+</Note>
+
 ## Authorizations
 
 <ParamField header="X-API-Key" type="string" required>
@@ -128,6 +132,23 @@ curl -X POST https://api.teli.ai/v1/contacts/lists \
     {"phone_number": "invalid", "reason": "invalid phone number format"}
   ],
   "message": "23 contacts added to group 'November Leads'",
+  "powered_by": "Teli"
+}
+```
+
+```json 202 (Large upload — background processing)
+{
+  "success": true,
+  "status": "processing",
+  "list_id": "1763072372500x777103986713560785",
+  "group_id": "1763072372500x888204097824671896",
+  "group_name": "November Leads",
+  "contacts_queued": 5000,
+  "contact_ids": [
+    "1763072372500x111222333444555666",
+    "1763072372500x222333444555666777"
+  ],
+  "message": "5000 contacts queued for upload to 'November Leads'. Processing in background.",
   "powered_by": "Teli"
 }
 ```

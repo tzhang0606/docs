@@ -24,6 +24,10 @@ Returns comprehensive analytics for your tenant including message counts, voice 
   End date for filtering (ISO 8601 format: YYYY-MM-DD). Defaults to today.
 </ParamField>
 
+<ParamField query="organization_id" type="string">
+  Optional. Limit the overview to a single organization (by `unique_id`). If omitted, returns tenant-wide totals.
+</ParamField>
+
 ## Response
 
 <ResponseField name="success" type="boolean">
