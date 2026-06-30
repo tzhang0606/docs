@@ -20,8 +20,8 @@ Returns all voice campaigns (bulk calling campaigns) for an organization filtere
   Organization unique_id
 </ParamField>
 
-<ParamField query="tenant_id" type="string" required>
-  Tenant identifier
+<ParamField query="tenant_id" type="string">
+  Optional. The tenant is determined automatically from your API key; any value sent here is ignored.
 </ParamField>
 
 <ParamField query="is_admin" type="boolean" default="false">
@@ -71,11 +71,11 @@ Returns all voice campaigns (bulk calling campaigns) for an organization filtere
     </ResponseField>
     
     <ResponseField name="campaign_begin_time" type="timestamp">
-      When campaign calling started
+      When campaign calling started. **Currently returned as an empty string** in list responses (not stored in the list source table).
     </ResponseField>
     
     <ResponseField name="campaign_end_time" type="timestamp">
-      When campaign calling ended (or scheduled to end)
+      When campaign calling ended (or scheduled to end). **Currently returned as an empty string** in list responses (not stored in the list source table).
     </ResponseField>
     
     <ResponseField name="created_at" type="timestamp">
@@ -110,8 +110,8 @@ curl -X GET "https://api.teli.ai/v1/voice/campaigns?organization_id=176289636476
       "contacts_count": 1,
       "organization_id": "1762896364768x389173798861431550",
       "tenant_id": "your_tenant",
-      "campaign_begin_time": "2025-11-20T19:44:46.536728",
-      "campaign_end_time": "2025-11-27T19:44:46.536728",
+      "campaign_begin_time": "",
+      "campaign_end_time": "",
       "created_at": ""
     }
   ],
