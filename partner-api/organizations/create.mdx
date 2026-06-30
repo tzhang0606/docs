@@ -20,8 +20,8 @@ Create a new organization to manage SMS campaigns, users, and contacts.
   Example: `"My Company LLC"`
 </ParamField>
 
-<ParamField body="contact_email" type="string" required>
-  Primary contact email.
+<ParamField body="contact_email" type="string">
+  Primary contact email. Optional — currently accepted by the API but not stored on the organization record. Only `name` is required.
   
   Example: `"admin@mycompany.com"`
 </ParamField>
@@ -73,9 +73,10 @@ data = response.json()
 
 <ResponseExample>
 
-```json 200 Success
+```json 201 Success
 {
   "success": true,
+  "message": "Organization created successfully",
   "organization": {
     "unique_id": "1763070568417x631086913669115287",
     "name": "My Company LLC",

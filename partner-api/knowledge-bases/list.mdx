@@ -18,8 +18,8 @@ description: 'List all knowledge bases for an organization'
   Organization unique_id to list KBs for
 </ParamField>
 
-<ParamField query="user_id" type="string" required>
-  User unique_id (for filtering if not admin)
+<ParamField query="user_id" type="string">
+  User unique_id. Optional. When `is_admin=false` and a `user_id` is supplied, results are limited to that user's knowledge bases; if omitted, all of the organization's knowledge bases are returned.
 </ParamField>
 
 <ParamField query="is_admin" type="boolean">

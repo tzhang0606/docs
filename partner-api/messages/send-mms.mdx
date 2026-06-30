@@ -154,6 +154,28 @@ curl -X POST "https://api.teli.ai/v1/mms/send" \
 }
 ```
 
+```json 400 (Media too large or unsupported type)
+{
+  "success": false,
+  "error": "Media file exceeds the maximum allowed size",
+  "powered_by": "Teli"
+}
+```
+
+```json 409 (Contact on DNC list)
+{
+  "success": false,
+  "dnc_blocked": true,
+  "phone_number": "+15551234567",
+  "organization_id": "org_abc123",
+  "lead_outcome": "do_not_contact",
+  "do_not_call": true,
+  "in_dnc_repo": true,
+  "error": "Contact is on DNC list. Remove from DNC before sending.",
+  "powered_by": "Teli"
+}
+```
+
 ## Notes
 
 <Info>
@@ -166,6 +188,8 @@ curl -X POST "https://api.teli.ai/v1/mms/send" \
 - Some carriers may have additional size or format restrictions
 - Like SMS, sending MMS disables AI follow-ups for the contact
 - The contact must already exist in the specified campaign
+- The `media_url` is validated server-side for size and file type before sending; oversized or unsupported files are rejected with a `400`
+- **Do-Not-Call (DNC) is enforced.** Contacts on the organization's DNC list are blocked with a `409` — remove them via [Remove from DNC](/partner-api/dnc/remove) first
 
 ## Related Endpoints
 

@@ -55,6 +55,10 @@ POST /v1/sms/bulk-send
   Number of messages that failed
 </ResponseField>
 
+<ResponseField name="skipped_dnc" type="number">
+  Number of contacts skipped because they are on the organization's Do-Not-Call (DNC) list
+</ResponseField>
+
 <ResponseField name="results" type="array">
   Per-contact send results
 
@@ -64,7 +68,7 @@ POST /v1/sms/bulk-send
     </ResponseField>
 
     <ResponseField name="status" type="string">
-      `"sent"` or `"failed"`
+      `"sent"`, `"failed"`, or `"skipped_dnc"` (contact is on the DNC list)
     </ResponseField>
 
     <ResponseField name="error" type="string">
@@ -127,10 +131,11 @@ data = response.json()
 ```json
 {
   "success": true,
-  "message": "Bulk SMS complete: 2 sent, 1 failed",
+  "message": "Bulk SMS complete: 2 sent, 1 failed, 0 skipped (DNC)",
   "total": 3,
   "sent": 2,
   "failed": 1,
+  "skipped_dnc": 0,
   "results": [
     {
       "phone_number": "+15551234567",
@@ -163,6 +168,7 @@ data = response.json()
 ## Important Notes
 
 - **AI stays active** — the AI agent will continue handling replies from contacts
+- **DNC numbers are skipped automatically** — contacts on the organization's Do-Not-Call list are not messaged; they appear in `results` with `status: "skipped_dnc"` and are counted in the `skipped_dnc` total
 - Contacts must already exist in the specified campaign
 - The endpoint processes messages sequentially; failed sends do not stop remaining messages
 - The response includes per-contact results so you can identify and retry failures
