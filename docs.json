@@ -29,48 +29,34 @@
             ]
           },
           {
-            "group": "AI Agents Setup",
+            "group": "SMS Campaigns",
             "pages": [
               "teli-agents/agents",
-              "teli-agents/dynamic-variables2"
-            ]
-          },
-          {
-            "group": "Running Campaigns",
-            "pages": [
+              "teli-agents/dynamic-variables2",
+              "teli-agents/ai-prompt-assistant",
               "teli-agents/contacts",
-              "teli-agents/teli-voice",
               "teli-agents/teli-sms",
-              "teli-agents/reporting"
+              "teli-agents/round-robin"
             ]
           },
           {
-            "group": "Integrations - Actions",
+            "group": "Monitoring Performance",
             "pages": [
-              "zapier-app/Actions/add-lead-to-campaign",
-              "zapier-app/Actions/upload-lead-to-lead-group"
+              "teli-agents/dashboard-widgets",
+              "teli-agents/analytics"
             ]
           },
           {
-            "group": "Integrations - Triggers",
+            "group": "Voice Campaigns",
             "pages": [
-              "zapier-app/Triggers/completed-call-data",
-              "zapier-app/Triggers/qualified-sms-contact"
+              "teli-agents/voice-agents",
+              "teli-agents/voice-campaign"
             ]
           },
           {
-            "group": "AI Agents",
+            "group": "Integrations",
             "pages": [
-              "partner-api1/agents/extraction-fields"
-            ]
-          },
-          {
-            "group": "Thread Assignment",
-            "pages": [
-              "partner-api1/threads/assign",
-              "partner-api1/threads/unassign",
-              "partner-api1/threads/contacts",
-              "partner-api1/threads/thread-messages"
+              "teli-agents/integrations"
             ]
           },
           {

@@ -1,0 +1,42 @@
+---
+title: "Round Robin"
+description: "Distribute outbound calls and texts evenly across multiple numbers with Round Robin."
+icon: "arrows-rotate"
+---
+
+{/* TODO: replace this Note with the new "Round Robin" video once the Cloudinary URL is available:
+<video controls className="w-full aspect-video" src="<ROUND_ROBIN_VIDEO_URL>" /> */}
+
+<Note>
+  🎥 **Video walkthrough coming soon** — a short walkthrough of activating Round Robin will be added here.
+</Note>
+
+## What is Round Robin?
+
+Round Robin automatically rotates your campaign's outbound traffic across a pool of phone numbers
+instead of sending everything from a single number. Spreading volume across multiple numbers
+improves deliverability, keeps individual numbers within healthy sending limits, and reduces the
+risk of a number being flagged for high volume.
+
+## When to use it
+
+- You're running a **high-volume** SMS or voice campaign.
+- You want to **protect deliverability** by keeping per-number volume balanced.
+- You have **multiple numbers** provisioned and want Teli to manage rotation for you.
+
+## Activating Round Robin
+
+1. **Open your campaign** – Go to the campaign you want to enable Round Robin on.
+2. **Open campaign settings** – Find the Round Robin / number-pool option in the campaign
+   configuration.
+3. **Select the numbers to include** – Choose the pool of phone numbers Teli should rotate
+   through. Each number should be provisioned and in good standing.
+4. **Enable Round Robin** – Toggle Round Robin on. Teli will now distribute outbound messages and
+   calls evenly across the selected numbers.
+5. **Monitor performance** – Track how each number is performing from the
+   [Analytics page](/teli-agents/analytics), which is where Round Robin performance is surfaced.
+
+<Note>
+  Setting up Round Robin the first time can involve number provisioning specific to your account.
+  If you're not sure which numbers to pool, reach out to the Teli team and we'll help you configure it.
+</Note>
