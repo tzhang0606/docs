@@ -40,17 +40,17 @@
             ]
           },
           {
-            "group": "Monitoring Performance",
-            "pages": [
-              "teli-agents/dashboard-widgets",
-              "teli-agents/analytics"
-            ]
-          },
-          {
             "group": "Voice Campaigns",
             "pages": [
               "teli-agents/voice-agents",
               "teli-agents/voice-campaign"
+            ]
+          },
+          {
+            "group": "Monitoring Performance",
+            "pages": [
+              "teli-agents/dashboard-widgets",
+              "teli-agents/analytics"
             ]
           },
           {
