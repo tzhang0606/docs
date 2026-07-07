@@ -1,8 +1,12 @@
 ---
-title: "Dynamic Variables"
-description: "Learn how to use dynamic variables to customize your documentation based on user input."
+title: "Using Dynamic Variables"
+description: "Learn how to use dynamic variables to personalize your agent scripts with contact data."
 icon: "code"
 ---
+
+# Watch the Video
+
+<video controls className="w-full aspect-video" src="https://res.cloudinary.com/ayjgpoal/video/upload/v1783362693/DynamicVariables_Tab_j73hnl.mp4" />
 
 ## How it works
 
@@ -61,7 +65,7 @@ Dynamic variables provides a way for you to reference individual contact informa
 
 ---
 
-### **Employement & Company Information**
+### **Employment & Company Information**
 
 <Expandable title="Employment & Company Information">
   <ResponseField name="{{company_name}}" type="text" default="TELI AI, LLC.">
@@ -98,7 +102,7 @@ Dynamic variables provides a way for you to reference individual contact informa
 
 ---
 
-### **Finanical Information**
+### **Financial Information**
 
 <Expandable title="Financial Information">
   <ResponseField name="{{FICO_score}}" type="text" default="800">
@@ -155,6 +159,6 @@ Dynamic variables provides a way for you to reference individual contact informa
 
 <Expandable title="Call Context">
   <ResponseField name="{{recent_call_context}}" type="text" default="">
-    Automatically populated on inbound callback calls. Contains a summary of the most recent outbound and inbound call history for the contact, allowing the agent to pick up the conversation where it left off. **Only available when the inbound callback webhook is enabled on the phone number.**
+    Automatically populated on inbound calls. Contains a summary of the most recent outbound and inbound call history for the contact, allowing the agent to pick up the conversation where it left off. **Only available when Call Memory (the "Memory" setting) is enabled on the phone number.**
   </ResponseField>
 </Expandable>

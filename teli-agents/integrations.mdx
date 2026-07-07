@@ -1,43 +1,231 @@
 ---
 title: "Integrations"
-description: "Learn how to integrate Teli AI with plugins and workflows."
+description: "Connect Teli AI with Zapier and other platforms through native plugins, actions, and triggers."
 icon: "plug"
 ---
 
-# Watch the Video
-
-Learn more about setting up integrations in the following video:
-
+{/* TODO: replace with the new integrations video once recorded (jump on with Nate Scott per boss).
+     Keeping the existing integrations video below as an interim placeholder. */}
 <video controls className="w-full aspect-video" src="https://res.cloudinary.com/dpazvavqx/video/upload/v1741980678/hj8byt6qcbv1gjwivupw.mp4" />
 
-## Integrating Teli AI with Other Platforms
+### Integrations Overview
 
 Teli AI offers seamless integration capabilities that allow you to connect with various third-party platforms, expanding the scope and functionality of your AI-powered campaigns.
 
-## Native Plugins
+#### Native Plugins
 
 Native plugins are integrations that Teli supports natively. Once activated, you can directly connect these plugins into your agent setup.
 
-### **1. Cal.com**
+**1. Cal.com** — By entering Cal.com API key into Teli, our AI Agents will be able to check your linked calendars in real time. Enabling this plugin will allow you to specify an appointment booking script, and allow voice agents to check calendar and book appointments during live conversation.
 
-By entering Cal.com API key into Teli, our AI Agents will be able to check your linked calendars in real time. Enabling this plugin will allow you to specify an appointment booking script, and allow voice agents to check calendar and book appointments during live conversation.
+**2. Email Alerts** — By entering your email address, or enabling email alerts for your organization for an additional usage-based fee, you or your entire organization will receive an email after every phone call with detailed information.
 
-### **2. Email Alerts**
+**3. ElevenLabs** — By enabling ElevenLabs, you will have access to the voice library. This allows you to choose from a variety of voices that you can select to further customize your AI agents. If you would like to train an agent with your own voice or have your own voice model, please contact us for a training session.
 
-By entering your email address, or enabling email alerts for your organization for an additional usage-based fee, you or your entire organization will receive an email after every phone call with detailed information.
+**4. Zapier** — Teli also supports custom hooks and triggers for Zapier. Please reach out to us for a consultation on how best to set up Zapier connections.
 
-### **3. ElevenLabs**
-
-By enabling ElevenLabs, you will have access to the voice library. This allows you to choose from a variety of voices that you can select to further customize your AI agents. If you would like to train an agent with your own voice or have your own voice model, please contact us for a training session.
-
-### **4. Zapier**
-
-Teli also supports custom hooks and triggers for Zapier. Please reach out to us for a consultation on how best to set up Zapier connections.
-
-## Teli Automations
+#### Teli Automations
 
 Beyond Native Plugins, Teli also has the ability for you to build robust workflows with hundreds of other softwares. Our team provides various tiers of support depending on your technical experience with API based workflows:
 
 - Tier 1: Your premium plan includes free activation of custom workflows. This tier allows you to customize your workflows by yourself, with Teli's team providing basic support when necessary.
 - Tier 2: For a one-time onboarding fee, Teli's team will engineer a dedicated flow for your specific integration use case. We handle the build, the testing, as well as maintainence.
 - Tier 3: For more significant integrations that would require substantial changes to Teli's core offering, we work with enterprise customers directly to implement custom API integrations.
+
+## Integrations - Actions
+
+Actions let Zapier push data **into** Teli — for example, adding leads to a campaign or a lead group as they flow through your Zap.
+
+### Add Lead to Campaign
+
+A step-by-step guide on how to find, connect, and activate the **Add Lead to Campaign** Zapier action. This action allows you to add leads to an active campaign.
+
+**Step 1** — Click on the **"Action"** step in the Zapier workflow and type in **"Teli AI"** in the search bar.
+
+![Add Lead to Campaign step 1](/images/Screenshot2025-11-11161813.png)
+
+**Step 2** — Click **"Account"** and sign in to your Teli AI account.
+
+![Add Lead to Campaign step 2](/images/Screenshot2025-11-12115814.PNG)
+
+**Step 3** — Click the **"Trigger event"** menu options and select **"Add Lead to Campaign"**.
+
+![Add Lead to Campaign step 3](/images/Screenshot2025-11-12115955.PNG)
+
+**Step 4** — Click on the **"Configure"** tab. Click on the **"Campaign"** menu options. This displays all your available SMS campaigns. Select the campaign you'd like to add leads to. Minimum requirements for this action is the campaign and phone number.
+
+![Add Lead to Campaign step 4](/images/Screenshot2025-11-12120156.PNG)
+
+![Add Lead to Campaign step 4b](/images/Screenshot2025-11-12120937.PNG)
+
+**Step 5** — Once you've finished building your zap and published it, whenever leads pass through the integration they should populate in the campaign you've selected.
+
+<Note>
+  It's highly advised that you start with a test lead to ensure the lead is populating in the correct campaign.
+</Note>
+
+![Add Lead to Campaign step 5](/images/Screenshot2025-11-12121633.PNG)
+
+### Upload Lead to Lead Group
+
+A step-by-step guide on how to find, connect, and activate the **Upload Lead to Lead Group** Zapier action. This action allows you to add leads to a lead group.
+
+**Step 1** — Click on the **"Action"** step in the Zapier workflow and type in **"Teli AI"** in the search bar.
+
+![Upload Lead to Lead Group step 1](/images/Screenshot2025-11-11161813.png)
+
+**Step 2** — Click **"Account"** and sign in to your Teli AI account.
+
+![Upload Lead to Lead Group step 2](/images/Screenshot2025-11-12115814.PNG)
+
+**Step 3** — Click the **"Trigger event"** menu options and select **"Upload Lead to Lead Group"**.
+
+![Upload Lead to Lead Group step 3](/images/Screenshot2025-11-12122258.PNG)
+
+**Step 4** — Click on the **"Configure"** tab. Click on the **"Lead Group"** menu options. This displays all your available lead groups. Minimum requirements for this action is the lead group and phone number.
+
+<Note>
+  If the list is empty, make sure you have a lead group present in your Teli account.
+</Note>
+
+![Upload Lead to Lead Group step 4](/images/Screenshot2025-11-12122546.PNG)
+
+![Upload Lead to Lead Group step 4b](/images/Screenshot2025-11-12122845.PNG)
+
+**Step 5** — Once you've finished building your zap and published it, whenever leads pass through the integration they should populate in the lead group you've selected.
+
+<Note>
+  It's highly advised that you start with a test lead to ensure the lead is populating in the correct lead group.
+</Note>
+
+![Upload Lead to Lead Group step 5](/images/Screenshot2025-11-12122955.PNG)
+
+## Integrations - Triggers
+
+Triggers let Teli send data **out** to Zapier — for example, sending completed call analysis or qualified SMS contacts to your other tools.
+
+### Completed Call Data
+
+A step-by-step guide on how to find, connect, and activate the **Completed Call Data** Zapier trigger. This trigger allows you to get the complete AI analysis of calls from voice campaigns.
+
+**Step 1** — Click on the **"Trigger"** step in the Zapier workflow and type in **"Teli AI"** in the search bar.
+
+![Completed Call Data step 1](/images/Screenshot2025-11-11161813.png)
+
+**Step 2** — Click **"Account"** and sign in to your Teli AI account.
+
+![Completed Call Data step 2](/images/Screenshot2025-11-11162851.PNG)
+
+**Step 3** — Click the **"Trigger event"** menu options and select **"Completed Call Data"**.
+
+![Completed Call Data step 3](/images/Screenshot2025-11-11163315.png)
+
+**Step 4** — Click on the **"Configure"** tab where you will name your integration.
+
+<Note>
+  The integration name does not prevent duplicate names.
+</Note>
+
+![Completed Call Data step 4](/images/Screenshot2025-11-11165757.PNG)
+
+**Step 5** — When in **"Configure"**, after you've named your integration, select the voice agent this integration will be for. Click the **"Completed Call Data Example"** dropdown and you should see a list with all of your current active voice agents.
+
+<Note>
+  If you do not see any agents or the agent you're looking for, be sure to double check in your Teli account that your agents are deployed and the status says **"Active"**.
+</Note>
+
+![Completed Call Data step 5](/images/Screenshot2025-11-11164625.png)
+
+**Step 6** — Once you've named your integration and selected your voice agent, click **"Continue"** at the bottom and you should now be in the **"Test"** tab. Click the **"Test Trigger"** button at the bottom. You should get an example payload — a full payload example for the selected agent for mapping your data for your next action.
+
+<Note>
+  The example payload is not live data. It serves for mapping your data in Zapier only.
+</Note>
+
+![Completed Call Data step 6](/images/Screenshot2025-11-11170013.PNG)
+
+**Step 7** — Once you've selected your next Zapier action(s) and published your zap, your integration should be available for activation in your Teli account for inbound, outbound, and manual pushes.
+
+**Inbound Example**
+
+![Completed Call Data inbound example](/images/Screenshot2025-11-11171552.PNG)
+
+**Outbound Example**
+
+![Completed Call Data outbound example](/images/Screenshot2025-11-11171848.PNG)
+
+**Manual Push** — You can locate the manual push set up in the **"Call History"** tab. There should be a menu button in the top right corner of the **"Analytics"** section. Click the 3 dots and a menu should appear. Click **"Connect CRM"**. A popup should appear with a dropdown of your integration options.
+
+![Completed Call Data manual push](/images/Screenshot2025-11-11172134.PNG)
+
+![Completed Call Data connect CRM](/images/Screenshot2025-11-11172340.PNG)
+
+Once activated, whenever you wish to push call data to your Zapier integration, click the same 3 dot menu button again and click the **"Push to CRM"** button.
+
+![Completed Call Data push to CRM](/images/Screenshot2025-11-11172845.PNG)
+
+### Qualified SMS Contact
+
+A step-by-step guide on how to find, connect, and activate the **Qualified SMS Contact** Zapier trigger. This trigger allows you to get the SMS data from a qualified or manually pushed lead.
+
+**Step 1** — Click on the **"Trigger"** step in the Zapier workflow and type in **"Teli AI"** in the search bar.
+
+![Qualified SMS Contact step 1](/images/Screenshot2025-11-11161813.png)
+
+**Step 2** — Click **"Account"** and sign in to your Teli AI account.
+
+![Qualified SMS Contact step 2](/images/Screenshot2025-11-11162851.PNG)
+
+**Step 3** — Click the **"Trigger event"** menu options and select **"Qualified SMS Contact"**.
+
+![Qualified SMS Contact step 3](/images/Screenshot2025-11-11173629.PNG)
+
+**Step 4** — Click on the **"Configure"** tab where you will name your integration.
+
+<Note>
+  The integration name does not prevent duplicate names.
+</Note>
+
+![Qualified SMS Contact step 4](/images/Screenshot2025-11-11173936.png)
+
+**Step 5** — When in **"Configure"**, after you've named your integration, select the SMS agent this integration will be for. Click the **"Qualified SMS Contact Example"** dropdown and you should see a list with all of your current active SMS agents.
+
+<Note>
+  If you do not see any agents or the agent you're looking for, make sure you have SMS agents in your account.
+</Note>
+
+![Qualified SMS Contact step 5](/images/Screenshot2025-11-11174631.PNG)
+
+**Step 6** — Once you've named your integration and selected your SMS agent, click **"Continue"** at the bottom and you should now be in the **"Test"** tab. Click the **"Test Trigger"** button at the bottom. You should get an example payload — a full payload example for the selected agent for mapping your data for your next action.
+
+<Note>
+  The example payload is not live data. It serves for mapping your data in Zapier only.
+</Note>
+
+![Qualified SMS Contact step 6](/images/Screenshot2025-11-11174911.PNG)
+
+**Step 7** — Once you've selected your next Zapier action(s) and published your zap, your integration should be available for activation in your Teli account for your SMS campaigns. SMS contacts can be pushed to your Zapier integration automatically or manually.
+
+Access one of your SMS campaigns and click on any lead. You should see a **"Lead Details"** section to the right. In that section, you should see 3 vertically stacked dots. Click on that and a menu should appear. Next, click **"CRM Setup"**. A popup should appear titled **"Integration Setup"**.
+
+<Note>
+  Pushing leads manually is always an option no matter how you set up your integration.
+</Note>
+
+![Qualified SMS Contact lead details](/images/download.png)
+
+![Qualified SMS Contact integration setup](/images/Screenshot2025-11-12113146.PNG)
+
+**Automatic — All Qualified Leads** — To set up **ALL** qualified leads to be pushed to your Zapier integration automatically, select **"Yes"**. Another dropdown should appear titled **"Only push voice transferred leads to CRM?"**. Select **"No"** for this. Click **"Activate Integration"**.
+
+![Qualified SMS Contact automatic all](/images/Screenshot2025-11-12113655.png)
+
+**Automatic — Only Successfully Transferred Leads** — To set up **ONLY SUCCESSFULLY TRANSFERRED LEADS** to be pushed to your Zapier integration automatically, select **"Yes"**. Another dropdown should appear titled **"Only push voice transferred leads to CRM?"**. Select **"Yes"** for this. Click **"Activate Integration"**.
+
+![Qualified SMS Contact automatic transferred](/images/Screenshot2025-11-12113912.png)
+
+**Manual — Push Leads Manually** — To **ONLY PUSH LEADS MANUALLY** to your Zapier integration, select **"No"**. Click **"Activate Integration"**. To push a lead manually, click the 3 dots in the **"Lead Details"** section.
+
+![Qualified SMS Contact manual](/images/Screenshot2025-11-12114113.png)
+
+![Qualified SMS Contact manual push](/images/Screenshot2025-11-1211145d.PNG)
