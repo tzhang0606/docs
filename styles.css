@@ -1,0 +1,9 @@
+/* Offset anchor-link scrolling so a section's title clears the sticky top
+   navigation bar when you click it in the "On this page" list.
+   Tune the value if the landing spot needs to sit higher/lower. */
+h1,
+h2,
+h3,
+h4 {
+  scroll-margin-top: 6rem;
+}
